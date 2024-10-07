@@ -1,0 +1,50 @@
+[{
+  "_id": "SPYT001",
+  "userId": "U001",
+  "productId": "SP001"
+},
+{
+  "_id": "SPYT002",
+  "userId": "U002",
+  "productId": "SP002"
+},
+{
+  "_id": "SPYT003",
+  "userId": "U003",
+  "productId": "SP003"
+},
+{
+  "_id": "SPYT004",
+  "userId": "U004",
+  "productId": "SP004"
+},
+{
+  "_id": "SPYT005",
+  "userId": "U005",
+  "productId": "SP005"
+},
+{
+  "_id": "SPYT006",
+  "userId": "U006",
+  "productId": "SP006"
+},
+{
+  "_id": "SPYT007",
+  "userId": "U007",
+  "productId": "SP007"
+},
+{
+  "_id": "SPYT008",
+  "userId": "U008",
+  "productId": "SP008"
+},
+{
+  "_id": "SPYT009",
+  "userId": "U009",
+  "productId": "SP009"
+},
+{
+  "_id": "SPYT010",
+  "userId": "U010",
+  "productId": "SP010"
+}]
