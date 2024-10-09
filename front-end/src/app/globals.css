@@ -300,3 +300,67 @@ a {
   color: #ffffff;
   opacity: 0.8;
 }
+
+/* css trang chi tiết */
+.product-container {
+  display: flex;
+}
+
+.thumbnail-images {
+  display: flex;
+  flex-direction: column;
+  margin-right: 20px;
+}
+
+.thumbnail-images img {
+  width: 100px;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+}
+
+.price {
+  font-size: 24px;
+  color: red;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #999;
+}
+
+.size-buttons .btn {
+  margin-right: 5px;
+  margin-bottom: 5px;
+}
+
+.product-details {
+  margin-top: 20px;
+}
+
+/* Sản phẩm tương tự */
+.similar-products img {
+  width: 100px;
+
+  cursor: pointer;
+}
+
+.similar-products {
+  align-items: center;
+}
+
+/* Thông tin đổi trả */
+.returns-info {
+  align-items: center;
+  margin-top: 10px;
+}
+
+.returns-info img {
+  width: 20%;
+}
+
+/* css trang chi tiết */
