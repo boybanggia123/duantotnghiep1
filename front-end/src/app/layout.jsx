@@ -10,6 +10,14 @@ const inter = Inter({ subsets: ["latin"] });
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+
+      <head> 
+        {/* Thêm thẻ link để chèn css cho page*/}
+        <link href="css/style-info.css" rel="stylesheet" /> 
+        <link href="css/style-dangnhap.css" rel="stylesheet" />
+        <link href="css/style-dangky.css" rel="stylesheet" />
+        {/* Thêm thẻ link để chèn css cho page*/}
+      </head>
       <body className={inter.className}>
         <Header />
         {children}
@@ -19,3 +27,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+
