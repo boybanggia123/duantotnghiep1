@@ -38,24 +38,7 @@ export default function Header() {
               />
             </form>
           </div>
-          <div className=" d-flex grid gap-3 mt-4 ms-4">
-            <div>
-              
-              {/* Thêm thẻ Link để chuyển trang */}
-              <Link href={'/info'}>
-                <i class="bi bi-person-circle icon-h "></i>
-              </Link>
-              {/* Thêm thẻ Link để chuyển trang */}
-
-            </div>
-            <div>
-              {" "}
-              <i class="bi bi-suit-heart icon-h"></i>
-            </div>
-            <div>
-              <i class="bi bi-basket icon-h"></i>
-            </div>
-          </div>
+      
         </div>
       </nav>
       <div className="d-flex justify-content-start mx-5 mb-4 ">
