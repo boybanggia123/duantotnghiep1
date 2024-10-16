@@ -40,7 +40,13 @@ export default function Header() {
           </div>
           <div className=" d-flex grid gap-3 mt-4 ms-4">
             <div>
-              <i class="bi bi-person-circle icon-h   "></i>
+              
+              {/* Thêm thẻ Link để chuyển trang */}
+              <Link href={'/info'}>
+                <i class="bi bi-person-circle icon-h "></i>
+              </Link>
+              {/* Thêm thẻ Link để chuyển trang */}
+
             </div>
             <div>
               {" "}
