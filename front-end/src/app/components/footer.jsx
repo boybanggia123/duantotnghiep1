@@ -1,123 +1,138 @@
+import Link from "next/link";
+
 export default function Footer() {
   return (
     <div className="sup-footer">
-      <div class="container ">
-        <footer class="pt-4">
-          <div class="row sup-footer2 d-flex justify-content-between">
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Section</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Home
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Features
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Pricing
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    FAQs
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    About
-                  </a>
+      <div className="container">
+        <footer className="pt-4 mt-4">
+          <div className="row sup-footer2 d-flex justify-content-between">
+            {/* Cột App Store */}
+            <div className="col-12 col-md-3 mb-3">
+              <h2>About us</h2>
+              <ul className="nav flex-column">
+                <li className="nav-item mb-2">
+                  <span className="about">
+                    Địa chỉ: Phần mêm Quang Trung <br />
+                    Hotline:(+84) 123456789 <br />
+                    Email: duanfashionverse@gmail.com
+                  </span>
+                  <Link className="dathongbao" href={""}>
+                    <img src="/img/dathongbao.webp" alt="" />
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Section</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Home
-                  </a>
+            {/* Cột Get Help */}
+            <div className="col-6 col-md-2 mb-3">
+              <h5>Xu hướng</h5>
+              <ul className="nav flex-column">
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Sản phẩm khuyến mãi
+                  </Link>
                 </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Features
-                  </a>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Sản phẩm nổi bật
+                  </Link>
                 </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Pricing
-                  </a>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Sản phẩm nữ
+                  </Link>
                 </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    FAQs
-                  </a>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Sản phẩm nam
+                  </Link>
                 </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    About
-                  </a>
-                </li>
-              </ul>
-            </div>
-
-            <div class="col-6 col-md-2 mb-3">
-              <h5>Section</h5>
-              <ul class="nav flex-column">
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Home
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Features
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    Pricing
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    FAQs
-                  </a>
-                </li>
-                <li class="nav-item mb-2">
-                  <a href="#" class="nav-link p-0 ">
-                    About
-                  </a>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Tất cả sản phẩm
+                  </Link>
                 </li>
               </ul>
             </div>
 
-            <div class="col-md-5 offset-md-1 mb-3">
+            {/* Cột Company */}
+            <div className="col-6 col-md-2 mb-3">
+              <h5>Liên kết</h5>
+              <ul className="nav flex-column">
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Bảo mật thông tin
+                  </Link>
+                </li>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Chính sách đổi trả
+                  </Link>
+                </li>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Chính sách giao hàng
+                  </Link>
+                </li>
+                <li className="nav-item mb-2">
+                  <Link href="#" className="nav-link p-0 ">
+                    Chính sách kiểm hàng
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            {/* Đăng ký nhận email */}
+            <div className="col-md-3 mb-3">
+              <h5>Đăng ký để nhận khuyến mãi</h5>
               <form>
-                <h5>Subscribe to our newsletter</h5>
-                <p>Monthly digest of what's new and exciting from us.</p>
-                <div class="d-flex flex-column flex-sm-row w-100 gap-2">
-                  <label for="newsletter1" class="visually-hidden">
-                    Email address
-                  </label>
+                <div className="input-group-input mt-3">
                   <input
-                    id="newsletter1"
-                    type="text"
-                    class="form-control"
-                    placeholder="Email address"
+                    type="email"
+                    className="form-control"
+                    placeholder="Email Address"
+                    aria-label="Email Address"
                   />
                 </div>
+                <p className="mt-3 small">
+                  <Link href="#">Điều khoản dịch vụ</Link> <br />
+                  <Link href="#">Chính sách bảo mật</Link>.
+                </p>
               </form>
             </div>
           </div>
 
-          <div class="d-flex flex-column flex-sm-row justify-content-between  border-top">
-            <p>© 2024 Company, Inc. All rights reserved.</p>
+          {/* Biểu tượng mạng xã hội */}
+          <div className="d-flex justify-content-between align-items-center py-4 my-4 border-top">
+            <p className="small-text">
+              © 2024 FashionVerse, All Rights Reserved
+            </p>
+            <ul className="list-unstyled d-flex">
+              <li className="ms-3">
+                <Link href="#">
+                  <i className="bi bi-instagram"></i>
+                </Link>
+              </li>
+              <li className="ms-3">
+                <Link href="#">
+                  <i className="bi bi-tiktok"></i>
+                </Link>
+              </li>
+              <li className="ms-3">
+                <Link href="#">
+                  <i className="bi bi-youtube"></i>
+                </Link>
+              </li>
+              <li className="ms-3">
+                <Link href="#">
+                  <i className="bi bi-facebook"></i>
+                </Link>
+              </li>
+              <li className="ms-3">
+                <Link href="#">
+                  <i className="bi bi-pinterest"></i>
+                </Link>
+              </li>
+            </ul>
           </div>
         </footer>
       </div>

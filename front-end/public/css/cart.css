@@ -1,0 +1,85 @@
+
+.col-md-2{
+    margin-top: 5px;
+}
+.card{
+    box-shadow: none;
+    border-radius: 0px;
+}
+.search{
+    font-size: 16px;
+    font-weight: bolder;
+}
+.col-md-10 a{
+    font-size: .75rem;
+    font-weight: 600;
+}
+.col-md-10 p{
+    font-size: .75rem;
+    font-weight: 600;
+}
+.cart-giohang{
+    font-size: 1.3rem;
+    line-height: 1.5625rem;
+    font-weight: 900;
+    letter-spacing: -.0625rem;
+    color: #000;
+}
+.form-select{
+    font-size: .75rem;
+    width: 80px;
+    margin-right:10px;
+}
+.form-control-2{
+    font-weight: bolder;
+    border:none;
+    width: 50px;
+    text-align: center;
+}
+.btn-outline-secondary-1{
+    padding: 0;
+    margin-right: 10px;
+    font-size: 20px;
+    font-weight: bolder;
+}
+.col-3{
+    padding: 5px;
+}
+.list-unstyled{
+    font-weight: bolder;
+    font-size: .75rem;
+}
+.list-unstyled span{
+    padding-top: 5px;
+}
+.tongtien {
+    font-weight: bolder;
+}
+.codegiamgia{
+    display: flex;
+}
+.btn-success{
+    border-radius: 0 5px 5px 0;
+}
+.codegiamgia .form-control-3{
+
+    width: 100%;
+    padding: 10px;
+}
+.logothanhtoan i{
+    font-size: 35px;
+    color: #000;
+}
+.logothanhtoan i:hover{
+    transition: all 0.45s;
+    color: #4e4d4d;
+}
+.Total{
+    font-weight: bolder;
+}
+@media(max-width:650px){
+    .col-md-2 img{
+        width: auto;
+        height: auto;
+    }
+  }
