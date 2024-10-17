@@ -6,29 +6,29 @@ export default function Info() {
           <div className="row">
             <div className="col-3">
                 <Link href={'/'} id="back-home" className="fw-bold d-flex gap-1">
-                    <i class="bi bi-arrow-left"></i>
+                    <i className="bi bi-arrow-left"></i>
                     <span>Quay lại trang chủ</span>
                 </Link>
                 <ul id="list-nav-info" className="nav flex-column gap-3">
                     <li className="fw-bold d-flex gap-1">
-                        <i class="bi bi-pencil-square"></i>
+                        <i className="bi bi-pencil-square"></i>
                         <span>Thông tin của tôi</span>
                     </li>
                     <li className="fw-bold d-flex gap-1">
-                        <i class="bi bi-receipt-cutoff"></i>
+                        <i className="bi bi-receipt-cutoff"></i>
                         <span>Đơn hàng của tôi</span>
                     </li>
                     <li className="fw-bold d-flex gap-1">
-                        <i class="bi bi-bell-fill"></i>
+                        <i className="bi bi-bell-fill"></i>
                         <span>Thông báo</span>
                     </li>
                     <li className="fw-bold d-flex gap-1">
-                        <i class="bi bi-telephone-fill"></i>
+                        <i className="bi bi-telephone-fill"></i>
                         <span>Trung tâm trợ giúp</span>
                     </li>
                 </ul>
                 <div id="log-out" className="d-flex gap-1 text-danger fw-bold">
-                    <i class="bi bi-box-arrow-right"></i>
+                    <i className="bi bi-box-arrow-right"></i>
                     <span>Đăng xuất</span>
                 </div>
             </div>
@@ -71,7 +71,7 @@ export default function Info() {
                 <div className="save-info d-flex justify-content-between align-items-center">
                     <button id="btn-save" className="">Lưu lại</button>
                     <div className="reset-pass fs-6">
-                        <i class="bi bi-key-fill"></i>
+                        <i className="bi bi-key-fill"></i>
                         <a href="" className="text-decoration-underline"> Đặt lại mật khẩu của bạn</a>
                     </div>
                 </div>
