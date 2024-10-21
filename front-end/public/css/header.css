@@ -2,6 +2,9 @@
     color: black;
     text-decoration: none;
 }
+hr{
+  color: #8d8b8b;
+}
 .logo{
   padding: 5px;
   margin: 0px;

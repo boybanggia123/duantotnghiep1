@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <div className="sup-footer">
       <div className="container">
-        <footer className="pt-4 mt-4">
+        <footer className="pt-4">
           <div className="row sup-footer2 d-flex justify-content-between">
             {/* Cột App Store */}
             <div className="col-12 col-md-3 mb-3">

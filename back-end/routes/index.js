@@ -2,7 +2,12 @@ var express = require("express");
 var router = express.Router();
 
 //Imort model
-const connectDb = require("../model/db");
+const cors = require('cors');
+const app = express();
+
+app.use(cors())
+const connectDb=require('../model/db');
+const { ObjectId } = require('mongodb');
 //Lấy tất cả sản phẩm dạng json
 
 router.get("/products", async (req, res, next) => {

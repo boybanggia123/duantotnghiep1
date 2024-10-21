@@ -5,7 +5,6 @@ import React from "react";
 export default function Cart() {
   return (
     <>
-      <hr />
       <div className="container mt-2">
         <span className="cart-giohang mt-4">MY BAG </span>
         <span>(1 Item)</span>

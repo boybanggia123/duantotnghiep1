@@ -41,11 +41,6 @@
 .namesup{
     font-size: 12px;
 }
-.price{
-    font-size: 1.0625rem;
-    font-weight: bolder;
-   
-}
 .custom-container {
     max-width: 1140px;
     margin: 0 auto;
@@ -76,10 +71,13 @@
     height: 12%;
 }
 .price{
+    font-size: 14px;
+    font-weight: bolder;
     display: flex;
     justify-content: space-between;
 }
 .price p{
+  font-size: 14px;
     color: #9d2226;
 }
 .price del{

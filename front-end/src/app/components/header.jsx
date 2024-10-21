@@ -22,7 +22,7 @@ export default function Header() {
         </Link>
       </div>
 
-      <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
+      <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-3">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
             <img src="/img/logo_fashion.png" alt="logo" />
@@ -113,9 +113,9 @@ export default function Header() {
         </div>
       </nav>
 
-      <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
+      <div className="d-flex justify-content-start mx-3 mx-md-3 pl-2 pl-md-4 flex-wrap">
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          <Link href={"#"}>new in</Link>
+          <Link href={"/sanpham"}>new in</Link>
           <Link href={"#"}>clothing</Link>
           <Link href={"#"}>halloween</Link>
           <Link href={"#"}>dresses</Link>
@@ -125,6 +125,7 @@ export default function Header() {
           <Link href={"#"}>bottoms</Link>
         </div>
       </div>
+      <hr className=" m-0 p-0" />
     </>
   );
 }
