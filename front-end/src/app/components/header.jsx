@@ -59,6 +59,7 @@ export default function Header() {
       </div>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       <nav className="d-flex justify-content-between mx-5">
         <div className="d-flex">
           <img src="img/Fashion-Nova-Logo.png" alt="" className="logo" />
@@ -105,6 +106,9 @@ export default function Header() {
               <i className="bi bi-basket icon-h"></i>
 =======
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
+=======
+      <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-3">
+>>>>>>> b70a5267de376ac330a8bc940585fa69b80bf6a9
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
             <img src="/img/logo_fashion.png" alt="logo" />
@@ -197,6 +201,7 @@ export default function Header() {
       </nav>
 
 <<<<<<< HEAD
+<<<<<<< HEAD
       <div className="d-flex justify-content-start mx-5 mb-4">
         <div className="text-uppercase a-h fw-bolder">
           <a href="">New In</a>
@@ -209,8 +214,11 @@ export default function Header() {
           <a href="">Nova Luxe</a>
 =======
       <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
+=======
+      <div className="d-flex justify-content-start mx-3 mx-md-3 pl-2 pl-md-4 flex-wrap">
+>>>>>>> b70a5267de376ac330a8bc940585fa69b80bf6a9
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          <Link href={"#"}>new in</Link>
+          <Link href={"/sanpham"}>new in</Link>
           <Link href={"#"}>clothing</Link>
           <Link href={"#"}>halloween</Link>
           <Link href={"#"}>dresses</Link>
@@ -221,6 +229,7 @@ export default function Header() {
 >>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
         </div>
       </div>
+      <hr className=" m-0 p-0" />
     </>
   );
 }

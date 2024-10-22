@@ -7,14 +7,13 @@ var cors = require("cors");
 
 var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
-<<<<<<< HEAD
+
 var app = express();
 
-=======
 const cors = require('cors');
 const app = express();
 app.use(cors());
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
+
 // view engine setup
 app.use(cors());
 app.set("views", path.join(__dirname, "views"));

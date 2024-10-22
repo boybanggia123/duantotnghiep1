@@ -8,10 +8,16 @@ const initialState = {
 =======
 import { createSlice } from '@reduxjs/toolkit';
 
+<<<<<<< HEAD
 // const initialState = {
 //     items: JSON.parse(localStorage.getItem('cartItems')) || [],
 // };
 >>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
+=======
+const initialState = {
+    items: JSON.parse(localStorage.getItem('cartItems')) || [],
+};
+>>>>>>> b70a5267de376ac330a8bc940585fa69b80bf6a9
 
 const cartSlice = createSlice({
     name: 'cart',

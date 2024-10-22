@@ -12,7 +12,7 @@ function ProductsHome(props) {
               <div className="w-img">
                 <Link href={`/chitiet/${_id}`}>
                   <img
-                    src={`/img/Đầm/${image}`}
+                    src={`${image}`}
                     alt={image}
                     className="img-fluid img-gray "
                   />
