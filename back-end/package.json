@@ -6,17 +6,33 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+<<<<<<< HEAD
+=======
+    "@reduxjs/toolkit": "^2.2.6",
+    "axios": "^1.7.3",
+>>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
     "bcryptjs": "^2.4.3",
     "cookie-parser": "~1.4.4",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
-    "ejs": "~2.6.1",
-    "express": "~4.16.1",
+    "ejs": "^3.1.10",
+    "express": "^4.19.2",
+    "formik": "^2.4.6",
     "http-errors": "~1.6.3",
     "jsonwebtoken": "^9.0.2",
+<<<<<<< HEAD
     "mongodb": "^6.9.0",
     "morgan": "~1.9.1",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.1.7"
+=======
+    "mongodb": "^6.7.0",
+    "morgan": "~1.9.1",
+    "multer": "^1.4.5-lts.1",
+    "nodemon": "^3.1.4",
+    "react-hook-form": "^7.53.0",
+    "react-redux": "^9.1.2",
+    "yup": "^1.4.0"
+>>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
   }
 }

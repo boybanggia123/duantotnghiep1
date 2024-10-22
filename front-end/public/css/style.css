@@ -1,0 +1,102 @@
+.relative video{
+    width: 1399px;
+    height: auto;
+}
+.banner-1 img{
+    width: 100%;
+    height: auto;
+}
+.product-card {
+    border: none;
+    transition: transform 0.3s ease;
+  }
+  .product-card:hover {
+    transform: scale(1.05);
+  }
+  .product-image {
+    position: relative;
+  }
+  .quick-add-btn {
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  .product-image:hover .quick-add-btn {
+    opacity: 1;
+  }
+  .product-title {
+    font-weight: 600;
+    color: #000;
+  }
+  .product-price {
+    font-size: 1.2rem;
+  }
+  .product-offer {
+    font-size: 0.9rem;
+    color: #555;
+  }
+.namesup{
+    font-size: 12px;
+}
+.price{
+    font-size: 1.0625rem;
+    font-weight: bolder;
+   
+}
+.custom-container {
+    max-width: 1140px;
+    margin: 0 auto;
+}
+.text_h2{
+    font-size: 20px;
+    font-weight: bolder;
+}
+.button_new button{
+    border-radius: 30px;
+    height: 30px;
+    color: black;
+    background: white;
+    border: 0.5px solid #000;
+}
+.button_new button:hover{
+    background: #000;
+    color: white;
+    transition: all 0.7s;
+}
+.button_new button a{
+    padding: 15px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.w-img .sup-wimg{
+    font-size: 14px;
+    height: 12%;
+}
+.price{
+    display: flex;
+    justify-content: space-between;
+}
+.price p{
+    color: #9d2226;
+}
+.price del{
+    color: #666565;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 39.5%; /* Tỷ lệ 16:9 */
+}
+
+.video-container video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  object-fit: cover; /* Giúp video luôn giữ đúng tỷ lệ và che đầy khung */
+}
