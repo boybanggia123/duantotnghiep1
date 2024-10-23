@@ -145,6 +145,19 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
+        <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
+          <Link href={"/sanpham"}>new in</Link>
+          <Link href={"#"}>clothing</Link>
+          <Link href={"#"}>halloween</Link>
+          <Link href={"#"}>dresses</Link>
+          <Link href={"#"}>matching sets</Link>
+          <Link href={"#"}>tops</Link>
+          <Link href={"#"}>jeans</Link>
+          <Link href={"#"}>bottoms</Link>
+        </div>
+      </div>
+      <hr className="mt-0 mb-0" />
     </>
   );
 }

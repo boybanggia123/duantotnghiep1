@@ -6,6 +6,21 @@
     box-shadow: none;
     border-radius: 0px;
 }
+.cart_price{
+    display: flex;
+}
+.cart_price .cart_goc{
+    font-size: 10px;
+    font-weight: 500;
+}
+.cart_price .cart_discountedPrice{
+    padding-right: 5px;
+    color: #9d2226;
+    line-height: 15px;
+    font-size: .9375rem;
+    font-weight: 600;
+}
+
 .search{
     font-size: 16px;
     font-weight: bolder;
@@ -77,6 +92,45 @@
 .Total{
     font-weight: bolder;
 }
+/* Đảm bảo rằng thẻ cha có position relative để icon có thể được đặt tuyệt đối */
+.product-image-container {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Ảnh sản phẩm */
+  .product-image {
+    width: 100%;
+    height: auto;
+    transition: opacity 0.3s ease; /* Thêm hiệu ứng mờ dần */
+  }
+  
+  /* Icon thùng rác - ẩn mặc định */
+  .remove-icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    color: #ff0008;
+    padding: 8px;
+    border-radius: 50%;
+    display: none; /* Ẩn icon mặc định */
+    cursor: pointer;
+    transition: opacity 0.3s ease; /* Thêm hiệu ứng hiện dần */
+    opacity: 0;
+  }
+  
+  /* Khi hover vào ảnh, làm mờ ảnh và hiện icon thùng rác */
+  .product-image-container:hover .product-image {
+    opacity: 0.7; /* Mờ ảnh khi hover */
+  }
+  
+  .product-image-container:hover .remove-icon {
+    display: block;
+    opacity: 2; /* Hiện icon với hiệu ứng hiện dần */
+  }
+  
 @media(max-width:650px){
     .col-md-2 img{
         width: auto;

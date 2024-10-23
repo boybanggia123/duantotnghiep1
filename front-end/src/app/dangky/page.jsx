@@ -6,7 +6,6 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 
 export default function SignUp() {
-<<<<<<< HEAD
   const router = useRouter();
   const formik = useFormik({
     initialValues: {
@@ -68,8 +67,6 @@ export default function SignUp() {
     },
   });
 
-=======
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
   return (
     <section className="gradient-custom">
       <div className="container py-5 h-100">
@@ -79,7 +76,6 @@ export default function SignUp() {
               <div className="card-body p-5 text-center">
                 <div className="mb-md-5 mt-md-4 pb-5">
                   <h2 className="fw-bold mb-2 text-uppercase">Sign up</h2>
-<<<<<<< HEAD
                   <p className="mb-5">
                     Please fill in your information completely
                   </p>
@@ -146,71 +142,10 @@ export default function SignUp() {
                     <div className="form-outline form-white mb-4">
                       <label className="form-label d-block text-start">
                         Password
-=======
-                  <p className=" mb-5">
-                    Please fill in your information completely
-                  </p>
-                  <form>
-                    <div
-                      data-mdb-input-init
-                      className="form-outline form-white mb-4"
-                    >
-                      <label className="form-label d-block text-start">
-                        Fill in your email
-                      </label>
-                      <input
-                        type="email"
-                        id="email"
-                        formControlName="email"
-                        className="form-control form-control-lg"
-                        placeholder="Email"
-                      />
-                    </div>
-
-                    <div
-                      data-mdb-input-init
-                      className="form-outline form-white mb-4"
-                    >
-                      <label className="form-label d-block text-start">
-                        Fill in your full name
-                      </label>
-                      <input
-                        type="text"
-                        id="fullname"
-                        formControlName="fullname"
-                        className="form-control form-control-lg"
-                        placeholder="Full name"
-                      />
-                    </div>
-
-                    <div
-                      data-mdb-input-init
-                      className="form-outline form-white mb-4"
-                    >
-                      <label className="form-label d-block text-start">
-                        Fill in your username
-                      </label>
-                      <input
-                        type="text"
-                        id="username"
-                        formControlName="username"
-                        className="form-control form-control-lg"
-                        placeholder="Username"
-                      />
-                    </div>
-
-                    <div
-                      data-mdb-input-init
-                      className="form-outline form-white mb-4"
-                    >
-                      <label className="form-label d-block text-start">
-                        Fill in your password
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
                       </label>
                       <input
                         type="password"
                         id="password"
-<<<<<<< HEAD
                         name="password"
                         className="form-control form-control-lg"
                         placeholder="Password"
@@ -267,44 +202,6 @@ export default function SignUp() {
                     </Link>
                   </p>
 
-=======
-                        formControlName="password"
-                        className="form-control form-control-lg"
-                        placeholder="Password"
-                      />
-                    </div>
-
-                    <div
-                      data-mdb-input-init
-                      className="form-outline form-white mb-4"
-                    >
-                      <label className="form-label d-block text-start">
-                        Fill in your confirm password
-                      </label>
-                      <input
-                        type="password"
-                        id="passConfirm"
-                        formControlName="passConfirm"
-                        className="form-control form-control-lg"
-                        placeholder="Confirm password"
-                      />
-                    </div>
-                  </form>
-                  <p className="small mb-5 pb-lg-2">
-                    <a href="#!" className="text-dark">
-                      Forgot password?
-                    </a>
-                  </p>
-
-                  <button
-                    type="submit"
-                    className="btn btn-danger btn-lg px-5"
-                    routerLink="/dang_nhap"
-                  >
-                    Đăng ký
-                  </button>
-
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
                   <div className="d-flex justify-content-center text-center mt-4 pt-1 gap-4">
                     <a href="#!" className="text-dark">
                       <i className="fa fa-facebook"></i>
@@ -313,7 +210,6 @@ export default function SignUp() {
                       <i className="fa fa-google"></i>
                     </a>
                     <a href="#!" className="text-dark">
-<<<<<<< HEAD
                       <i className="fa fa-linkedin"></i>
                     </a>
                   </div>
@@ -325,26 +221,6 @@ export default function SignUp() {
                     </Link>
                   </p>
                 </div>
-=======
-                      {" "}
-                      <i className="fa fa-linkedin"></i>
-                    </a>
-                  </div>
-                </div>
-
-                <div>
-                  <p className="mb-0">
-                    Bạn đã có tài khoản?{" "}
-                    <a
-                      href="#!"
-                      routerLink="/dang_nhap"
-                      className="text-danger fw-bold"
-                    >
-                      Đăng nhập
-                    </a>
-                  </p>
-                </div>
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
               </div>
             </div>
           </div>

@@ -126,10 +126,6 @@ export default async function Home() {
           <div className="row">
             <ProductsHome data={productNew} />
           </div>
-
-          <div className="text-center my-3">
-            <button className="btn btn-dark">Load more</button>
-          </div>
         </div>
         {/* body */}
       </div>

@@ -11,6 +11,7 @@ import "../../public/css/footer.css";
 import "../../public/css/cart.css";
 import "../../public/css/style.css";
 import "../../public/css/sanpham.css";
+import "../../public/css/detail.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {

@@ -185,7 +185,7 @@
   /* Ẩn thanh cuộn cho phần sản phẩm */
   .custom-product-section {
     padding-left: 30px;
-    height: calc(100vh - 100px); /* Chiều cao cố định */
+    height: calc(200vh - 200px); /* Chiều cao cố định */
     overflow-y: scroll; /* Cho phép cuộn dọc */
   }
   
