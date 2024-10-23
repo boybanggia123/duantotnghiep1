@@ -8,13 +8,10 @@ export default function Checkout() {
       <div className="col-md-7">
 
         <div className="d-flex justify-content-between mb-3">
-  <img src="img/shoppay.jpg" alt="ShopPay" className="img-fluid w-25" />
-  <img src="img/paypal.png" alt="PayPal" className="img-fluid w-25" />
-  <img src="img/google.png"  alt="GPay" className="img-fluid w-25"  />
-</div>
-
-
-
+          <img src="img/shoppay.jpg" alt="ShopPay" className="img-fluid w-25" />
+          <img src="img/paypal.png" alt="PayPal" className="img-fluid w-25" />
+          <img src="img/google.png"  alt="GPay" className="img-fluid w-25"  />
+        </div>
         <div className="text-center my-3">OR</div>
   
         <div className="mb-4">

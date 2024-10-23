@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function ProductsHome(props) {
   const [currentPage, setCurrentPage] = useState(1); // State quản lý trang hiện tại
-  const itemsPerPage = 16; // Số lượng sản phẩm hiển thị mỗi trang
+  const itemsPerPage = 12; // Số lượng sản phẩm hiển thị mỗi trang
 
   // Tính toán sản phẩm hiện tại để hiển thị
   const indexOfLastItem = currentPage * itemsPerPage;
