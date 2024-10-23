@@ -20,7 +20,7 @@ export default function Cart() {
 
   // Tính toán tổng số tiền
   const total = cartItems.reduce(
-    (total, item) => total + item.price * item.quantity,
+    (total, item) => total + item.discountedPrice * item.quantity,
     0
   );
 
