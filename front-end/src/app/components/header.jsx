@@ -1,8 +1,44 @@
-import React from "react";
+"use client";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import Countdown from "../components/Countdown";
 
 export default function Header() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState(null);
+
+  useEffect(() => {
+    const token = document.cookie
+      .split("; ")
+      .find((c) => c.startsWith("token="))
+      ?.split("=")[1];
+
+    if (token) {
+      setIsLoggedIn(true);
+
+      fetch("http://localhost:3000/detailuser", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to fetch user info");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data?.fullname) {
+            setUserName(data.fullname);
+          }
+        })
+        .catch((error) => {
+          console.error("Error fetching user info:", error);
+        });
+    }
+  }, []);
+
   return (
     <>
       <div className="promotion-bar p-2 text-center text-md-start">
@@ -11,8 +47,7 @@ export default function Header() {
           ON ORDERS OVER $100! GET IT TOMORROW!
         </span>
         <div className="countdown d-inline d-md-block">
-          <Countdown initialSeconds={3721} />{" "}
-          {/* Bắt đầu từ 3721 giây (1 giờ, 2 phút, 1 giây) */}
+          <Countdown initialSeconds={3721} />
         </div>
         <Link
           href="/shop"
@@ -22,7 +57,7 @@ export default function Header() {
         </Link>
       </div>
 
-      <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-3">
+      <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
             <img src="/img/logo_fashion.png" alt="logo" />
@@ -39,7 +74,6 @@ export default function Header() {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarNav">
-            {/* <ul className="text-uppercase d-flex grid gap-3 mt-3 fw-bold  list-h"></ul> */}
             <ul className="navbar-nav text-uppercase fw-bold list-h me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link className="nav-link active" href="#">
@@ -69,42 +103,41 @@ export default function Header() {
             </ul>
             <form className="d-flex mt-3" role="search">
               <div className="input-group">
-                {/* Biểu tượng tìm kiếm bên trái */}
-                <span
-                  className="input-group-text search-icon-left"
-                  id="search-addon-left"
-                >
-                  <Link href={"#"}>
+                <span className="input-group-text search-icon-left">
+                  <Link href="#">
                     <i className="fa-solid fa-magnifying-glass"></i>
                   </Link>
                 </span>
-                {/* Trường nhập liệu */}
                 <input
                   type="text"
                   className="form-control search-input"
                   placeholder="Tìm kiếm"
-                  aria-label="Search"
                 />
-                {/* Biểu tượng bên phải */}
-                <span
-                  className="input-group-text search-icon-right"
-                  id="search-addon-right"
-                >
-                  <Link href={"#"}>
-                    <i className="fa-solid fa-camera"></i>{" "}
+                <span className="input-group-text search-icon-right">
+                  <Link href="#">
+                    <i className="fa-solid fa-camera"></i>
                   </Link>
                 </span>
               </div>
             </form>
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
               <div>
-                <i className="bi bi-person-circle icon-h"></i>
+                {isLoggedIn ? (
+                  <Link href="/info">
+                    <span className="ms-3">{userName}</span>
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
+                ) : (
+                  <Link href="/dangnhap">
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
+                )}
               </div>
               <div>
                 <i className="bi bi-suit-heart icon-h"></i>
               </div>
               <div>
-                <Link href={"/cart"}>
+                <Link href="/cart">
                   <i className="bi bi-basket icon-h"></i>
                 </Link>
               </div>
@@ -112,20 +145,6 @@ export default function Header() {
           </div>
         </div>
       </nav>
-
-      <div className="d-flex justify-content-start mx-3 mx-md-3 pl-2 pl-md-4 flex-wrap">
-        <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          <Link href={"/sanpham"}>new in</Link>
-          <Link href={"#"}>clothing</Link>
-          <Link href={"#"}>halloween</Link>
-          <Link href={"#"}>dresses</Link>
-          <Link href={"#"}>matching sets</Link>
-          <Link href={"#"}>tops</Link>
-          <Link href={"#"}>jeans</Link>
-          <Link href={"#"}>bottoms</Link>
-        </div>
-      </div>
-      <hr className=" m-0 p-0" />
     </>
   );
 }

@@ -1,22 +1,21 @@
-import { NextResponse } from 'next/server';
+import { NextResponse } from "next/server";
 
 export async function middleware(request) {
-  const token = request.cookies.get('token'); 
+  const token = request.cookies.get("token");
 
   if (!token) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL("/dangnhap", request.url));
   }
 
   // Gọi đến API xác thực token
-  const res = await fetch('http://localhost:3000/checktoken', {
+  const res = await fetch("http://localhost:3000/checktoken", {
     headers: {
       Authorization: `Bearer ${token.value}`,
     },
   });
-  
 
   if (!res.ok) {
-    return NextResponse.redirect(new URL('/login', request.url));
+    return NextResponse.redirect(new URL("/dangnhap", request.url));
   }
 
   // Nếu token hợp lệ, cho phép yêu cầu tiếp tục
@@ -24,5 +23,5 @@ export async function middleware(request) {
 }
 
 export const config = {
-  matcher: '/info'
+  matcher: "/info",
 };
