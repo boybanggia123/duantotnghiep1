@@ -14,12 +14,6 @@
     "axios": "^1.7.7",
     "bootstrap-icons": "^1.11.3",
     "formik": "^2.4.6",
-<<<<<<< HEAD
-    "jsonwebtoken": "^9.0.2",
-    "next": "^14.2.13",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-=======
     "globals": "^15.11.0",
     "jsonwebtoken": "^9.0.2",
     "multer": "^1.4.5-lts.1",
@@ -30,7 +24,6 @@
     "react-hook-form": "^7.53.0",
     "react-redux": "^9.1.2",
     "swr": "^2.2.5",
->>>>>>> 74a2490f947d33cd6e9b34f7af8061fa4aad63e3
     "yup": "^1.4.0"
   }
 }
