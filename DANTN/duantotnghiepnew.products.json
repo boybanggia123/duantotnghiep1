@@ -1,0 +1,218 @@
+[{
+  "_id": "SP001",
+  "name": "Product 1",
+  "description": "Description of Product 1",
+  "image": "aokhoac1.JPG",
+  "price": 100,
+  "discountedPrice": 90,
+  "size": "M",
+  "quantity": 50,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": "SP002",
+  "name": "Product 2",
+  "description": "Description of Product 2",
+  "image": "aokhoac2.JPG",
+  "price": 200,
+  "discountedPrice": 180,
+  "size": "L",
+  "quantity": 30,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": "SP003",
+  "name": "Product 3",
+  "description": "Description of Product 3",
+  "image": "aokhoac3.JPG",
+  "price": 300,
+  "discountedPrice": 270,
+  "size": "S",
+  "quantity": 20,
+  "status": "out of stock",
+  " hot": true,
+  " dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": "SP004",
+  "name": "Product 4",
+  "description": "Description of Product 4",
+  "image": "dam1.webp",
+  "price": 400,
+  "discountedPrice": 360,
+  "size": "M",
+  "quantity": 40,
+  "status": "in stock",
+  " hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": "SP005",
+  "name": "Product 5",
+  "description": "Description of Product 5",
+  "image": "dam2.webp",
+  "price": 500,
+  "discountedPrice": 450,
+  "size": "XL",
+  "quantity": 25,
+  "status": "in stock",
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  },
+  "hot": true
+},
+{
+  "_id": "SP006",
+  "name": "Product 6",
+  "description": "Description of Product 6",
+  "image": "dam3.webp",
+  "price": 600,
+  "discountedPrice": 540,
+  "size": "M",
+  "quantity": 60,
+  "status": "in stock",
+  " dayadd": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  " hot": true
+},
+{
+  "_id": "SP007",
+  "name": "Product 7",
+  "description": "Description of Product 7",
+  "image": "quan1.jpg",
+  "price": 700,
+  "discountedPrice": 630,
+  "size": "S",
+  "quantity": 10,
+  "status": "out of stock",
+  "dayadd": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "hot": false
+},
+{
+  "_id": "SP008",
+  "name": "Product 8",
+  "description": "Description of Product 8",
+  "image": "quan2.jpg",
+  "price": 800,
+  "discountedPrice": 720,
+  "size": "L",
+  "quantity": 15,
+  "status": "in stock",
+  "dayadd": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "hot": false
+},
+{
+  "_id": "SP009",
+  "name": "Product 9",
+  "description": "Description of Product 9",
+  "image": "quan3.jpg",
+  "price": 900,
+  "discountedPrice": 810,
+  "size": "M",
+  "quantity": 35,
+  "status": "in stock",
+  "dayadd": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "hot": false
+},
+{
+  "_id": "SP010",
+  "name": "Product 10",
+  "description": "Description of Product 10",
+  "image": "quan4.jpg",
+  "price": 1000,
+  "discountedPrice": 900,
+  "size": "XL",
+  "quantity": 5,
+  "status": "out of stock",
+  "dayadd": {
+    "$date": "2024-01-01T00:00:00.000Z"
+  },
+  "hot": false
+},
+{
+  "_id": {
+    "$oid": "6718710ab44f59f5cda25c5f"
+  },
+  "name": "Product 11",
+  "description": "Description of Product 1",
+  "image": "quantay1.webp",
+  "price": 100,
+  "discountedPrice": 90,
+  "size": "M",
+  "quantity": 50,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67187118b44f59f5cda25c60"
+  },
+  "name": "Product 12",
+  "description": "Description of Product 1",
+  "image": "quantay2.webp",
+  "price": 100,
+  "discountedPrice": 90,
+  "size": "M",
+  "quantity": 50,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "67187814b44f59f5cda25c61"
+  },
+  "name": "Product 13",
+  "description": "Description of Product 1",
+  "image": "dam4.webp",
+  "price": 100,
+  "discountedPrice": 90,
+  "size": "M",
+  "quantity": 50,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "6718781bb44f59f5cda25c62"
+  },
+  "name": "Product 14",
+  "description": "Description of Product 1",
+  "image": "dam10.webp",
+  "price": 100,
+  "discountedPrice": 90,
+  "size": "M",
+  "quantity": 50,
+  "status": "in stock",
+  "hot": true,
+  "dayadd": {
+    "$date": "2024-10-23T00:00:00.000Z"
+  }
+}]

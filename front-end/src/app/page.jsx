@@ -1,11 +1,15 @@
 import Link from "next/link";
 import ProductsHome from "./components/ProductsHome";
+const fetchNewProducts = async () => {
+  const res = await fetch("http://localhost:3000/new");
+  if (!res.ok) {
+    throw new Error("Failed to fetch sale products");
+  }
+  return res.json();
+};
 export default async function Home() {
-  const res = await fetch("http://localhost:3000/products", {
-    cache: "no-store",
-  });
-  const data = await res.json();
-  console.log(data);
+  const productNew = await fetchNewProducts();
+  // console.log(data);
   return (
     <>
       <div>
@@ -40,7 +44,7 @@ export default async function Home() {
           <div className="row g-2">
             <div className="col-6 col-md-3">
               <div className="shoens">
-                <img src="img/shoes.webp" alt="" className="img-fluid" />
+                <img src="image/shoes.webp" alt="" className="img-fluid" />
                 <button
                   type="button"
                   className="fw-bolder text-uppercase bt-h2"
@@ -51,7 +55,7 @@ export default async function Home() {
             </div>
             <div className="col-6 col-md-3">
               <div className="shoens">
-                <img src="img/shoes4.webp" alt="" className="img-fluid" />
+                <img src="image/shoes4.webp" alt="" className="img-fluid" />
                 <button
                   type="button"
                   className="fw-bolder text-uppercase bt-h2"
@@ -62,7 +66,7 @@ export default async function Home() {
             </div>
             <div className="col-6 col-md-3">
               <div className="shoens">
-                <img src="img/shoes2.webp" alt="" className="img-fluid" />
+                <img src="image/shoes2.webp" alt="" className="img-fluid" />
                 <button
                   type="button"
                   className="fw-bolder text-uppercase bt-h2"
@@ -73,7 +77,7 @@ export default async function Home() {
             </div>
             <div className="col-6 col-md-3">
               <div className="shoens">
-                <img src="img/shoes3.webp" alt="" className="img-fluid" />
+                <img src="image/shoes3.webp" alt="" className="img-fluid" />
                 <button
                   type="button"
                   className="fw-bolder text-uppercase bt-h2"
@@ -120,7 +124,7 @@ export default async function Home() {
           </div>
 
           <div className="row">
-            <ProductsHome data={data} />
+            <ProductsHome data={productNew} />
           </div>
         </div>
         {/* body */}
