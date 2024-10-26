@@ -9,7 +9,8 @@ const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Detail({ params }) {
   const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState(""); // Thêm state để lưu size đã chọn
+  const [selectedSize, setSelectedSize] = useState("");
+  const [notification, setNotification] = useState(""); // Thêm state để quản lý thông báo
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   console.log(cart);
@@ -22,15 +23,33 @@ export default function Detail({ params }) {
     refreshInterval: 6000,
   });
 
-  if (error) return <div>Lỗi load dữ liệu.</div>;
-  if (isLoading) return <div>Đang tải</div>;
-  // Hàm xử lý khi người dùng chọn size
+  if (error) return <div>Lỗi tải dữ liệu.</div>;
+  if (isLoading) return <div>Đang tải...</div>;
+
   const handleSizeClick = (size) => {
     if (selectedSize === size) {
-      setSelectedSize(""); // Nếu size đã được chọn, bỏ chọn khi nhấn lần nữa
+      setSelectedSize("");
     } else {
-      setSelectedSize(size); // Chọn size mới
+      setSelectedSize(size);
     }
+  };
+
+  const handleAddToCart = () => {
+    if (!selectedSize) {
+      alert("Vui lòng chọn kích thước trước khi thêm vào giỏ hàng.");
+      return;
+    }
+    dispatch(
+      addToCart({
+        item: product,
+        quantity: quantity,
+        size: selectedSize,
+      })
+    );
+    setNotification("Đã thêm sản phẩm vào giỏ hàng!"); // Thiết lập thông báo khi thêm vào giỏ
+    setTimeout(() => {
+      setNotification(""); // Xóa thông báo sau 3 giây
+    }, 3000);
   };
 
   return (
@@ -39,7 +58,7 @@ export default function Detail({ params }) {
         <div aria-label="breadcrumb">
           <ol className="breadcrumb">
             <li className="Detail">
-              <Link href="#">Detail</Link>
+              <Link href="#">Chi tiết</Link>
             </li>
             <li className="item_detail">
               <i className="fa-solid fa-chevron-right"></i>
@@ -54,32 +73,31 @@ export default function Detail({ params }) {
             <div className="product-container">
               <div className="thumbnail-images d-flex flex-column">
                 <img
-                  src={`/${product.image}`} // Sử dụng URL gốc nếu cần
-                  alt="Thumbnail 1"
+                  src={`/${product.image}`}
+                  alt="Hình thu nhỏ 1"
                   className="mb-2"
                 />
                 <img
                   src={`/${product.image}`}
-                  alt="Thumbnail 2"
+                  alt="Hình thu nhỏ 2"
                   className="mb-2"
                 />
                 <img
                   src={`/${product.image}`}
-                  alt="Thumbnail 3"
+                  alt="Hình thu nhỏ 3"
                   className="mb-2"
                 />
               </div>
               <div className="main-product-image">
                 <img
                   src={`/${product.image}`}
-                  alt="Main Product"
+                  alt="Hình sản phẩm chính"
                   className="w-100"
                 />
               </div>
             </div>
           </div>
 
-          {/* Cột phải: Thông tin sản phẩm */}
           <div className="col-md-4">
             <div className="name_detail">{product.name}</div>
             <p className="price_giam mb-2">
@@ -92,9 +110,8 @@ export default function Detail({ params }) {
               </div>
             </p>
 
-            {/* Tùy chọn màu sắc */}
             <div className="mb-3">
-              <h6 className="name_detail">Color</h6>
+              <h6 className="name_detail">Màu sắc</h6>
               <div className="d-flex">
                 <div
                   className="color-btn bg-secondary rounded-circle me-2"
@@ -111,9 +128,8 @@ export default function Detail({ params }) {
               </div>
             </div>
 
-            {/* Tùy chọn kích thước */}
             <div className="mb-3">
-              <h6 className="mb-2 name_detail">Size</h6>
+              <h6 className="mb-2 name_detail">Kích thước</h6>
               <div className="size_detail d-flex flex-wrap">
                 {product.size && product.size.length > 0 ? (
                   product.size.map((size, index) => (
@@ -122,18 +138,17 @@ export default function Detail({ params }) {
                       className={`size_button ${
                         selectedSize === size ? "active" : ""
                       }`}
-                      onClick={() => handleSizeClick(size)} // Khi chọn size, lưu size vào state
+                      onClick={() => handleSizeClick(size)}
                     >
                       {size}
                     </button>
                   ))
                 ) : (
-                  <p>Không có size nào</p>
+                  <p>Không có kích thước nào</p>
                 )}
               </div>
             </div>
 
-            {/* Số lượng và nút thêm vào giỏ */}
             <div className="mb-3">
               <label className="name_detail" htmlFor="quantity">
                 Số lượng
@@ -149,26 +164,17 @@ export default function Detail({ params }) {
               />
             </div>
 
-            <button
-              className="button_detail"
-              onClick={() => {
-                if (!selectedSize) {
-                  alert("Vui lòng chọn size trước khi thêm vào giỏ hàng.");
-                  return;
-                }
-                dispatch(
-                  addToCart({
-                    item: product,
-                    quantity: quantity,
-                    size: selectedSize, // Thêm size vào giỏ hàng
-                  })
-                );
-              }}
-            >
+            <button className="button_detail" onClick={handleAddToCart}>
               Thêm vào giỏ hàng
             </button>
 
-            {/* Thông tin sản phẩm */}
+            {/* Hiển thị thông báo */}
+            {notification && (
+              <div className="alert alert-success mt-2" role="alert">
+                {notification}
+              </div>
+            )}
+
             <div className="mt-4">
               <h6>Thông tin sản phẩm</h6>
               <p className="text-muted" style={{ fontSize: "0.9rem" }}>
@@ -178,12 +184,11 @@ export default function Detail({ params }) {
           </div>
         </div>
 
-        {/* Ratings Section */}
         <div className="ratings-section d-flex justify-content-between pt-4">
           <div className="align-items-center">
             <div className="danhgia">4.7/5</div>
             <div className="text-warning fs-2">★★★★☆</div>
-            <span className="view_ratings">(3 reviews)</span>
+            <span className="view_ratings">(3 đánh giá)</span>
           </div>
 
           <div className="rating-bar">
@@ -255,81 +260,36 @@ export default function Detail({ params }) {
           </div>
         </div>
 
-        {/* Comments Section */}
-        <div className="comments-section mt-4">
-          <h4 className="h5">Reviews</h4>
-          {/* Bình luận hiện tại */}
-          <div className="review-item mb-3">
-            <div className="d-flex justify-content-between">
-              <div>
-                <span className="text-warning">★★★★★</span>
-                <strong className="ms-2">Nhựt Hào</strong>
-                <span className="ms-2">Ngày 22-10-2024</span>
-              </div>
-            </div>
-            <p className="mt-2">Sản phẩm như six</p>
-            <div className="text-muted">Size Purchased: S | Size: S</div>
-          </div>
-          <div className="review-item mb-3">
-            <div className="d-flex justify-content-between">
-              <div>
-                <span className="text-warning">★★★★★</span>
-                <strong className="ms-2">Minh Quân</strong>
-                <span className="ms-2">Ngày 22-10-2024</span>
-              </div>
-            </div>
-            <p className="mt-2">Sản phẩm tốt lắm</p>
-            <div className="text-muted">Size Purchased: S | Size: S</div>
-          </div>
-          <div className="review-item mb-3">
-            <div className="d-flex justify-content-between">
-              <div>
-                <span className="text-warning">★★★★★</span>
-                <strong className="ms-2">Thành</strong>
-                <span className="ms-2">Ngày 22-10-2024</span>
-              </div>
-            </div>
-            <p className="mt-2">Sản phẩm tốt lắm em</p>
-            <div className="text-muted">Size Purchased: S | Size: S</div>
-          </div>
-
-          {/* Form bình luận */}
-          <form className="mt-4">
-            <h5>Để lại đánh giá</h5>
-            <div className="mb-3">
-              <label htmlFor="name">Name</label>
-              <input
-                type="text"
-                id="name"
-                className="form-control"
-                placeholder="Your name"
-                required
+        <div className="comment-section mt-4">
+          <h5 className="comment-title">Nhận xét</h5>
+          <div className="comment-item">
+            <div className="user-info">
+              <img
+                src="/images/user.png"
+                alt="Người dùng"
+                className="user-avatar"
               />
+              <strong className="user-name">Nguyễn Văn A</strong>
+              <span className="user-date">02/10/2024</span>
             </div>
-            <div className="mb-3">
-              <label htmlFor="comment">Comment</label>
-              <textarea
-                id="comment"
-                rows="3"
-                className="form-control"
-                placeholder="Your comment"
-                required
-              ></textarea>
+            <div className="user-comment">
+              <p>Rất hài lòng với sản phẩm này!</p>
             </div>
-            <div className="mb-3">
-              <label htmlFor="rating">Rating</label>
-              <select id="rating" className="form-control">
-                <option value="5">5 stars</option>
-                <option value="4">4 stars</option>
-                <option value="3">3 stars</option>
-                <option value="2">2 stars</option>
-                <option value="1">1 star</option>
-              </select>
+          </div>
+          <div className="comment-item">
+            <div className="user-info">
+              <img
+                src="/images/user.png"
+                alt="Người dùng"
+                className="user-avatar"
+              />
+              <strong className="user-name">Trần Thị B</strong>
+              <span className="user-date">01/10/2024</span>
             </div>
-            <button type="submit" className="btn btn-dark mb-4">
-              Submit Review
-            </button>
-          </form>
+            <div className="user-comment">
+              <p>Sản phẩm rất chất lượng, sẽ mua tiếp!</p>
+            </div>
+          </div>
         </div>
       </div>
     </>

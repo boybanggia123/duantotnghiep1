@@ -124,7 +124,7 @@ router.post("/login", async (req, res, next) => {
   }
   const token = jwt.sign(
     { email: user.email, role: user.role, fullname: user.fullname },
-    "quandz47",
+    "secret",
     {
       expiresIn: "1h",
     }
@@ -134,7 +134,7 @@ router.post("/login", async (req, res, next) => {
 //lấy thông tin chi tiết user qua token
 router.get("/detailuser", async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  jwt.verify(token, "quandz47", async (err, user) => {
+  jwt.verify(token, "secret", async (err, user) => {
     if (err) {
       return res.status(401).json({ message: "Token không hợp lệ" });
     }
@@ -346,6 +346,31 @@ router.post("/orders", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
+
+router.get('/search', async function (req, res, next) {
+  try {
+    const searchKey = req.query.key;
+    if (!searchKey) {
+      return res.status(400).json({ message: 'Search key is required' });
+    }
+    const db = await connectDb();
+    const productCollection = db.collection('products');
+    const regex = new RegExp(searchKey, 'i');
+    const products = await productCollection
+      .find({
+        $or: [{ name: { $regex: regex } }, { description: { $regex: regex } }],
+      })
+      .toArray();
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: 'Không tìm thấy' });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
