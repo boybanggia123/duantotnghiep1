@@ -42,6 +42,55 @@ router.get("/products", async (req, res, next) => {
     res.status(404).json({ message: "Không tìm thấy" });
   }
 });
+//lấy sản phẩm hot
+router.get("/hot", async (req, res, next) => {
+  try {
+    const db = await connectDb();
+    const productCollection = db.collection("products");
+
+    const products = await productCollection
+      .find({ hot: true })
+      .limit(4)
+      .toArray();
+
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy sản phẩm hot" });
+    }
+  } catch (error) {
+    console.error("Error fetching products:", error);
+    next(error);
+  }
+});
+// lấy sản phẩm mới
+router.get("/new", async (req, res, next) => {
+  try {
+    const db = await connectDb();
+    const productCollection = db.collection("products");
+
+    // Lấy ngày hiện tại và ngày cách đây 30 ngày
+    const today = new Date();
+    const pastDate = new Date();
+    pastDate.setDate(today.getDate() - 30);
+
+    // Tìm các sản phẩm có `dayadd` nằm trong khoảng 30 ngày gần đây
+    const products = await productCollection
+      .find({ dayadd: { $gte: pastDate } })
+
+      .toArray();
+
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy sản phẩm mới" });
+    }
+  } catch (error) {
+    console.error("Error fetching new products:", error);
+    next(error);
+  }
+});
+
 // Lấy danh sách danh mục
 router.get('/categories', async (req, res, next) => {
   try {
