@@ -38,7 +38,7 @@ export default function Cart() {
                   <div className="row" key={item._id}>
                     <div className="col-4 col-sm-3 col-md-2 product-image-container">
                       <img
-                        src={`${item.image}`}
+                        src={`/img/${item.image}`}
                         className="img-fluid product-image"
                         alt="Product Image"
                       />

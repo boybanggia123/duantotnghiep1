@@ -2,8 +2,18 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Countdown from "../components/Countdown";
+import { useSelector } from "react-redux";
+import Search from "../components/Search";
 
 export default function Header() {
+  const cartItems = useSelector((state) => state.cart.items) || [];
+  const [cartCount, setCartCount] = useState(0);
+
+  useEffect(() => {
+    // Cập nhật giá trị số lượng sau khi render client hoàn tất
+    setCartCount(cartItems.length);
+  }, [cartItems]);
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
 
@@ -101,7 +111,7 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
-            <form className="d-flex mt-3" role="search">
+            {/* < <form className="d-flex mt-3" role="search">
               <div className="input-group">
                 <span className="input-group-text search-icon-left">
                   <Link href="#">
@@ -119,16 +129,17 @@ export default function Header() {
                   </Link>
                 </span>
               </div>
-            </form>
+            </form>> */}
+            <Search />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
               <div>
                 {isLoggedIn ? (
-                  <Link href="/info">
+                  <Link href={"/info"}>
                     <span className="ms-3">{userName}</span>
                     <i className="bi bi-person-circle icon-h"></i>
                   </Link>
                 ) : (
-                  <Link href="/dangnhap">
+                  <Link href={"/dangnhap"}>
                     <i className="bi bi-person-circle icon-h"></i>
                   </Link>
                 )}
@@ -136,9 +147,12 @@ export default function Header() {
               <div>
                 <i className="bi bi-suit-heart icon-h"></i>
               </div>
-              <div>
-                <Link href="/cart">
+              <div className="cart-icon-container">
+                <Link href={"/cart"} className="d-flex align-items-center">
                   <i className="bi bi-basket icon-h"></i>
+                  {cartCount > 0 && (
+                    <span className="cart-quantity-badge">{cartCount}</span>
+                  )}
                 </Link>
               </div>
             </div>

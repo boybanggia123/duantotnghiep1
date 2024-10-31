@@ -8,6 +8,28 @@ const app = express();
 app.use(cors())
 const connectDb=require('../model/db');
 const { ObjectId } = require('mongodb');
+const bcrypt = require("bcryptjs");
+const multer = require("multer");
+
+//Thiết lập nơi lưu trữ và tên file
+let storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './public/img')
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.originalname)
+  }
+})
+//Kiểm tra file upload
+function checkFileUpLoad(req, file, cb){
+  if(!file.originalname.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)){
+    return cb(new Error('Bạn chỉ được upload file ảnh'));
+  }
+  cb(null, true);
+  }
+  //Upload file
+  let upload = multer({ storage: storage, fileFilter: checkFileUpLoad });
+
 //Lấy tất cả sản phẩm dạng json
 
 router.get("/products", async (req, res, next) => {
@@ -48,6 +70,23 @@ router.get('/users', async(req, res, next)=> {
   }
 }
 );
+//xoa user
+router.delete('/deleteuser/:id', async (req, res, next) => {
+  const db = await connectDb();
+  const userCollection = db.collection('users');
+  const id = new ObjectId(req.params.id);
+  try {
+    const result = await userCollection.deleteOne({ _id: id });
+    if (result.deletedCount) {
+      res.status(200).json({ message: "Xóa tài khoản thành công" });
+    } else {
+      res.status(404).json({ message: "Không tìm thấy tài khoản" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
 //Kiểm tra token qua Bearer
 router.get('/checktoken', async (req, res, next) => {
   const token = req.headers.authorization.split(' ')[1];
@@ -74,10 +113,106 @@ router.get('/productdetail/:id', async(req, res, next)=> {
   }
 }
 );
-// Đăng ký
 
-//Đăng ký tài khoản với mã hóa mật khẩu bcrypt
-const bcrypt = require("bcryptjs");
+//lấy chi tiết 1 tài khoản
+router.get('/userdetail/:id', async(req, res, next)=> {
+  let id = new ObjectId(req.params.id);
+  const db = await connectDb();
+  const userCollection = db.collection('users');
+  const user = await userCollection.findOne({_id:id});
+  if(user){
+    res.status(200).json(user);
+  }else{
+    res.status(404).json({message : "Không tìm thấy"})
+  }
+}
+);
+
+// Sửa tài khoản
+router.put('/updateuser/:id', upload.single('img'), async (req, res, next) => {
+  const db = await connectDb();
+  const userCollection = db.collection('users');
+  const id = new ObjectId(req.params.id);
+
+  try {
+    // Lấy thông tin tài khoản hiện tại từ database
+    const existingUser = await userCollection.findOne({ _id: id });
+    if (!existingUser) {
+      return res.status(404).json({ message: "Không tìm thấy tài khoản" });
+    }
+
+    // Chuẩn bị đối tượng updateduser với dữ liệu mới hoặc dữ liệu cũ nếu không có dữ liệu mới
+    const { fullname, email, phone, address, createdAt, role, dateOfBirth, password } = req.body;
+    let updateduser = {
+      avatar: existingUser.avatar,
+      fullname: fullname || existingUser.fullname,
+      email: email || existingUser.email,
+      phone: phone || existingUser.phone,
+      address: address || existingUser.address,
+      createdAt: createdAt || existingUser.createdAt,
+      role: role || existingUser.role,
+      dateOfBirth: dateOfBirth || existingUser.dateOfBirth,
+      password: password || existingUser.password
+    };
+
+    // Cập nhật ảnh avatar nếu có file mới
+    if (req.file) {
+      updateduser.avatar = req.file.originalname;
+    }
+
+    // Thực hiện cập nhật vào database
+    const result = await userCollection.updateOne({ _id: id }, { $set: updateduser });
+    if (result.matchedCount) {
+      res.status(200).json({ message: "Sửa tài khoản thành công" });
+    } else {
+      res.status(404).json({ message: "Không tìm thấy tài khoản" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
+// Thêm tài khoản
+router.post("/adduser", upload.single('avatar'), async (req, res) => {
+  const db = await connectDb();
+  const userCollection = db.collection("users");
+  const { fullname, email, phone, address, createdAt, role, dateOfBirth, password } = req.body;
+  // Kiểm tra và cập nhật avatar nếu có file được tải lên
+  let avatar = req.file ? req.file.filename : null; // Sử dụng filename để lưu vào DB
+  try {
+    const user = await userCollection.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "Email đã tồn tại" });
+    }
+    const hashPassword = await bcrypt.hash(password, 10);
+    const newUser = {
+      avatar,
+      fullname,
+      email,
+      phone,
+      address,
+      createdAt,
+      role: role || "user", // Mặc định là "user" nếu không có role
+      dateOfBirth,
+      password: hashPassword,
+    };
+
+    // Thêm người dùng vào cơ sở dữ liệu
+    const result = await userCollection.insertOne(newUser);
+    if (result.insertedId) {
+      res.status(200).json({ message: "Thêm tài khoản thành công" });
+    } else {
+      res.status(500).json({ message: "Thêm tài khoản thất bại" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
+
+// Đăng ký
 router.post("/register", async (req, res, next) => {
   const db = await connectDb();
   const userCollection = db.collection("users");
@@ -124,17 +259,20 @@ router.post("/login", async (req, res, next) => {
   }
   const token = jwt.sign(
     { email: user.email, role: user.role, fullname: user.fullname },
-    "quandz47",
+    "secret",
     {
       expiresIn: "1h",
     }
   );
   res.status(200).json({ token });
 });
+
+
+
 //lấy thông tin chi tiết user qua token
 router.get("/detailuser", async (req, res, next) => {
   const token = req.headers.authorization.split(" ")[1];
-  jwt.verify(token, "quandz47", async (err, user) => {
+  jwt.verify(token, "secret", async (err, user) => {
     if (err) {
       return res.status(401).json({ message: "Token không hợp lệ" });
     }
@@ -149,23 +287,8 @@ router.get("/detailuser", async (req, res, next) => {
   });
 });
 
-const multer = require("multer");
-//Thiết lập nơi lưu trữ và tên file
-let storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "./public/images");
-  },
-  filename: function (req, file, cb) {
-    cb(null, file.originalname);
-  },
-});
-//Kiểm tra file upload
-function checkFileUpLoad(req, file, cb) {
-  if (!file.originalname.match(/\.(jpg|jpeg|png|gif|webp)$/)) {
-    return cb(new Error("Bạn chỉ được upload file ảnh"));
-  }
-  cb(null, true);
-};
+
+
 //orders
 //thêm đơn hàng
 router.post('/order', async(req, res, next)=> {
@@ -179,6 +302,9 @@ router.post('/order', async(req, res, next)=> {
     res.status(404).json({message : "Không tìm thấy"})
   }
 });
+
+
+
 // Route để lấy danh sách đơn hàng
 router.get('/order', async (req, res, next) => {
   try {
@@ -191,6 +317,8 @@ router.get('/order', async (req, res, next) => {
       next(error); // Chuyển lỗi đến middleware xử lý lỗi
   }
 });
+
+
 // Route để xóa đơn hàng
 router.delete('/order/:id', async (req, res, next) => {
   try {
@@ -234,6 +362,9 @@ router.put('/order/:id/confirm', async (req, res, next) => {
     next(error); // Chuyển lỗi đến middleware xử lý lỗi
   }
 });
+
+
+
 // Route để xóa đơn hàng
 router.delete('/order/:id', async (req, res, next) => {
   try {
@@ -253,6 +384,8 @@ router.delete('/order/:id', async (req, res, next) => {
     next(error); // Chuyển lỗi đến middleware xử lý lỗi
   }
 });
+
+
 // Route để xác nhận đơn hàng
 router.put('/order/:id/confirm', async (req, res, next) => {
   try {
@@ -275,48 +408,9 @@ router.put('/order/:id/confirm', async (req, res, next) => {
     next(error); // Chuyển lỗi đến middleware xử lý lỗi
   }
 });
-//Upload file
-let upload = multer({ storage: storage, fileFilter: checkFileUpLoad });
 
-router.put("/updateuser", upload.single("avatar"), async (req, res) => {
-  const token = req.headers.authorization.split(" ")[1];
-  jwt.verify(token, "quandz47", async (err, user) => {
-    if (err) {
-      return res.status(401).json({ message: "Token không hợp lệ" });
-    }
 
-    const db = await connectDb();
-    const userCollection = db.collection("users");
-    const { fullname, phone, address, gender, dateOfBirth } = req.body; // Thêm các trường cần cập nhật
-    const updateData = {
-      fullname,
-      phone,
-      email,
-      address,
-      avatar,
-      role,
-      createdAt,
-      gender,
-      dateOfBirth,
-    };
-
-    // Nếu có avatar mới, thêm vào dữ liệu cập nhật
-    if (req.file) {
-      updateData.avatar = req.file.filename; // Lưu tên file ảnh
-    }
-
-    const result = await userCollection.updateOne(
-      { email: user.email },
-      { $set: updateData }
-    );
-
-    if (result.modifiedCount > 0) {
-      res.status(200).json({ message: "Cập nhật thông tin thành công" });
-    } else {
-      res.status(500).json({ message: "Cập nhật thất bại" });
-    }
-  });
-});// checkout
+// checkout
 router.post("/orders", async (req, res) => {
   try {
     const {
@@ -346,6 +440,31 @@ router.post("/orders", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
+
+router.get('/search', async function (req, res, next) {
+  try {
+    const searchKey = req.query.key;
+    if (!searchKey) {
+      return res.status(400).json({ message: 'Search key is required' });
+    }
+    const db = await connectDb();
+    const productCollection = db.collection('products');
+    const regex = new RegExp(searchKey, 'i');
+    const products = await productCollection
+      .find({
+        $or: [{ name: { $regex: regex } }, { description: { $regex: regex } }],
+      })
+      .toArray();
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: 'Không tìm thấy' });
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
