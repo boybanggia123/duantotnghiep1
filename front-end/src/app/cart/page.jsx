@@ -141,7 +141,7 @@ export default function Cart() {
                 <div className="col-6 col-sm-4 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 1"
                     />
@@ -151,7 +151,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 2"
                     />
@@ -161,7 +161,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 3"
                     />
@@ -171,7 +171,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 4"
                     />
@@ -181,7 +181,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 1"
                     />
@@ -191,7 +191,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 2"
                     />
@@ -201,7 +201,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 3"
                     />
@@ -211,7 +211,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 4"
                     />
