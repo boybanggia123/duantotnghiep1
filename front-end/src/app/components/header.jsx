@@ -60,7 +60,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="/img/logo_fashion.png" alt="logo" />
+            <img src="image/logo_fashion.png" alt="logo" />
           </Link>
           <button
             className="navbar-toggler"

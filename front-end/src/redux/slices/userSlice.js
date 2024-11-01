@@ -1,19 +1,20 @@
-// src/redux/slices/userSlice.js
-import { createSlice } from '@reduxjs/toolkit';
-
-const initialState = {
-  user: null,
-};
+// redux/slices/userSlice.js
+import { createSlice } from "@reduxjs/toolkit";
 
 const userSlice = createSlice({
-  name: 'user',
-  initialState,
+  name: "user",
+  initialState: {
+    email: null,
+    isAuthenticated: false,
+  },
   reducers: {
-    setUser(state, action) {
-      state.user = action.payload;
+    setUser: (state, action) => {
+      state.email = action.payload.email;
+      state.isAuthenticated = true;
     },
-    clearUser(state) {
-      state.user = null;
+    clearUser: (state) => {
+      state.email = null;
+      state.isAuthenticated = false;
     },
   },
 });

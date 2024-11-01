@@ -95,7 +95,7 @@ export default function Info() {
   };
 
   return (
-    <div className="container">
+    <div className="container mt-5">
       <div className="row">
         <div className="col-3">
           <Link href="/" id="back-home" className="fw-bold d-flex gap-1">
@@ -239,7 +239,7 @@ export default function Info() {
               />
             </div>
             <input type="file" onChange={handleFileChange} accept="image/*" />
-            <button onClick={handleUploadAvatar} className="btn btn-secondary">
+            <button onClick="" className="btn btn-secondary">
               Chọn ảnh đại diện
             </button>
           </div>

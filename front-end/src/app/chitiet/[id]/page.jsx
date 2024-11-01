@@ -54,24 +54,24 @@ export default function Detail({ params }) {
             <div className="product-container">
               <div className="thumbnail-images d-flex flex-column">
                 <img
-                  src={`/${product.image}`} // Sử dụng URL gốc nếu cần
-                  alt="Thumbnail 1"
+                  src={`http://localhost:3000/images/${product.image}`} // Sử dụng URL gốc nếu cần
+                  alt={name}
                   className="mb-2"
                 />
                 <img
-                  src={`/${product.image}`}
-                  alt="Thumbnail 2"
+                  src={`http://localhost:3000/images/${product.image}`}
+                  alt={name}
                   className="mb-2"
                 />
                 <img
-                  src={`/${product.image}`}
-                  alt="Thumbnail 3"
+                  src={`http://localhost:3000/images/${product.image}`}
+                  alt={name}
                   className="mb-2"
                 />
               </div>
               <div className="main-product-image">
                 <img
-                  src={`/${product.image}`}
+                  src={`http://localhost:3000/images/${product.image}`}
                   alt="Main Product"
                   className="w-100"
                 />

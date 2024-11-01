@@ -1,0 +1,80 @@
+[{
+  "_id": {
+    "$oid": "67137f99e6f3114680b41066"
+  },
+  "name": "Áo Khoác",
+  "description": "All kinds of electronics",
+  "position": 1
+},
+{
+  "_id": {
+    "$oid": "67137fa3e6f3114680b41067"
+  },
+  "name": "Áo Thun",
+  "description": "Clothing and accessories",
+  "position": 2
+},
+{
+  "_id": {
+    "$oid": "67137fabe6f3114680b41068"
+  },
+  "name": "Chân Váy",
+  "description": "Appliances for home",
+  "position": 3
+},
+{
+  "_id": {
+    "$oid": "67137fb1e6f3114680b41069"
+  },
+  "name": "Đầm",
+  "description": "Fiction and non-fiction books",
+  "position": 4
+},
+{
+  "_id": {
+    "$oid": "67137fb6e6f3114680b4106a"
+  },
+  "name": "Giày Cao Gót",
+  "description": "Toys and games for kids",
+  "position": 5
+},
+{
+  "_id": {
+    "$oid": "67137fbbe6f3114680b4106b"
+  },
+  "name": "Giày Thể Thao",
+  "description": "Beauty and skincare products",
+  "position": 6
+},
+{
+  "_id": {
+    "$oid": "67137fc0e6f3114680b4106c"
+  },
+  "name": "Quần Jeans",
+  "description": "Sports equipment and clothing",
+  "position": 7
+},
+{
+  "_id": {
+    "$oid": "67137fc6e6f3114680b4106d"
+  },
+  "name": "Quần Short",
+  "description": "Daily groceries and essentials",
+  "position": 8
+},
+{
+  "_id": {
+    "$oid": "67137fd4e6f3114680b4106e"
+  },
+  "name": "Quần Tây",
+  "description": "Car and bike accessories",
+  "position": 9
+},
+{
+  "_id": {
+    "$oid": "67137fe1e6f3114680b4106f"
+  },
+  "name": "Phụ Kiện",
+  "description": "Furniture and home decor",
+  "position": 10
+}]
