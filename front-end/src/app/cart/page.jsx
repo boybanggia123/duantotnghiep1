@@ -32,7 +32,6 @@ export default function Cart() {
     0
   );
 
-  const imageUrl = "http://localhost:3000/images/";
 
   return (
     <>
@@ -47,7 +46,7 @@ export default function Cart() {
                   <div className="row" key={item._id}>
                     <div className="col-4 col-sm-3 col-md-2 product-image-container">
                       <img
-                        src={`${imageUrl}/${item.image}`}
+                        src={`${item.image}`}
                         className="img-fluid product-image"
                         alt="Product Image"
                       />
@@ -141,7 +140,91 @@ export default function Cart() {
             </div>
             <div className="recommended-section mt-4">
               <h5>SẢN PHẨM LIÊN QUAN</h5>
-              {/* Thêm sản phẩm liên quan ở đây */}
+              <div className="row mt-4">
+                <div className="col-6 col-sm-4 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith1.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 1"
+                    />
+                    <p>$12.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith2.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 2"
+                    />
+                    <p>$15.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith1.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 3"
+                    />
+                    <p>$10.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith2.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 4"
+                    />
+                    <p>$20.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith1.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 1"
+                    />
+                    <p>$12.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith2.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 2"
+                    />
+                    <p>$15.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith1.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 3"
+                    />
+                    <p>$10.00</p>
+                  </div>
+                </div>
+                <div className="col-6 col-md-3 mb-4">
+                  <div className="text-center">
+                    <img
+                      src="img/itwith2.webp"
+                      className="img-fluid mb-2"
+                      alt="Rec 4"
+                    />
+                    <p>$20.00</p>
+                  </div>
+                </div>
+              </div>
+              <button className="btn btn-outline-secondary w-100 mb-4">
+                Load More
+              </button>
             </div>
           </div>
           {isMounted && (

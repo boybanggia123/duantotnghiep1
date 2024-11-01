@@ -239,9 +239,13 @@ export default function Info() {
               />
             </div>
             <input type="file" onChange={handleFileChange} accept="image/*" />
+
             <button onClick="" className="btn btn-secondary">
               Chọn ảnh đại diện
             </button>
+
+            <button className="btn btn-secondary">Chọn ảnh đại diện</button>
+
           </div>
         </div>
       </div>

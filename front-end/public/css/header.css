@@ -17,6 +17,35 @@ hr{
   width: 140px;
   height: auto;
 }
+.cart-icon-container {
+  position: relative;
+  display: inline-block;
+}
+
+.icon-h {
+  font-size: 24px;
+  position: relative;
+}
+
+.cart-quantity-badge {
+  display: none; /* Hide badge by default */
+  position: absolute;
+  top: -4px;
+  right: -2px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 4px;
+  font-size: 8px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+/* Show badge only if there's a number in it */
+.cart-quantity-badge:not(:empty) {
+  display: inline;
+}
+
 .nav_2{
   height: 65px;
 }

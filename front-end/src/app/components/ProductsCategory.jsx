@@ -31,7 +31,7 @@ function ProductsHome(props) {
               <div className="w-img gray-background">
                 <Link href={`/chitiet/${_id}`}>
                   <img
-                    src={`${image}`}
+                    src={`img/${image}`}
                     alt={image}
                     className="img-fluid img-gray "
                   />

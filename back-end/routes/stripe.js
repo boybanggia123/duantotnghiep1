@@ -12,7 +12,7 @@ router.post("/create-checkout-session", async (req, res) => {
   const line_items = req.body.cartItems.map((item) => {
     return {
       price_data: {
-        currency: "vnd",
+        currency: "usd", // Ensure this matches the shipping options
         product_data: {
           name: item.name,
           images: [item.image],
@@ -21,7 +21,7 @@ router.post("/create-checkout-session", async (req, res) => {
             id: item._id,
           },
         },
-        unit_amount: item.price * 100,
+        unit_amount: item.price * 100, // Price in cents
       },
       quantity: item.quantity,
     };
@@ -37,7 +37,7 @@ router.post("/create-checkout-session", async (req, res) => {
           type: "fixed_amount",
           fixed_amount: {
             amount: 0,
-            currency: "vnd",
+            currency: "usd", // Match this currency
           },
           display_name: "Free shipping",
           delivery_estimate: {
@@ -57,7 +57,7 @@ router.post("/create-checkout-session", async (req, res) => {
           type: "fixed_amount",
           fixed_amount: {
             amount: 1500,
-            currency: "vnd",
+            currency: "usd", // Ensure this is also USD
           },
           display_name: "Next day air",
           delivery_estimate: {
@@ -78,7 +78,9 @@ router.post("/create-checkout-session", async (req, res) => {
     success_url: `${process.env.CLIENT_URL}/checkout`,
     cancel_url: `${process.env.CLIENT_URL}/cart`,
   });
+  
   res.send({ url: session.url });
 });
+
 
 module.exports = router;
