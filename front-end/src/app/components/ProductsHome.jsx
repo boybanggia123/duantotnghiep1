@@ -32,9 +32,9 @@ function ProductsHome(props) {
                 <Link href={`/chitiet/${_id}`}>
                   <img
 
-                    src={`http://localhost:3000/images/${image}`}
+                    // src={`http://localhost:3000/images/${image}`}
 
-                    src={`img/${image}`}
+                    src={`/img/${image}`}
 
                     alt={name}
                     className="img-fluid img-gray "
@@ -64,37 +64,14 @@ function ProductsHome(props) {
           </div>
         );
       })}
-
-      {/* Phân trang */}
-      <div className="pagination">
-        <button
-          onClick={() => paginate(currentPage - 1)}
-          className="btn btn-outline-dark"
-          disabled={currentPage === 1}
-        >
-          &laquo;
-        </button>
-
-        {Array.from({ length: totalPages }, (_, index) => (
-          <button
-            key={index + 1}
-            onClick={() => paginate(index + 1)}
-            className={`btn ${
-              currentPage === index + 1 ? "btn-dark" : "btn-outline-dark"
-            }`}
-          >
-            {index + 1}
-          </button>
-        ))}
-
-        <button
-          onClick={() => paginate(currentPage + 1)}
-          className="btn btn-outline-dark"
-          disabled={currentPage === totalPages}
-        >
-          &raquo;
-        </button>
-      </div>
+       {/* Phân trang */}
+       <Link href={"/sanpham"} className="namesup">
+       <div className="text-center my-3">
+           <button className="btn load-more-btn">
+            Load more
+           </button>
+         </div>  
+       </Link>
     </>
   );
 }

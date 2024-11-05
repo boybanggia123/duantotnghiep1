@@ -44,6 +44,31 @@ router.get("/hot", async (req, res, next) => {
     next(error);
   }
 });
+// tìm kiếm sản phẩm 
+router.get('/search', async function (req, res, next) {
+  try {
+    const searchKey = req.query.key;
+    if (!searchKey) {
+      return res.status(400).json({ message: 'Search key is required' });
+    }
+    const db = await connectDb();
+    const productCollection = db.collection('products');
+    const regex = new RegExp(searchKey, 'i');
+    const products = await productCollection
+      .find({
+        $or: [{ name: { $regex: regex } }, { description: { $regex: regex } }],
+      })
+      .toArray();
+
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: 'No products found' });
+    }
+  } catch (error) {
+    next(error);
+  }
+});
 // lấy sản phẩm mới
 router.get("/new", async (req, res, next) => {
   try {
@@ -68,6 +93,24 @@ router.get("/new", async (req, res, next) => {
     }
   } catch (error) {
     console.error("Error fetching new products:", error);
+    next(error);
+  }
+});
+// lấy sản phẩm theo danh mục
+router.get("/products/:categoryId", async (req, res, next) => {
+  try {
+    const { categoryId } = req.params;
+    const db = await connectDb();
+    const productCollection = db.collection("products");
+    const query = { categoryId: ObjectId.isValid(categoryId) ? new ObjectId(categoryId) : categoryId };
+    const products = await productCollection.find(query).toArray();
+    if (products.length > 0) {
+      res.status(200).json(products);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy sản phẩm cho danh mục này" });
+    }
+  } catch (error) {
+    console.error("Error fetching products by categoryId:", error);
     next(error);
   }
 });

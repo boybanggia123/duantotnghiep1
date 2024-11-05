@@ -23,7 +23,7 @@ export default async function Home() {
                 poster="https://cdn.shopify.com/s/files/1/0293/9277/files/ENGLISH_DESKTOP_STILL.png?v=1727818039"
               >
                 <source
-                  src="https://cdn.shopify.com/videos/c/o/v/9a0ee408478e4613b6400169e7746598.mp4"
+                  src="https://cdn.shopify.com/videos/c/o/v/75589e7ba86043039b077baa855ec68a.mp4"
                   type="video/mp4"
                 />
               </video>
@@ -123,7 +123,7 @@ export default async function Home() {
             <ProductsHome data={data} />
           </div>
         </div>
-        {/* body */}
+
       </div>
     </>
   );
