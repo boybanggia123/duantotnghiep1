@@ -50,7 +50,7 @@ const Search = () => {
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      window.location.href = `/sanpham?key=${encodeURIComponent(keyword)}`;
+      window.location.href = `/sanpham`;
     }
   };
 
@@ -90,35 +90,36 @@ const Search = () => {
           {error}
         </p>
       )}
-      {products.length > 0 ? (
-        <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
-          {products.map((product) => (
-            <a
-              key={product._id}
-              href={`/chitiet/${product._id}`}
-              className="d-flex justify-content-center align-content-center product-item gap-3"
-            >
-              <div className="product-image">
-                <img
-                  className="img-fluid"
-                  src={product.image}
-                  alt={product.name}
-                  style={{ maxWidth: "100px" }}
-                  loading="lazy"
-                />
-              </div>
-              <div className="d-flex flex-column justify-content-center">
-                <h4 className="mb-0">{product.name}</h4>
-                <p className="mb-0">{product.description}</p>
-              </div>
-            </a>
-          ))}
+      {products.length > 0 && keyword ? (
+  <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
+    {products.map((product) => (
+      <a
+        key={product._id}
+        href={`/chitiet/${product._id}`}
+        className="d-flex justify-content-center align-content-center product-item gap-3"
+      >
+        <div className="product-image">
+          <img
+            className="img-fluid"
+            src={`/img/${product.image}`}
+            alt={product.name}
+            style={{ maxWidth: "100px" }}
+            loading="lazy"
+          />
         </div>
-      ) : (
-        !loading &&
-        !error &&
-        keyword && <p className="mb-0">Không có sản phẩm nào</p>
-      )}
+        <div className="d-flex flex-column justify-content-center">
+          <h4 className="mb-0">{product.name}</h4>
+          <p className="mb-0">{product.description}</p>
+        </div>
+      </a>
+    ))}
+  </div>
+) : (
+  !loading &&
+  !error &&
+  keyword && <p className="mb-0">Không có sản phẩm nào</p>
+)}
+
     </div>
   );
 };

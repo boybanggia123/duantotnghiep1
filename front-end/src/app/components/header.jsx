@@ -4,7 +4,9 @@ import Link from "next/link";
 import Countdown from "../components/Countdown";
 import { useSelector } from "react-redux";
 import Search from "../components/Search";
+import useSWR from "swr"
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
   const cartItems = useSelector((state) => state.cart.items) || [];
   const [cartCount, setCartCount] = useState(0);
@@ -16,6 +18,7 @@ export default function Header() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
+  const {data: categories} = useSWR("http://localhost:3000/categories", fetcher)
 
   useEffect(() => {
     const token = document.cookie
@@ -161,14 +164,9 @@ export default function Header() {
       </nav>
       <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          <Link href={"/sanpham"}>new in</Link>
-          <Link href={"#"}>clothing</Link>
-          <Link href={"#"}>halloween</Link>
-          <Link href={"#"}>dresses</Link>
-          <Link href={"#"}>matching sets</Link>
-          <Link href={"#"}>tops</Link>
-          <Link href={"#"}>jeans</Link>
-          <Link href={"#"}>bottoms</Link>
+          {categories && categories.map(category => (
+            <Link href={`/category/${category._id}`}>{category.name}</Link>
+          ))}
         </div>
       </div>
       <hr className="mt-0 mb-0" />

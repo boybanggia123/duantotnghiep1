@@ -1,25 +1,28 @@
 "use client";
+import Link from "next/link";
+import { useState,useEffect } from "react";
+import { useParams } from "next/navigation";
+import useSWR from "swr";
+import ProductsCategory from "../../components/ProductsCategory"; 
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-import React, { useState, useEffect } from "react";
-import ProductsCategory from "../components/ProductsCategory";
-
-export default function ProductPage() {
+export default function ProductByCategoryPage() {
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState(""); 
+  const [sortOption, setSortOption] = useState("asc"); 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [products, setProducts] = useState([]); // Trạng thái lưu dữ liệu sản phẩm
-  const [categories, setCategories] = useState([]); // Trạng thái lưu danh mục
-  const [selectedCategories, setSelectedCategories] = useState([]); // Trạng thái danh mục đã chọn (mảng)
-  const [minPrice, setMinPrice] = useState(""); // Trạng thái giá tối thiểu
-  const [maxPrice, setMaxPrice] = useState(""); // Trạng thái giá tối đa
-  const [sortOption, setSortOption] = useState("asc"); // Trạng thái sắp xếp
+  const { id } = useParams();
+  const [products, setProducts] = useState([]); 
+  const { data: categories, error } = useSWR(`http://localhost:3000/products/${id}`, fetcher);
 
   // Hàm mở/đóng menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // Fetch danh mục và sản phẩm từ API
+
   useEffect(() => {
-    async function fetchProducts() {
+    async function fetchProducts(){
       const res = await fetch("http://localhost:3000/products", {
         cache: "no-store",
       });
@@ -27,29 +30,13 @@ export default function ProductPage() {
       setProducts(newProducts);
     }
     fetchProducts();
-  }, []);
-
-  useEffect(() => {
-    const getCategories = async () => {
-      const res = await fetch("http://localhost:3000/categories", {
-        cache: "no-store",
-      });
-      const data = await res.json();
-      setCategories(data);
-    };
-    getCategories();
-  }, []);
-
-  // Hàm xử lý lọc sản phẩm theo danh mục, giá và sắp xếp
-  const handleSortAndFilter = (products) => {
+  }, [id]);
+  
+   // Hàm xử lý lọc sản phẩm theo danh mục, giá và sắp xếp
+   const handleSortAndFilter = (products) => {
     let filteredProducts = products;
 
-    // Lọc theo danh mục
-    if (selectedCategories.length > 0) {
-      filteredProducts = filteredProducts.filter((product) =>
-        selectedCategories.includes(product.categoryId)
-      );
-    }
+
 
     // Lọc theo giá
     if (minPrice) {
@@ -95,8 +82,40 @@ export default function ProductPage() {
     setSortOption(e.target.value);
   };
 
+  // const handleSortAndFilter = (data) => {
+  //   return data;
+  // };
   return (
-    <div className="container-fluid m-0">
+    <>
+      <div>
+        {/* banner */}
+        <div className="banner-1">
+          <div className="video-container">
+            <Link href={"/"}>
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                data-testid="video-banner"
+                aria-label="30/40/50 hero"
+                poster="https://cdn.shopify.com/s/files/1/0293/9277/files/ENGLISH_DESKTOP_STILL.png?v=1727818039"
+              >
+                <source
+                  src="https://cdn.shopify.com/videos/c/o/v/75589e7ba86043039b077baa855ec68a.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </Link>
+          </div>
+        </div>
+        <div className="banner-1">
+          <img src="image/banner1.3.webp" alt="" className="img-fluid w-100" />
+        </div>
+        <div className="container main-body custom-container">
+        </div>
+        {/* products */}
+       <div className="container-fluid m-0">
       <div className="row">
         {/* Nút mở menu trên mobile */}
         <button
@@ -115,25 +134,6 @@ export default function ProductPage() {
           <div className="Categories_phai">REFINE BY</div>
 
           {/* Danh mục */}
-          <div className="custom-filter">
-            <h6>Category</h6>
-            <ul className="list-unstyled">
-              {categories.map((category) => (
-                <li key={category._id}>
-                  <input
-                    className="input_checkbox"
-                    type="checkbox"
-                    id={category._id}
-                    checked={selectedCategories.includes(category._id)}
-                    onChange={() => handleCategoryChange(category._id)}
-                  />
-                  <label htmlFor={category._id} className="label_trai ms-0">
-                    {category.name}
-                  </label>
-                </li>
-              ))}
-            </ul>
-          </div>
           <hr />
 
           {/* Kích thước */}
@@ -199,7 +199,7 @@ export default function ProductPage() {
         {/* Lưới sản phẩm bên phải */}
         <div className="col-md-10 custom-product-section">
           <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
-            <div className="Products_show">DANH SÁCH SẢN PHẨM</div>
+          <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
             <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
               <div className="price-filter d-flex align-items-center">
                 <label htmlFor="minPrice" className="me-2">
@@ -225,8 +225,6 @@ export default function ProductPage() {
                   style={{ width: "100px", height: "28px", fontSize: ".75rem" }}
                 />
               </div>
-
-              {/* Sort by Price */}
               <select
                 className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
                 onChange={handleSortChange}
@@ -236,13 +234,14 @@ export default function ProductPage() {
               </select>
             </div>
           </div>
-
           {/* Lưới sản phẩm */}
           <div className="row g-4 custom-product-grid">
-            <ProductsCategory data={handleSortAndFilter(products)} />
+          <ProductsCategory data={handleSortAndFilter(categories || [])} />
           </div>
         </div>
       </div>
     </div>
+      </div>
+    </>
   );
 }
