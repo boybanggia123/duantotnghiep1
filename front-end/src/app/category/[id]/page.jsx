@@ -1,256 +1,272 @@
 "use client";
-import { useSelector, useDispatch } from "react-redux";
-import { addToCart } from "@/redux/slices/cartslice";
-import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import { useParams } from "next/navigation";
 import useSWR from "swr";
+import ProductsCategory from "../../components/ProductsCategory";
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
-const fetcher = (...args) => fetch(...args).then((res) => res.json());
+export default function ProductByCategoryPage() {
+  const [minPrice, setMinPrice] = useState("");
+  const [maxPrice, setMaxPrice] = useState("");
+  const [sortOption, setSortOption] = useState("asc");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const { data: categories, error } = useSWR(
+    `http://localhost:3000/products/${id}`,
+    fetcher
+  );
 
-export default function Detail({ params }) {
-  const [quantity, setQuantity] = useState(1);
-  const [selectedSize, setSelectedSize] = useState("");
-  const [notification, setNotification] = useState("");
-  const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart);
-  const user = useSelector((state) => state.user.user); // Lấy thông tin người dùng từ Redux store
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Thêm state kiểm tra đăng nhập
+  // Hàm mở/đóng menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   useEffect(() => {
-    const token = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("token="));
-    if (token) {
-      setIsLoggedIn(true); // Người dùng đã đăng nhập
-    } else {
-      setIsLoggedIn(false); // Người dùng chưa đăng nhập
+    async function fetchProducts() {
+      const res = await fetch("http://localhost:3000/products", {
+        cache: "no-store",
+      });
+      const newProducts = await res.json();
+      setProducts(newProducts);
     }
-  }, []);
+    fetchProducts();
+  }, [id]);
 
-  const {
-    data: product,
-    error,
-    isLoading,
-  } = useSWR(`http://localhost:3000/productdetail/${params.id}`, fetcher, {
-    refreshInterval: 6000,
-  });
+  // Hàm xử lý lọc sản phẩm theo danh mục, giá và sắp xếp
+  const handleSortAndFilter = (products) => {
+    let filteredProducts = products;
 
-  if (error) return <div>Lỗi tải dữ liệu.</div>;
-  if (isLoading) return <div>Đang tải...</div>;
+    // Lọc theo giá
+    if (minPrice) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price >= minPrice
+      );
+    }
 
-  const handleSizeClick = (size) => {
-    if (selectedSize === size) {
-      setSelectedSize("");
+    if (maxPrice) {
+      filteredProducts = filteredProducts.filter(
+        (product) => product.price <= maxPrice
+      );
+    }
+
+    // Sắp xếp sản phẩm theo giá
+    return filteredProducts.sort((a, b) => {
+      return sortOption === "asc" ? a.price - b.price : b.price - a.price;
+    });
+  };
+
+  // Sự kiện chọn danh mục
+  const handleCategoryChange = (categoryId) => {
+    if (selectedCategories.includes(categoryId)) {
+      setSelectedCategories(
+        selectedCategories.filter((id) => id !== categoryId)
+      ); // Bỏ chọn nếu đã chọn trước đó
     } else {
-      setSelectedSize(size);
+      setSelectedCategories([...selectedCategories, categoryId]); // Thêm vào danh mục đã chọn
     }
   };
 
-  const handleAddToCart = () => {
-    if (!isLoggedIn) {
-      // Kiểm tra nếu chưa đăng nhập
-      alert("Vui lòng đăng nhập trước khi thêm vào giỏ hàng.");
-      window.location.href = "/dangnhap"; // Chuyển hướng tới trang đăng nhập
-      return;
-    }
-
-    if (!selectedSize) {
-      alert("Vui lòng chọn kích thước trước khi thêm vào giỏ hàng.");
-      return;
-    }
-
-    dispatch(
-      addToCart({
-        item: product,
-        quantity: quantity,
-        size: selectedSize,
-      })
-    );
-    setNotification("Đã thêm sản phẩm vào giỏ hàng!"); // Thiết lập thông báo khi thêm vào giỏ
-    setTimeout(() => {
-      setNotification(""); // Xóa thông báo sau 3 giây
-    }, 3000);
+  // Sự kiện thay đổi giá
+  const handleMinPriceChange = (e) => {
+    setMinPrice(e.target.value);
   };
+
+  const handleMaxPriceChange = (e) => {
+    setMaxPrice(e.target.value);
+  };
+
+  // Sự kiện thay đổi sắp xếp
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+
+  // const handleSortAndFilter = (data) => {
+  //   return data;
+  // };
   return (
-    <div className="container mt-3">
-      <div aria-label="breadcrumb">
-        <ol className="breadcrumb">
-          <li className="Detail">
-            <Link href="#">Chi tiết</Link>
-          </li>
-          <li className="item_detail">
-            <i className="fa-solid fa-chevron-right"></i>
-          </li>
-          <li className="Detail active" aria-current="page">
-            {product.name}
-          </li>
-        </ol>
-      </div>
-      <div className="row mb-4">
-        <div className="col-md-8">
-          <div className="product-container">
-            <div className="thumbnail-images d-flex flex-column">
-              <img
-                src={`/img/${product.image}`}
-                alt="Hình thu nhỏ 1"
-                className="mb-2"
-              />
-              <img
-                src={`/img/${product.image}`}
-                alt="Hình thu nhỏ 2"
-                className="mb-2"
-              />
-              <img
-                src={`/img/${product.image}`}
-                alt="Hình thu nhỏ 3"
-                className="mb-2"
-              />
-            </div>
-            <div className="main-product-image">
-              <img
-                src={`/img/${product.image}`}
-                alt="Hình sản phẩm chính"
-                className="w-100"
-              />
-            </div>
+    <>
+      <div>
+        {/* banner */}
+        <div className="banner-1">
+          <div className="video-container">
+            <Link href={"/"}>
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                data-testid="video-banner"
+                aria-label="30/40/50 hero"
+                poster="https://cdn.shopify.com/s/files/1/0293/9277/files/ENGLISH_DESKTOP_STILL.png?v=1727818039"
+              >
+                <source
+                  src="https://cdn.shopify.com/videos/c/o/v/75589e7ba86043039b077baa855ec68a.mp4"
+                  type="video/mp4"
+                />
+              </video>
+            </Link>
           </div>
         </div>
+        <div className="banner-1">
+          <img src="image/banner1.3.webp" alt="" className="img-fluid w-100" />
+        </div>
+        <div className="container main-body custom-container"></div>
+        {/* products */}
+        <div className="container-fluid m-0">
+          <div className="row">
+            {/* Nút mở menu trên mobile */}
+            <button
+              className="btn btn-primary m-0 d-md-none mb-3"
+              onClick={toggleMenu}
+            >
+              {isMenuOpen ? "Close Filter" : "Open Filter"}
+            </button>
 
-        <div className="col-md-4">
-          <div className="name_detail">{product.name}</div>
-          <p className="price_giam mb-2">
-            <div className="gia_detail">
-              ${product.discountedPrice}{" "}
-              <del className="price_goc">${product.price}</del>
-            </div>
-            <div className=" text-warning_1 fs-6">
-              ★★★★☆<span className="sl_ratings">(3)</span>
-            </div>
-          </p>
+            {/* Bộ lọc bên trái */}
+            <div
+              className={`col-md-2 custom-filter-section m-0 rounded-0 ${
+                isMenuOpen ? "d-block" : "d-none"
+              } d-md-block`}
+            >
+              <div className="Categories_phai">REFINE BY</div>
 
-          <div className="mb-3">
-            <h6 className="name_detail">Màu sắc</h6>
-            <div className="d-flex">
-              <div
-                className="color-btn bg-secondary rounded-circle me-2"
-                style={{ width: "20px", height: "20px" }}
-              ></div>
-              <div
-                className="color-btn bg-danger rounded-circle me-2"
-                style={{ width: "20px", height: "20px" }}
-              ></div>
-              <div
-                className="color-btn bg-primary rounded-circle"
-                style={{ width: "20px", height: "20px" }}
-              ></div>
-            </div>
-          </div>
+              {/* Danh mục */}
+              <hr />
 
-          <div className="mb-3">
-            <h6 className="mb-2 name_detail">Kích thước</h6>
-            <div className="size_detail d-flex flex-wrap">
-              {product.size && product.size.length > 0 ? (
-                product.size.map((size, index) => (
-                  <button
-                    key={index}
-                    className={`size_button ${
-                      selectedSize === size ? "active" : ""
-                    }`}
-                    onClick={() => handleSizeClick(size)}
+              {/* Kích thước */}
+              <div className="custom-filter">
+                <h6>Size</h6>
+                <ul className="list-unstyled">
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="sizeS"
+                    />
+                    <label htmlFor="sizeS" className="label_trai ms-0">
+                      S
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="sizeM"
+                    />
+                    <label htmlFor="sizeM" className="label_trai ms-0">
+                      M
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="sizeL"
+                    />
+                    <label htmlFor="sizeL" className="label_trai ms-0">
+                      L
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="sizeXL"
+                    />
+                    <label htmlFor="sizeXL" className="label_trai ms-0">
+                      L/XL
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <hr />
+
+              {/* Màu sắc */}
+              <div className="custom-filter">
+                <h6>Colors</h6>
+                <ul className="list-unstyled">
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="colorBlack"
+                    />
+                    <label htmlFor="colorBlack" className="label_trai ms-0">
+                      Black
+                    </label>
+                  </li>
+                  <li>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id="colorBrown"
+                    />
+                    <label htmlFor="colorBrown" className="label_trai ms-0">
+                      Brown
+                    </label>
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            {/* Lưới sản phẩm bên phải */}
+            <div className="col-md-10 custom-product-section">
+              <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
+                <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
+                <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
+                  <div className="price-filter d-flex align-items-center">
+                    <label htmlFor="minPrice" className="me-2">
+                      Price range:
+                    </label>
+                    <input
+                      type="number"
+                      id="minPrice"
+                      className="form-control rounded-0"
+                      placeholder="Min"
+                      value={minPrice}
+                      onChange={handleMinPriceChange}
+                      style={{
+                        width: "100px",
+                        height: "28px",
+                        fontSize: ".75rem",
+                      }}
+                    />
+                    <span className="mx-2">-</span>
+                    <input
+                      type="number"
+                      id="maxPrice"
+                      className="form-control rounded-0"
+                      placeholder="Max"
+                      value={maxPrice}
+                      onChange={handleMaxPriceChange}
+                      style={{
+                        width: "100px",
+                        height: "28px",
+                        fontSize: ".75rem",
+                      }}
+                    />
+                  </div>
+                  <select
+                    className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
+                    onChange={handleSortChange}
                   >
-                    {size}
-                  </button>
-                ))
-              ) : (
-                <p>Không có kích thước nào</p>
-              )}
+                    <option value="asc">Giá tăng dần</option>
+                    <option value="desc">Giá giảm dần</option>
+                  </select>
+                </div>
+              </div>
+              {/* Lưới sản phẩm */}
+              <div className="row g-4 custom-product-grid">
+                <ProductsCategory
+                  data={handleSortAndFilter(categories || [])}
+                />
+              </div>
             </div>
-          </div>
-
-          <div className="mb-3">
-            <label className="name_detail" htmlFor="quantity">
-              Số lượng
-            </label>
-            <input
-              style={{ width: "80px", marginTop: "10px" }}
-              type="number"
-              id="quantity"
-              min="1"
-              value={quantity}
-              onChange={(e) => setQuantity(e.target.value)}
-              className="form-control "
-            />
-          </div>
-
-          <button className="button_detail" onClick={handleAddToCart}>
-            Thêm vào giỏ hàng
-          </button>
-
-          {/* Hiển thị thông báo */}
-          {notification && (
-            <div className="alert alert-success mt-2" role="alert">
-              {notification}
-            </div>
-          )}
-
-          <div className="mt-4">
-            <h6>Thông tin sản phẩm</h6>
-            <p className="text-muted" style={{ fontSize: "0.9rem" }}>
-              {product.description}
-            </p>
           </div>
         </div>
       </div>
-
-      <div className="ratings-section d-flex justify-content-between pt-4">
-        <div className="align-items-center">
-          <div className="danhgia">4.7/5</div>
-          <div className="text-warning fs-2">★★★★☆</div>
-          <span className="view_ratings">(3 đánh giá)</span>
-        </div>
-
-        <div className="rating-bar">
-          <div className="d-flex align-items-center mb-1">
-            <span className="me-2">5 ★</span>
-            <div
-              className="progress flex-grow-1 me-2"
-              style={{ width: "300px" }}
-            >
-              <div
-                className="progress-bar bg-warning"
-                style={{ width: "75%" }}
-              ></div>
-            </div>
-            <span>2</span>
-          </div>
-          <div className="d-flex align-items-center mb-1">
-            <span className="me-2">4 ★</span>
-            <div
-              className="progress flex-grow-1 me-2"
-              style={{ width: "150px" }}
-            >
-              <div
-                className="progress-bar bg-warning"
-                style={{ width: "50%" }}
-              ></div>
-            </div>
-            <span>1</span>
-          </div>
-          <div className="d-flex align-items-center mb-1">
-            <span className="me-2">3 ★</span>
-            <div
-              className="progress flex-grow-1 me-2"
-              style={{ width: "150px" }}
-            >
-              <div
-                className="progress-bar bg-warning"
-                style={{ width: "0%" }}
-              ></div>
-            </div>
-            <span>0</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }

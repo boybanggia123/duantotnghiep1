@@ -338,6 +338,24 @@ router.post("/adduser", upload.single('avatar'), async (req, res) => {
   }
 });
 
+//xoa user
+router.delete('/deleteuser/:id', async (req, res, next) => {
+  const db = await connectDb();
+  const userCollection = db.collection('users');
+  const id = new ObjectId(req.params.id);
+  try {
+    const result = await userCollection.deleteOne({ _id: id });
+    if (result.deletedCount) {
+      res.status(200).json({ message: "Xóa tài khoản thành công" });
+    } else {
+      res.status(404).json({ message: "Không tìm thấy tài khoản" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
 // ----------------------------------------------END USER--------------------------------------------------------------
 
 module.exports = router;
