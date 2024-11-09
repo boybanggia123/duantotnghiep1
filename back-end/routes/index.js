@@ -171,7 +171,7 @@ router.post("/login", async (req, res, next) => {
     return res.status(400).json({ message: "Mật khẩu không chính xác" });
   }
   const token = jwt.sign(
-    { email: user.email, role: user.role, fullname: user.fullname },
+    { id: user._id,email: user.email, role: user.role, fullname: user.fullname },
     "secret",
     {
       expiresIn: "1h",
@@ -215,124 +215,6 @@ function checkFileUpLoad(req, file, cb) {
   }
   cb(null, true);
 }
-//orders
-//thêm đơn hàng
-router.post("/order", async (req, res, next) => {
-  const db = await connectDb();
-  const orderCollection = db.collection("orders");
-  const data = req.body;
-  const result = await orderCollection.insertOne(data);
-  if (result.insertedId) {
-    res.status(200).json(result);
-  } else {
-    res.status(404).json({ message: "Không tìm thấy" });
-  }
-});
-
-// Route để lấy danh sách đơn hàng
-router.get("/order", async (req, res, next) => {
-  try {
-    const db = await connectDb();
-    const orderCollection = db.collection("orders");
-    const orders = await orderCollection.find().toArray(); // Lấy tất cả đơn hàng từ collection
-
-    res.status(200).json(orders);
-  } catch (error) {
-    next(error); // Chuyển lỗi đến middleware xử lý lỗi
-  }
-});
-
-// Route để xóa đơn hàng
-router.delete("/order/:id", async (req, res, next) => {
-  try {
-    const db = await connectDb();
-    const orderCollection = db.collection("orders");
-    const orderId = req.params.id; // Lấy ID đơn hàng từ URL
-
-    // Xóa đơn hàng khỏi collection
-    const result = await orderCollection.deleteOne({
-      _id: new ObjectId(orderId),
-    });
-
-    if (result.deletedCount === 1) {
-      res.status(200).json({ message: "Đơn hàng đã được xóa thành công." });
-    } else {
-      res.status(404).json({ message: "Không tìm thấy đơn hàng để xóa." });
-    }
-  } catch (error) {
-    next(error); // Chuyển lỗi đến middleware xử lý lỗi
-  }
-});
-
-// Route để xác nhận đơn hàng
-router.put("/order/:id/confirm", async (req, res, next) => {
-  try {
-    const db = await connectDb();
-    const orderCollection = db.collection("orders");
-    const orderId = req.params.id; // Lấy ID đơn hàng từ URL
-
-    // Cập nhật trạng thái đơn hàng thành đã xác nhận
-    const result = await orderCollection.updateOne(
-      { _id: new ObjectId(orderId) },
-      { $set: { status: "Đã xác nhận" } } // Thay đổi trạng thái ở đây
-    );
-
-    if (result.modifiedCount === 1) {
-      res
-        .status(200)
-        .json({ message: "Đơn hàng đã được xác nhận thành công." });
-    } else {
-      res.status(404).json({ message: "Không tìm thấy đơn hàng để xác nhận." });
-    }
-  } catch (error) {
-    next(error); // Chuyển lỗi đến middleware xử lý lỗi
-  }
-});
-// Route để xóa đơn hàng
-router.delete("/order/:id", async (req, res, next) => {
-  try {
-    const db = await connectDb();
-    const orderCollection = db.collection("orders");
-    const orderId = req.params.id; // Lấy ID đơn hàng từ URL
-
-    // Xóa đơn hàng khỏi collection
-    const result = await orderCollection.deleteOne({
-      _id: new ObjectId(orderId),
-    });
-
-    if (result.deletedCount === 1) {
-      res.status(200).json({ message: "Đơn hàng đã được xóa thành công." });
-    } else {
-      res.status(404).json({ message: "Không tìm thấy đơn hàng để xóa." });
-    }
-  } catch (error) {
-    next(error); // Chuyển lỗi đến middleware xử lý lỗi
-  }
-});
-// Route để xác nhận đơn hàng
-router.put("/order/:id/confirm", async (req, res, next) => {
-  try {
-    const db = await connectDb();
-    const orderCollection = db.collection("orders");
-    const orderId = req.params.id; // Lấy ID đơn hàng từ URL
-
-    // Cập nhật trạng thái đơn hàng thành đã xác nhận
-    const result = await orderCollection.updateOne(
-      { _id: new ObjectId(orderId) },
-      { $set: { status: "Đã xác nhận" } } // Thay đổi trạng thái ở đây
-    );
-
-    if (result.modifiedCount === 1) {
-      res
-        .status(200)
-        .json({ message: "Đơn hàng đã được xác nhận thành công." });
-    } else {
-      res.status(404).json({ message: "Không tìm thấy đơn hàng để xác nhận." });
-    }
-  } catch (error) {
-    next(error); // Chuyển lỗi đến middleware xử lý lỗi
-  }
-});
 //Upload file
 let upload = multer({ storage: storage, fileFilter: checkFileUpLoad });
 
