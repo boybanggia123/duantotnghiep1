@@ -1,10 +1,13 @@
 "use client";
 import Link from "next/link";
 import React from "react";
+import { useDispatch } from 'react-redux';
+import { setUser } from '../../redux/slices/userSlice';
 import { useFormik } from "formik";
 import * as Yup from "yup";
 
 export default function SignIn() {
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -29,10 +32,16 @@ export default function SignIn() {
         }
         const data = await res.json();
         document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
-
+  
         const token = data.token;
         const payload = JSON.parse(atob(token.split(".")[1]));
-        if (payload.role === "admin") {
+        console.log("Decoded JWT Payload:", payload);
+  
+        // Dispatch action to set user in Redux
+        const { userId, email, role, fullname } = payload;  // Assuming the payload contains these fields
+        dispatch(setUser({ userId, email, role, fullname }));
+  
+        if (role === "admin") {
           window.location.href = "http://localhost:3002";
         } else {
           alert("Đăng nhập thành công");
@@ -136,9 +145,9 @@ export default function SignIn() {
                     Remember me
                   </label>
                 </div>
-                <a href="#!" className="text-body">
+                <Link href="auth/email" className="text-body">
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               <div className="text-center text-lg-start mt-4 pt-2">

@@ -406,4 +406,147 @@ a {
   background-color: #333; /* Hiệu ứng khi rê chuột */
 }
 
+/* auth css ----------------------------------------------------------------*/
+
+/* Đặt kiểu cho các phần tử trong form */
+.auth-container {
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Thêm khoảng cách cho các phần tử trong form */
+.auth-form {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Tạo hiệu ứng hover cho nút */
+.auth-button {
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+  text-decoration: none;
+}
+
+/* Các button */
+.auth-button:hover {
+  background-color: #007bff;
+
+}
+
+/* Hiệu ứng border focus cho input */
+.auth-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+}
+
+/* Định dạng cho tiêu đề */
+.auth-title {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 24px;
+  font-weight: 600;
+  color: #333;
+}
+
+/* Định dạng cho các trường lỗi */
+.auth-alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+  margin-bottom: 20px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Thêm margin dưới cho các input */
+.auth-mb-3 {
+  margin-bottom: 15px;
+}
+
+/* Định dạng cho các form labels */
+.auth-form-label {
+  font-weight: 500;
+  color: #555;
+}
+
+/* Định dạng cho button đang xử lý */
+.auth-button:disabled {
+  background-color: #d6d6d6;
+  cursor: not-allowed;
+}
+
+.auth-button:disabled:hover {
+  background-color: #d6d6d6;
+}
+
+
+/* ---------------------------------------css trang info----------------------------------------------- */
+
+/* Avatar Wrapper */
+
+
+.avatar-wrapper {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+
+.avatar-wrapper:hover {
+  transform: scale(1.05);
+}
+
+/* Avatar Image */
+#avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+
+}
+
+/* Overlay Effect */
+.avatar-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  border-radius: 50%;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.avatar-wrapper:hover .avatar-overlay {
+  opacity: 1;
+}
+
+/* "+" Icon */
+.avatar-overlay span {
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+/* Hide File Input */
+#avatar-input {
+  display: none;
+}
+
+
 

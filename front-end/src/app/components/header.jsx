@@ -73,8 +73,9 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="image/logo_fashion.png" alt="logo" />
+            <img src="img/logo_fashion.png" alt="logo" />
           </Link>
+          
           <button
             className="navbar-toggler"
             type="button"
@@ -137,7 +138,7 @@ export default function Header() {
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
               <div>
                 {isLoggedIn ? (
-                  <Link href={"/info"}>
+                  <Link href={"/appinfo/info"}>
                     <span className="ms-3">{userName}</span>
                     <i className="bi bi-person-circle icon-h"></i>
                   </Link>

@@ -210,6 +210,19 @@ router.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
 });
 
 
+// --------------------------------------------------------------- Hiển Thị hóa đơn của người dùng
+
+router.get("/orders/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const ordersCollection = db.collection("bills");
+    const orders = await ordersCollection.find({ userId }).toArray();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 

@@ -5,18 +5,27 @@ import { useSelector } from "react-redux";
 import Cookies from "js-cookie";
 
 const PayButton = ({ cartItems }) => {
-  const user = useSelector((state) => state.user);
+  const user = useSelector((state) => {
+    console.log(state.user); 
+    return state.user;
+  });
+
+  console.log("Redux User ID:", user.userId);
   const [couponCode, setCouponCode] = useState("");
 
   const handleCheckout = () => {
-    const token = Cookies.get("token"); 
+    const token = Cookies.get("token");
+if (!token) {
+  console.error("Token is missing or invalid");
+  return; 
+}
   
     axios
       .post(
         `http://localhost:3000/stripe/create-checkout-session`,
         {
           cartItems,
-          userId: user._id,
+          userId: user.userId,
           couponId: couponCode || null,
         },
         {
