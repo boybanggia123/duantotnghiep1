@@ -1,11 +1,20 @@
 import Link from "next/link";
 import ProductsHome from "./components/ProductsHome";
+
 export default async function Home() {
+  // Fetch dữ liệu bất đồng bộ
   const res = await fetch("http://localhost:3000/products", {
     cache: "no-store",
   });
+
+  // Kiểm tra lỗi khi fetch
+  if (!res.ok) {
+    console.error("Failed to fetch data");
+    return <div>Error loading products.</div>;
+  }
+
   const data = await res.json();
-  console.log(data);
+
   return (
     <>
       <div>
@@ -91,7 +100,6 @@ export default async function Home() {
           <h2 className="text_h2 text-uppercase">shop the latest</h2>
           <div className="d-flex flex-wrap gap-2 mb-3 button_new">
             <button>
-              {" "}
               <Link href={"#"} className="btn-outline-dark">
                 New in
               </Link>
@@ -102,7 +110,6 @@ export default async function Home() {
               </Link>
             </button>
             <button>
-              {" "}
               <Link href={"#"} className="btn-outline-dark">
                 Dresses
               </Link>
@@ -120,6 +127,7 @@ export default async function Home() {
           </div>
 
           <div className="row">
+            {/* Truyền data vào ProductsHome */}
             <ProductsHome data={data} />
           </div>
         </div>

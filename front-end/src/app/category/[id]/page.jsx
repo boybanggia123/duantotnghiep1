@@ -1,23 +1,29 @@
 "use client";
+
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import ProductsCategory from "../../components/ProductsCategory";
+<<<<<<< HEAD
+=======
+
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export default function ProductByCategoryPage() {
+  const { id } = useParams();
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
   const [sortOption, setSortOption] = useState("asc");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { id } = useParams();
-  const [products, setProducts] = useState([]);
-  const { data: categories, error } = useSWR(
+
+  const { data: products, error } = useSWR(
     `http://localhost:3000/products/${id}`,
     fetcher
   );
 
+<<<<<<< HEAD
   // Hàm mở/đóng menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -44,48 +50,26 @@ export default function ProductByCategoryPage() {
         (product) => product.price >= minPrice
       );
     }
+=======
+  if (error) return <div>Error loading products...</div>;
+  if (!products) return <div>Loading...</div>;
 
-    if (maxPrice) {
-      filteredProducts = filteredProducts.filter(
-        (product) => product.price <= maxPrice
-      );
-    }
+  // Hàm xử lý lọc và sắp xếp
+  const handleSortAndFilter = () => {
+    let filtered = [...products];
+    if (minPrice) filtered = filtered.filter((p) => p.price >= parseInt(minPrice));
+    if (maxPrice) filtered = filtered.filter((p) => p.price <= parseInt(maxPrice));
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
 
-    // Sắp xếp sản phẩm theo giá
-    return filteredProducts.sort((a, b) => {
-      return sortOption === "asc" ? a.price - b.price : b.price - a.price;
-    });
+    return filtered.sort((a, b) =>
+      sortOption === "asc" ? a.price - b.price : b.price - a.price
+    );
   };
 
-  // Sự kiện chọn danh mục
-  const handleCategoryChange = (categoryId) => {
-    if (selectedCategories.includes(categoryId)) {
-      setSelectedCategories(
-        selectedCategories.filter((id) => id !== categoryId)
-      ); // Bỏ chọn nếu đã chọn trước đó
-    } else {
-      setSelectedCategories([...selectedCategories, categoryId]); // Thêm vào danh mục đã chọn
-    }
-  };
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  // Sự kiện thay đổi giá
-  const handleMinPriceChange = (e) => {
-    setMinPrice(e.target.value);
-  };
-
-  const handleMaxPriceChange = (e) => {
-    setMaxPrice(e.target.value);
-  };
-
-  // Sự kiện thay đổi sắp xếp
-  const handleSortChange = (e) => {
-    setSortOption(e.target.value);
-  };
-
-  // const handleSortAndFilter = (data) => {
-  //   return data;
-  // };
   return (
+<<<<<<< HEAD
     <>
       <div>
         {/* products */}
@@ -238,10 +222,77 @@ export default function ProductByCategoryPage() {
                   data={handleSortAndFilter(categories || [])}
                 />
               </div>
+=======
+    <div>
+      {/* Banner */}
+      <div className="banner-1">
+        <div className="video-container">
+          <Link href={"/"}>
+            <video
+              autoPlay
+              muted
+              loop
+              playsInline
+              poster="https://cdn.shopify.com/s/files/1/0293/9277/files/ENGLISH_DESKTOP_STILL.png?v=1727818039"
+            >
+              <source
+                src="https://cdn.shopify.com/videos/c/o/v/75589e7ba86043039b077baa855ec68a.mp4"
+                type="video/mp4"
+              />
+            </video>
+          </Link>
+        </div>
+      </div>
+
+      {/* Bộ lọc và sản phẩm */}
+      <div className="container-fluid">
+        <div className="row">
+          {/* Nút mở menu trên mobile */}
+          <button
+            className="btn btn-primary d-md-none mb-3"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? "Close Filter" : "Open Filter"}
+          </button>
+
+          {/* Bộ lọc */}
+          <div
+            className={`col-md-2 ${
+              isMenuOpen ? "d-block" : "d-none"
+            } d-md-block`}
+          >
+            <h6>Filters</h6>
+            <input
+              type="number"
+              placeholder="Min Price"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+            <input
+              type="number"
+              placeholder="Max Price"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+            <select
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+            >
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+
+          {/* Lưới sản phẩm */}
+          <div className="col-md-10">
+            <h6>Products</h6>
+            <div className="row">
+              <ProductsCategory data={handleSortAndFilter()} />
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

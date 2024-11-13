@@ -34,7 +34,7 @@ function ProductsHome(props) {
 
                     // src={`http://localhost:3000/images/${image}`}
 
-                    src={`/img/${image}`}
+                    src={`${image}`}
 
                     alt={name}
                     className="img-fluid img-gray "
