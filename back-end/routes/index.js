@@ -29,6 +29,76 @@ function checkFileUpLoad(req, file, cb){
   //Upload file
   let upload = multer({ storage: storage, fileFilter: checkFileUpLoad });
 //-----------------------------------------------end Upload img--------------------------------------------------------
+//-------------------------------------------------BÌNH LUẬN VÀ ĐÁNH GIÁ--------------------------------------------------------------
+// Thêm bình luận và đánh giá cho sản phẩm
+router.post("/productdetail/:id/review", async (req, res, next) => {
+  const { userId, rating, comment } = req.body;
+  const productId = new ObjectId(req.params.id);
+
+  // Kiểm tra dữ liệu hợp lệ
+  if (!userId || !rating || !comment) {
+    return res.status(400).json({ message: "Thiếu thông tin đánh giá" });
+  }
+
+  // Kiểm tra rating có hợp lệ (từ 1 đến 5)
+  if (rating < 1 || rating > 5) {
+    return res.status(400).json({ message: "Rating phải từ 1 đến 5" });
+  }
+
+  const db = await connectDb();
+  const productCollection = db.collection("products");
+
+  // Lấy sản phẩm từ database
+  const product = await productCollection.findOne({ _id: productId });
+  if (!product) {
+    return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+  }
+
+  // Tạo đối tượng bình luận
+  const review = {
+    userId: new ObjectId(userId),
+    rating,
+    comment,
+    createdAt: new Date(),
+  };
+
+  // Cập nhật sản phẩm với bình luận mới
+  const updateResult = await productCollection.updateOne(
+    { _id: productId },
+    { $push: { reviews: review } }
+  );
+
+  if (updateResult.modifiedCount > 0) {
+    res.status(200).json({ message: "Bình luận và đánh giá đã được thêm thành công" });
+  } else {
+    res.status(500).json({ message: "Không thể thêm bình luận và đánh giá" });
+  }
+});
+// Lấy tất cả bình luận và đánh giá của sản phẩm
+router.get("/productdetail/:id/reviews", async (req, res, next) => {
+  const productId = new ObjectId(req.params.id);
+
+  const db = await connectDb();
+  const productCollection = db.collection("products");
+
+  // Lấy sản phẩm từ database
+  const product = await productCollection.findOne({ _id: productId });
+  if (!product) {
+    return res.status(404).json({ message: "Không tìm thấy sản phẩm" });
+  }
+
+  // Trả về các bình luận và đánh giá của sản phẩm
+  const reviews = product.reviews;
+
+  if (reviews && reviews.length > 0) {
+    res.status(200).json(reviews);
+  } else {
+    res.status(404).json({ message: "Không có đánh giá cho sản phẩm này" });
+  }
+});
+
+
+//-----------------------------------------------END ĐÁNH GIÁ VÀ BÌNH LUẬN-----------------------------------------------------------
 
 //Lấy tất cả sản phẩm dạng json
 router.get("/products", async (req, res, next) => {
@@ -184,62 +254,238 @@ router.get("/productdetail/:id", async (req, res, next) => {
   }
 });
 
-// ----------------------------------------------USER--------------------------------------------------------------
 
-// Đăng ký
-router.post("/register", async (req, res, next) => {
-  const db = await connectDb();
-  const userCollection = db.collection("users");
-  const { fullname, phone, email, password } = req.body;
-  const user = await userCollection.findOne({ email });
-  if (user) {
-    return res.status(400).json({ message: "Email đã tồn tại" });
-  } else {
-    const hashPassword = await bcrypt.hash(password, 10);
-    const newUser = {
-      fullname,
-      phone,
-      email,
-      password: hashPassword,
-      role: "user",
-    };
-    try {
-      const result = await userCollection.insertOne(newUser);
-      if (result.insertedId) {
-        res.status(200).json({ message: "Đăng ký thành công" });
-      } else {
-        res.status(500).json({ message: "Đăng ký thất bại" });
-      }
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+
+
+
+// ----------------------------------------------USER--------------------------------------------------------------
+// ------------------------------------------------CART----------------------------------------------------------
+// Thêm sản phẩm vào giỏ hàng
+router.post("/cart", async (req, res, next) => {
+    const { userId, productId, quantity, size } = req.body;
+
+    // Kiểm tra dữ liệu hợp lệ
+    if (!userId || !productId || !quantity || !size) {
+      return res.status(400).json({ message: "Thiếu thông tin giỏ hàng" });
     }
+
+    // Kiểm tra số lượng phải lớn hơn 0
+    if (quantity <= 0) {
+      return res.status(400).json({ message: "Số lượng phải lớn hơn 0" });
+    }
+
+    const db = await connectDb();
+    const cartCollection = db.collection("cart");
+    const productCollection = db.collection("products");
+
+    // Lấy thông tin sản phẩm từ collection products
+    const product = await productCollection.findOne({ _id: new ObjectId(productId) });
+
+    if (!product) {
+      return res.status(404).json({ message: "Sản phẩm không tồn tại" });
+    }
+
+    // Thông tin sản phẩm cần lưu vào giỏ hàng, bao gồm tên, giá, và giá đã giảm
+    const productInfo = {
+      productId: new ObjectId(productId),
+      image: product.image,
+      name: product.name,         // Thêm tên sản phẩm
+      price: product.price,       // Thêm giá sản phẩm
+      discountedPrice: product.discountedPrice || product.price, // Thêm giá đã giảm (nếu có)
+      size: size,
+      quantity: quantity,
+    };
+
+    const existingCart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+
+    if (existingCart) {
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+      const productIndex = existingCart.items.findIndex(item => 
+        item.productId.toString() === productId && item.size === size
+      );
+      
+      if (productIndex !== -1) {
+        // Nếu có, cập nhật số lượng
+        existingCart.items[productIndex].quantity += quantity;
+        await cartCollection.updateOne(
+          { userId: new ObjectId(userId) },
+          { $set: { items: existingCart.items } }
+        );
+        return res.status(200).json({ message: "Cập nhật sản phẩm trong giỏ hàng thành công" });
+      } else {
+        // Nếu không có, thêm sản phẩm mới vào giỏ hàng
+        existingCart.items.push(productInfo);
+        await cartCollection.updateOne(
+          { userId: new ObjectId(userId) },
+          { $set: { items: existingCart.items } }
+        );
+        return res.status(200).json({ message: "Thêm sản phẩm vào giỏ hàng thành công" });
+      }
+    } else {
+      // Nếu không có giỏ hàng, tạo mới giỏ hàng cho người dùng
+      const newCart = {
+        userId: new ObjectId(userId),
+        items: [productInfo],
+      };
+      await cartCollection.insertOne(newCart);
+      return res.status(201).json({ message: "Tạo giỏ hàng mới và thêm sản phẩm thành công" });
+    }
+});
+// Lấy giỏ hàng của người dùng
+router.get("/cart/:userId", async (req, res, next) => {
+    const userId = req.params.userId;
+
+    const db = await connectDb();
+    const cartCollection = db.collection("cart");
+
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+
+    if (cart) {
+      res.status(200).json(cart.items);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy giỏ hàng cho người dùng này" });
+    }
+});
+router.delete("/cart/:userId", async (req, res, next) => {
+    const userId = req.params.userId;
+    const { productId, size } = req.body;
+  
+    // Kiểm tra dữ liệu hợp lệ
+    if (!userId || !productId || !size) {
+      return res.status(400).json({ message: "Thiếu thông tin giỏ hàng" });
+    }
+  
+    const db = await connectDb();
+    const cartCollection = db.collection("cart");
+  
+    // Lấy giỏ hàng của người dùng
+    const cart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+  
+    if (!cart) {
+      return res.status(404).json({ message: "Không tìm thấy giỏ hàng cho người dùng này" });
+    }
+  
+    // Chuyển productId từ chuỗi thành ObjectId
+    const productObjectId = new ObjectId(productId);
+  
+    // Tìm sản phẩm trong giỏ hàng theo productId và size
+    const productIndex = cart.items.findIndex(item => 
+      item.productId.toString() === productObjectId.toString() && item.size === size
+    );
+  
+    if (productIndex === -1) {
+      return res.status(404).json({ message: "Sản phẩm không có trong giỏ hàng" });
+    }
+  
+    // Xóa sản phẩm khỏi giỏ hàng
+    cart.items.splice(productIndex, 1);
+  
+    // Cập nhật lại giỏ hàng
+    await cartCollection.updateOne(
+      { userId: new ObjectId(userId) },
+      { $set: { items: cart.items } }
+    );
+  
+    return res.status(200).json({ message: "Xóa sản phẩm khỏi giỏ hàng thành công", items: cart.items });
+});
+  
+
+// Cập nhật số lượng sản phẩm trong giỏ hàng
+router.put("/cart", async (req, res, next) => {
+  const { userId, productId, size, quantity } = req.body;
+
+  // Kiểm tra dữ liệu hợp lệ
+  if (!userId || !productId || !size || !quantity) {
+    return res.status(400).json({ message: "Thiếu thông tin giỏ hàng" });
   }
+
+  // Kiểm tra số lượng phải lớn hơn 0
+  if (quantity <= 0) {
+    return res.status(400).json({ message: "Số lượng phải lớn hơn 0" });
+  }
+
+  const db = await connectDb();
+  const cartCollection = db.collection("cart");
+
+  // Lấy giỏ hàng của người dùng
+  const existingCart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+
+  if (!existingCart) {
+    return res.status(404).json({ message: "Giỏ hàng không tồn tại" });
+  }
+
+  // Tìm sản phẩm trong giỏ hàng theo productId và size
+  const productIndex = existingCart.items.findIndex(item => 
+    item.productId.toString() === productId && item.size === size
+  );
+
+  if (productIndex === -1) {
+    return res.status(404).json({ message: "Sản phẩm không có trong giỏ hàng" });
+  }
+
+  // Cập nhật số lượng sản phẩm
+  existingCart.items[productIndex].quantity = quantity;
+
+  // Cập nhật lại giỏ hàng
+  await cartCollection.updateOne(
+    { userId: new ObjectId(userId) },
+    { $set: { items: existingCart.items } }
+  );
+
+  return res.status(200).json({ message: "Cập nhật số lượng sản phẩm trong giỏ hàng thành công" });
 });
 
+
+// ------------------------------------------------END CART-----------------------------------------------------------
 // Đăng nhập
 const jwt = require("jsonwebtoken");
 router.post("/login", async (req, res, next) => {
-  const db = await connectDb();
-  const userCollection = db.collection("users");
-  const { email, password } = req.body;
-  const user = await userCollection.findOne({ email });
-  if (!user) {
-    return res.status(404).json({ message: "Email không tồn tại" });
-  }
-  const match = await bcrypt.compare(password, user.password);
-  if (!match) {
-    return res.status(400).json({ message: "Mật khẩu không chính xác" });
-  }
-  const token = jwt.sign(
-    { email: user.email, role: user.role, fullname: user.fullname },
-    "secret",
-    {
-      expiresIn: "1h",
+  try {
+    const db = await connectDb();
+    const userCollection = db.collection("users");
+    const { email, password } = req.body;
+
+    // Kiểm tra nếu thiếu trường email hoặc password
+    if (!email || !password) {
+      return res.status(400).json({ message: "Vui lòng nhập email và mật khẩu" });
     }
-  );
-  res.status(200).json({ token });
+
+    // Kiểm tra người dùng
+    const user = await userCollection.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "Email không tồn tại" });
+    }
+
+    // Kiểm tra mật khẩu
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) {
+      return res.status(400).json({ message: "Mật khẩu không chính xác" });
+    }
+
+    // Tạo token với thông tin người dùng
+    const token = jwt.sign(
+      { email: user.email, role: user.role, fullname: user.fullname },
+      process.env.JWT_SECRET || "secret", // Sử dụng biến môi trường cho JWT_SECRET
+      { expiresIn: "1h" }
+    );
+
+    // Trả về token và các thông tin cần thiết khác
+    res.status(200).json({
+      token,
+      user: {
+        email: user.email,
+        fullname: user.fullname,
+        role: user.role,
+      },
+      message: "Đăng nhập thành công",
+    });
+  } catch (error) {
+    console.error("Đã xảy ra lỗi khi đăng nhập:", error);
+    res.status(500).json({ message: "Đã xảy ra lỗi khi đăng nhập" });
+  }
 });
+
+
 
 //lấy chi tiết 1 tài khoản
 router.get('/userdetail/:id', async(req, res, next)=> {
@@ -255,8 +501,74 @@ router.get('/userdetail/:id', async(req, res, next)=> {
 }
 );
 
-// Sửa tài khoản
-router.put('/updateuser/:id', upload.single('img'), async (req, res, next) => {
+//lấy thông tin chi tiết user qua token
+router.get("/detailuser", async (req, res, next) => {
+  const token = req.headers.authorization.split(" ")[1];
+  jwt.verify(token, "secret", async (err, user) => {
+    if (err) {
+      return res.status(401).json({ message: "Token không hợp lệ" });
+    }
+    const db = await connectDb();
+    const userCollection = db.collection("users");
+    const userInfo = await userCollection.findOne({ email: user.email });
+    if (userInfo) {
+      res.status(200).json(userInfo);
+    } else {
+      res.status(404).json({ message: "Không tìm thấy user" });
+    }
+  });
+});
+
+// Đăng ký
+router.post("/register", upload.single('avatar'), async (req, res) => {
+  const db = await connectDb();
+  const userCollection = db.collection("users");
+  const { fullname, email, phone, password, dateOfBirth } = req.body;
+
+  // Kiểm tra và cập nhật avatar nếu có file được tải lên
+  let avatar = req.file ? req.file.filename : null; // Nếu có file ảnh thì lưu tên file avatar
+
+  // Lấy thời gian hiện tại cho trường createdAt
+  const createdAt = new Date(); // Thời gian hiện tại
+
+  try {
+    const user = await userCollection.findOne({ email });
+    if (user) {
+      return res.status(400).json({ message: "Email đã tồn tại" });
+    }
+
+    // Mã hóa mật khẩu
+    const hashPassword = await bcrypt.hash(password, 10);
+
+    const newUser = {
+      avatar,
+      fullname,
+      email,
+      phone,
+      dateOfBirth,
+      password: hashPassword,
+      role: "user", // Mặc định là "user"
+      createdAt, // Thêm trường createdAt
+    };
+
+    // Thêm người dùng vào cơ sở dữ liệu
+    const result = await userCollection.insertOne(newUser);
+    if (result.insertedId) {
+      res.status(200).json({ message: "Đăng ký thành công" });
+    } else {
+      res.status(500).json({ message: "Đăng ký thất bại" });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
+  }
+});
+
+
+router.put('/updateuser/:id', upload.single('avatar'), async (req, res, next) => {
+  console.log(req.file); // Kiểm tra xem file có nhận đúng không
+  console.log(req.body); // Kiểm tra các dữ liệu khác
+  
   const db = await connectDb();
   const userCollection = db.collection('users');
   const id = new ObjectId(req.params.id);
@@ -268,10 +580,10 @@ router.put('/updateuser/:id', upload.single('img'), async (req, res, next) => {
       return res.status(404).json({ message: "Không tìm thấy tài khoản" });
     }
 
-    // Chuẩn bị đối tượng updateduser với dữ liệu mới hoặc dữ liệu cũ nếu không có dữ liệu mới
+    // Chuẩn bị đối tượng updatedUser với dữ liệu mới hoặc dữ liệu cũ nếu không có dữ liệu mới
     const { fullname, email, phone, address, createdAt, role, dateOfBirth, password } = req.body;
-    let updateduser = {
-      avatar: existingUser.avatar,
+    let updatedUser = {
+      avatar: existingUser.avatar, // Giữ avatar cũ nếu không có file ảnh mới
       fullname: fullname || existingUser.fullname,
       email: email || existingUser.email,
       phone: phone || existingUser.phone,
@@ -284,11 +596,11 @@ router.put('/updateuser/:id', upload.single('img'), async (req, res, next) => {
 
     // Cập nhật ảnh avatar nếu có file mới
     if (req.file) {
-      updateduser.avatar = req.file.originalname;
+      updatedUser.avatar = req.file.originalname; // Cập nhật avatar mới với tên file của ảnh đã upload
     }
 
     // Thực hiện cập nhật vào database
-    const result = await userCollection.updateOne({ _id: id }, { $set: updateduser });
+    const result = await userCollection.updateOne({ _id: id }, { $set: updatedUser });
     if (result.matchedCount) {
       res.status(200).json({ message: "Sửa tài khoản thành công" });
     } else {
@@ -299,6 +611,10 @@ router.put('/updateuser/:id', upload.single('img'), async (req, res, next) => {
     res.status(500).json({ message: "Có lỗi xảy ra, vui lòng thử lại" });
   }
 });
+
+
+
+
 
 // Thêm tài khoản
 router.post("/adduser", upload.single('avatar'), async (req, res) => {
@@ -357,5 +673,9 @@ router.delete('/deleteuser/:id', async (req, res, next) => {
 });
 
 // ----------------------------------------------END USER--------------------------------------------------------------
+
+
+
+
 
 module.exports = router;

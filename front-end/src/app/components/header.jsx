@@ -4,7 +4,10 @@ import Link from "next/link";
 import Countdown from "../components/Countdown";
 import { useSelector } from "react-redux";
 import Search from "../components/Search";
-import useSWR from "swr"
+import SignInModal from "../dangnhap/page";
+import SignUpModal from "../dangky/page";
+import { useRouter } from "next/navigation";
+import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
@@ -18,7 +21,10 @@ export default function Header() {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
-  const {data: categories} = useSWR("http://localhost:3000/categories", fetcher)
+  const { data: categories } = useSWR(
+    "http://localhost:3000/categories",
+    fetcher
+  );
 
   useEffect(() => {
     const token = document.cookie
@@ -73,7 +79,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="image/logo_fashion.png" alt="logo" />
+            <img src="img/logo_fashion.png" alt="logo" />
           </Link>
           <button
             className="navbar-toggler"
@@ -114,39 +120,45 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
-            {/* < <form className="d-flex mt-3" role="search">
-              <div className="input-group">
-                <span className="input-group-text search-icon-left">
-                  <Link href="#">
-                    <i className="fa-solid fa-magnifying-glass"></i>
-                  </Link>
-                </span>
-                <input
-                  type="text"
-                  className="form-control search-input"
-                  placeholder="Tìm kiếm"
-                />
-                <span className="input-group-text search-icon-right">
-                  <Link href="#">
-                    <i className="fa-solid fa-camera"></i>
-                  </Link>
-                </span>
-              </div>
-            </form>> */}
             <Search />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
-              <div>
-                {isLoggedIn ? (
-                  <Link href={"/info"}>
-                    <span className="ms-3">{userName}</span>
-                    <i className="bi bi-person-circle icon-h"></i>
-                  </Link>
-                ) : (
-                  <Link href={"/dangnhap"}>
-                    <i className="bi bi-person-circle icon-h"></i>
-                  </Link>
+              <div className="position-relative user-icon-container">
+                <Link href={"/info"} className="text-decoration-none">
+                  {isLoggedIn ? <span className="ms-3">{userName}</span> : null}
+                  <i className="bi bi-person-circle icon-h"></i>
+                </Link>
+                {!isLoggedIn && (
+                  <div className="user-dropdown">
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signInModal"
+                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
+                      className="btn btn-primary btn-sm w-100 mb-1"
+                    >
+                      Đăng nhập
+                    </button>
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signUpModal"
+                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
+                      className="btn btn-secondary btn-sm w-100"
+                    >
+                      Đăng ký
+                    </button>
+                    {/* <Link
+                      href="/dangky"
+                      className="btn btn-secondary btn-sm w-100"
+                    >
+                      Đăng ký
+                    </Link> */}
+                  </div>
                 )}
+                <SignInModal />
+                <SignUpModal />
               </div>
+
               <div>
                 <i className="bi bi-suit-heart icon-h"></i>
               </div>
@@ -164,9 +176,10 @@ export default function Header() {
       </nav>
       <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          {categories && categories.map(category => (
-            <Link href={`/category/${category._id}`}>{category.name}</Link>
-          ))}
+          {categories &&
+            categories.map((category) => (
+              <Link href={`/category/${category._id}`}>{category.name}</Link>
+            ))}
         </div>
       </div>
       <hr className="mt-0 mb-0" />

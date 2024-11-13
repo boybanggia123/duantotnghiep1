@@ -5,6 +5,7 @@
 .card{
     box-shadow: none;
     border-radius: 0px;
+    max-height: none;
 }
 .cart_price{
     display: flex;

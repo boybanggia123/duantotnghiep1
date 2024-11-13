@@ -1,8 +1,12 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useDispatch } from "react-redux";
+import { clearCart } from "../../redux/slices/cartslice";
+import { clearUser } from "../../redux/slices/userSlice";
 
 export default function Info() {
+  const dispatch = useDispatch(); // Khai báo dispatch
   const [user, setUser] = useState({
     fullname: "",
     phone: "",
@@ -20,18 +24,17 @@ export default function Info() {
     setSelectedFile(e.target.files[0]);
   };
 
-  // Get token from browser cookies
+  // Nhận mã thông báo từ cookie trình duyệt
   const token = document.cookie
     .split(";")
     .find((c) => c.trim().startsWith("token="));
   const tokenValue = token?.split("=")[1];
-
-  // Redirect to login if no token is found
+  // Chuyển hướng sang đăng nhập nếu không tìm thấy token
   if (!tokenValue) {
-    window.location.href = "/dangnhap";
+    window.location.href = "/";
   }
 
-  // Fetch user information using the token
+  // Lấy thông tin người dùng bằng token
   useEffect(() => {
     const getUser = async () => {
       const res = await fetch("http://localhost:3000/detailuser", {
@@ -48,7 +51,7 @@ export default function Info() {
     }
   }, [tokenValue]);
 
-  // Handle user information update
+  // Xử lý cập nhật thông tin người dùng
   const handleUpdateUser = async (e) => {
     e.preventDefault();
 
@@ -60,7 +63,7 @@ export default function Info() {
     formData.append("gender", user.gender);
     formData.append("dateOfBirth", user.dateOfBirth);
     if (selectedFile) {
-      formData.append("avatar", selectedFile); // Append image file to form data
+      formData.append("avatar", selectedFile); // Nối file ảnh vào dữ liệu mẫu
     }
 
     const response = await fetch("http://localhost:3000/updateuser", {
@@ -72,11 +75,12 @@ export default function Info() {
     });
 
     const data = await response.json();
-    // Update user information if the update was successful
+    // Cập nhật thông tin người dùng nếu cập nhật thành công
     if (response.ok) {
       setUser((prevUser) => ({
         ...prevUser,
-        avatar: data.updatedUser.avatar, // Update avatar if changed
+        avatar: data.updatedUser.avatar,
+        // Cập nhật hình đại diện nếu thay đổi
       }));
     }
   };
@@ -91,7 +95,9 @@ export default function Info() {
 
   const handleLogout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/dangnhap";
+    dispatch(clearUser()); // Xóa thông tin người dùng
+    dispatch(clearCart()); // Xóa giỏ hàng trong Redux
+    window.location.href = "/";
   };
 
   return (
@@ -245,7 +251,6 @@ export default function Info() {
             </button>
 
             <button className="btn btn-secondary">Chọn ảnh đại diện</button>
-
           </div>
         </div>
       </div>

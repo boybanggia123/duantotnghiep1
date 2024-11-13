@@ -5,14 +5,13 @@ require("dotenv").config();
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 app.use(express.static("."));
 app.use(express.json());
-
 var router = express.Router();
 
 router.post("/create-checkout-session", async (req, res) => {
   const line_items = req.body.cartItems.map((item) => {
     return {
       price_data: {
-        currency: "usd", // Ensure this matches the shipping options
+        currency: "usd",
         product_data: {
           name: item.name,
           images: [item.image],
@@ -21,7 +20,7 @@ router.post("/create-checkout-session", async (req, res) => {
             id: item._id,
           },
         },
-        unit_amount: item.price * 100, // Price in cents
+        unit_amount: item.price * 100,
       },
       quantity: item.quantity,
     };
@@ -57,7 +56,7 @@ router.post("/create-checkout-session", async (req, res) => {
           type: "fixed_amount",
           fixed_amount: {
             amount: 1500,
-            currency: "usd", // Ensure this is also USD
+            currency: "usd", 
           },
           display_name: "Next day air",
           delivery_estimate: {
@@ -81,6 +80,5 @@ router.post("/create-checkout-session", async (req, res) => {
   
   res.send({ url: session.url });
 });
-
 
 module.exports = router;

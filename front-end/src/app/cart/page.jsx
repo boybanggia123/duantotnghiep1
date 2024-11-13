@@ -5,7 +5,11 @@ import { useRouter } from "next/navigation";
 import {
   removeFromCart,
   updateCartItemQuantity,
-} from "@/redux/slices/cartslice";
+  fetchCart,
+  clearCart,
+} from "../../redux/slices/cartslice";
+import Cookies from "js-cookie";
+import axios from "axios";
 import Link from "next/link";
 import { loadStripe } from "@stripe/stripe-js"; // Nhập loadStripe
 
@@ -14,39 +18,79 @@ const stripePromise = loadStripe(
 );
 import PayButton from "../components/PayButton";
 export default function Cart() {
-  const [isMounted, setIsMounted] = useState(false);
-  const cartItems = useSelector((state) => state.cart.items) || [];
   const router = useRouter();
   const dispatch = useDispatch();
-  const [customerEmail, setCustomerEmail] = useState(null);
+  const { items = [] } = useSelector((state) => state.cart || {});
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const token = Cookies.get("token");
+  //       if (token) {
+  //         const response = await axios.get(
+  //           `http://localhost:3000/cart/${userId}`,
+  //           {
+  //             headers: { Authorization: `Bearer ${token}` },
+  //           }
+  //         );
 
+  //         dispatch(fetchCart(response.data)); // Giả sử fetchCart lưu dữ liệu giỏ hàng vào Redux
+  //       }
+  //     } catch (err) {
+  //       console.error("Error fetching cart:", err);
+  //     }
+  //   };
+
+  //   fetchUserData();
+  // }, [dispatch]);
   useEffect(() => {
-    setIsMounted(true);
-    // Lấy email từ localStorage
-    const email = localStorage.getItem("customerEmail");
-    setCustomerEmail(email); // Cập nhật state với email lấy được
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const token = Cookies.get("token"); // Lấy token từ cookie
+        if (token) {
+          // Gửi yêu cầu lấy thông tin người dùng
+          const response = await axios.get("http://localhost:3000/detailuser", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-  const total = cartItems.reduce(
+          const userId = response.data._id; // Lấy userId từ dữ liệu người dùng
+
+          // Kiểm tra xem userId có tồn tại không trước khi gọi API giỏ hàng
+          if (userId) {
+            dispatch(fetchCart(userId));
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
+
+    fetchUserData();
+  }, [dispatch]); // Mỗi lần dispatch thay đổi sẽ gọi lại useEffect
+
+  const total = (Array.isArray(items) ? items : []).reduce(
     (total, item) => total + item.discountedPrice * item.quantity,
     0
   );
-
 
   return (
     <>
       <div className="container mt-2">
         <span className="cart-giohang mt-4">MY BAG </span>
-        {isMounted && <span> ({cartItems.length} Item)</span>}
+
+        <span> ({items.length} Item)</span>
+
         <div className="row">
           <div className="col-lg-8 col-md-12">
             <div className="card-1 mb-4">
-              {isMounted &&
-                cartItems.map((item) => (
-                  <div className="row" key={item._id}>
+              {items.length > 0 ? (
+                items.map((item) => (
+                  <div
+                    className="row"
+                    key={`${item._id}-${item.userId}-${item.productId}-${item.size}`}
+                  >
                     <div className="col-4 col-sm-3 col-md-2 product-image-container">
                       <img
-                        src={`${item.image}`}
+                        src={`img/${item.image}`}
                         className="img-fluid product-image"
                         alt="Product Image"
                       />
@@ -54,7 +98,12 @@ export default function Cart() {
                         className="remove-icon"
                         onClick={() =>
                           dispatch(
-                            removeFromCart({ _id: item._id, size: item.size })
+                            removeFromCart({
+                              _id: item._id,
+                              userId: item.userId,
+                              productId: item.productId,
+                              size: item.size,
+                            })
                           )
                         }
                       >
@@ -87,6 +136,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId: item.userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -108,6 +159,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId: item.userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -121,6 +174,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId: item.userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -136,7 +191,10 @@ export default function Cart() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p>Giỏ hàng của bạn đang trống.</p>
+              )}
             </div>
             <div className="recommended-section mt-4">
               <h5>SẢN PHẨM LIÊN QUAN</h5>
@@ -227,7 +285,7 @@ export default function Cart() {
               </button>
             </div>
           </div>
-          {isMounted && (
+          {items.length > 0 ? (
             <div className="col-lg-4 col-md-12">
               <div className="card p-3 mb-3 ">
                 <div className="mb-3 text-center">
@@ -276,7 +334,7 @@ export default function Cart() {
                     })}
                   </span>
                 </span>
-                <PayButton cartItems={cartItems} />
+                <PayButton items={items} />
                 <div className="mt-3">
                   <Link href="/" className="text-center">
                     Quay về trang chủ
@@ -284,6 +342,8 @@ export default function Cart() {
                 </div>
               </div>
             </div>
+          ) : (
+            <p></p>
           )}
         </div>
       </div>
