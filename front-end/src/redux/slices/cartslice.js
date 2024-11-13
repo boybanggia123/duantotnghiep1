@@ -40,8 +40,8 @@ export const removeFromCart = createAsyncThunk(
   'cart/removeFromCart',
   async ({ userId, productId, size }, thunkAPI) => {
     try {
-      const response = await axios.delete(`http://localhost:3000/cart/${userId}`, {
-        params: { productId, size } // Sử dụng params thay vì data
+      const response = await axios.delete("http://localhost:3000/cart", {
+        data: {userId, productId, size } // Sử dụng data thay vì params
       });
       return response.data; // Trả về giỏ hàng đã được cập nhật từ API
     } catch (error) {
@@ -76,7 +76,7 @@ const cartSlice = createSlice({
   initialState: {
     items: [], // Mảng lưu các sản phẩm trong giỏ
     loading: false,
-    status: 'idle',
+    status: 'null',
     error: null,
     userDetail: null, // Thêm userDetail để lưu thông tin người dùng
     products: [], // Thêm sản phẩm để lưu danh sách sản phẩm
@@ -116,17 +116,18 @@ const cartSlice = createSlice({
         state.error = action.payload;
       })
      // Remove from cart
-      .addCase(removeFromCart.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(removeFromCart.fulfilled, (state, action) => {
-        state.loading = false;
-        state.items = action.payload; // Cập nhật giỏ hàng sau khi xóa sản phẩm
-      })
-      .addCase(removeFromCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
-      })
+     .addCase(removeFromCart.pending, (state) => {
+      state.loading = true;
+    })
+    .addCase(removeFromCart.fulfilled, (state, action) => {
+      state.loading = false;
+      // Cập nhật lại giỏ hàng sau khi xóa
+      state.items = action.payload;
+    })
+    .addCase(removeFromCart.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    })
 
 
       // Update cart item quantity

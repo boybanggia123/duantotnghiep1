@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useDispatch } from "react-redux";
-import { clearCart } from "../../redux/slices/cartslice";
 import { clearUser } from "../../redux/slices/userSlice";
 
 export default function Info() {
@@ -96,7 +95,6 @@ export default function Info() {
   const handleLogout = () => {
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
     dispatch(clearUser()); // Xóa thông tin người dùng
-    dispatch(clearCart()); // Xóa giỏ hàng trong Redux
     window.location.href = "/";
   };
 

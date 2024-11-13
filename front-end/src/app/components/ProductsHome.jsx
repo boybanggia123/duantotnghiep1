@@ -31,11 +31,8 @@ function ProductsHome(props) {
               <div className="w-img gray-background">
                 <Link href={`/chitiet/${_id}`}>
                   <img
-
-                    // src={`http://localhost:3000/images/${image}`}
-
-                    src={`${image}`}
-
+                    // src={`http://localhost:3001/images/${image}`}
+                    src={`/img/${image}`}
                     alt={name}
                     className="img-fluid img-gray "
                   />
@@ -64,14 +61,12 @@ function ProductsHome(props) {
           </div>
         );
       })}
-       {/* Phân trang */}
-       <Link href={"/sanpham"} className="namesup">
-       <div className="text-center my-3">
-           <button className="btn load-more-btn">
-            Load more
-           </button>
-         </div>  
-       </Link>
+      {/* Phân trang */}
+      <Link href={"/sanpham"} className="namesup">
+        <div className="text-center my-3">
+          <button className="btn load-more-btn">Load more</button>
+        </div>
+      </Link>
     </>
   );
 }

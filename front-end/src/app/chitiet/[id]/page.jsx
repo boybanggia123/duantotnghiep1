@@ -20,12 +20,10 @@ export default function Detail({ params }) {
   const cart = useSelector((state) => state.cart);
   console.log(cart);
   const router = useRouter();
-
   const handleStarClick = (star) => {
     // Nếu nhấn vào số sao đã chọn thì bỏ chọn, nếu không thì chọn sao mới
     setRating(rating === star ? 0 : star);
   };
-
   const {
     data: product,
     error,
@@ -128,24 +126,24 @@ export default function Detail({ params }) {
           <div className="product-container">
             <div className="thumbnail-images d-flex flex-column">
               <img
-                src={`${product.image}`}
+                src={`/img/${product.image}`}
                 alt="Hình thu nhỏ 1"
                 className="mb-2"
               />
               <img
-                src={`${product.image}`}
+                src={`/img/${product.image}`}
                 alt="Hình thu nhỏ 2"
                 className="mb-2"
               />
               <img
-                src={`${product.image}`}
+                src={`/img/${product.image}`}
                 alt="Hình thu nhỏ 3"
                 className="mb-2"
               />
             </div>
             <div className="main-product-image">
               <img
-                src={`${product.image}`}
+                src={`/img/${product.image}`}
                 alt="Hình sản phẩm chính"
                 className="w-100"
               />
@@ -225,14 +223,12 @@ export default function Detail({ params }) {
           >
             Thêm vào giỏ hàng
           </button>
-
           {/* Hiển thị thông báo */}
           {notification && (
             <div className="alert alert-success mt-2" role="alert">
               {notification}
             </div>
           )}
-
           <div className="mt-4">
             <h6>Thông tin sản phẩm</h6>
             <p className="text-muted" style={{ fontSize: "0.9rem" }}>
@@ -249,7 +245,6 @@ export default function Detail({ params }) {
           <div className="text-warning fs-2">★★★★☆</div>
           <span className="text-muted">(3 đánh giá)</span>
         </div>
-
         <div className="rating-bars flex-grow-1 ms-md-4 w-100">
           {[5, 4, 3, 2, 1].map((rating, index) => (
             <div className="d-flex align-items-center mb-1" key={index}>
