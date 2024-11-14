@@ -123,7 +123,7 @@ export default function Header() {
             <Search />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
               <div className="position-relative user-icon-container">
-                <Link href={"/info"} className="text-decoration-none">
+                <Link href={"/appinfo/info"} className="text-decoration-none">
                   {isLoggedIn ? <span className="ms-3">{userName}</span> : null}
                   <i className="bi bi-person-circle icon-h"></i>
                 </Link>

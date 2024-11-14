@@ -7,6 +7,7 @@ const bcrypt = require("bcryptjs");
 require("dotenv").config();
 const Bill = require("../model/bill")
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+const { ObjectId } = require("mongodb");
 const connectDb = require("../model/db");
 app.use(express.static("."));
 app.use(express.json());
@@ -24,29 +25,35 @@ var router = express.Router();
 
 
 router.post("/create-checkout-session", async (req, res) => {
+  const { userId, couponId } = req.body;
+
+  // Kết nối cơ sở dữ liệu
+  const db = await connectDb();
+  const cartCollection = db.collection("cart");
+
+  // Lấy giỏ hàng của người dùng từ MongoDB
+  const userCart = await cartCollection.findOne({ userId: new ObjectId(userId) });
+
+  if (!userCart || userCart.items.length === 0) {
+    return res.status(404).json({ message: "Giỏ hàng trống" });
+  }
 
   const customer = await stripe.customers.create({
     metadata: {
-      userId: req.body.userId, 
+      userId: userId,
       cart: JSON.stringify(
-        req.body.cartItems.map(item => ({
-          id: item._id,
+        userCart.items.map(item => ({
+          id: item.productId,
           name: item.name,
           description: item.description,
           price: item.price,
           images: item.image,
           size: item.size,
-          quantity: item.quantity
+          quantity: item.quantity,
         }))
-      )
-      
-    
-      }
-    
-  },
- 
-
-);
+      ),
+    },
+  });
  
   const line_items = req.body.cartItems.map((item) => {
     return {
@@ -69,7 +76,7 @@ router.post("/create-checkout-session", async (req, res) => {
 
   
 
-  const couponId = req.body.couponId;
+  
 
   const session = await stripe.checkout.sessions.create({
     shipping_address_collection: {
@@ -166,49 +173,96 @@ try{
 
 let endpointSecret ;
 // endpointSecret = "whsec_2012e3ef93473c4aff8dd580bc089e5cb45645845400148bed33242726171cf3";
-router.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
-const sig = req.headers['stripe-signature'];
+router.post('/webhook', express.raw({ type: 'application/json' }), async (req, res) => {
+  const sig = req.headers['stripe-signature'];
 
-let data;
-let eventType;
-if(endpointSecret){
-  let event;
-
-  try {
-    event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
-    console.log("Webhooks đã được gửi");
-    
-  } catch (err) {
-    console.log(`Webhook Error: ${err.message}`);
-    res.status(400).send(`Webhook Error: ${err.message}`);
-    return;
+  let data;
+  let eventType;
+  if (endpointSecret) {
+    try {
+      const event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+      console.log("Webhook verified successfully");
+      data = event.data.object;
+      eventType = event.type;
+    } catch (err) {
+      console.error(`Webhook Error: ${err.message}`);
+      return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+  } else {
+    data = req.body.data.object;
+    eventType = req.body.type;
   }
-  data = event.data.object;
-  eventType = event.type;
-} else {
-  data = req.body.data.object;
-  eventType = req.body.type;
-}
 
-// Handle the event
-if(eventType === "checkout.session.completed"){
-  stripe.customers.retrieve(data.customer)
-    .then((customer) => {
-      console.log("Retrieved customer:", customer); 
-      console.log("Data from session:", JSON.stringify(data, null, 2));
+  // Xử lý sự kiện "checkout.session.completed"
+  if (eventType === "checkout.session.completed") {
+    try {
+      // Lấy thông tin khách hàng từ Stripe
+      const customer = await stripe.customers.retrieve(data.customer);
+      console.log("Retrieved customer:", customer);
+      console.log("Session data:", JSON.stringify(data, null, 2));
+
+      // Lấy metadata từ phiên thanh toán
+      const userId = customer.metadata.userId;
+
+      // Kết nối tới MongoDB
+      const db = await connectDb();
+      const cartCollection = db.collection("cart");
+
+      // Xóa giỏ hàng của người dùng
+      const result = await cartCollection.deleteOne({ userId: new ObjectId(userId) });
+
+      if (result.deletedCount > 0) {
+        console.log(`Cart for user ${userId} has been deleted successfully`);
+      } else {
+        console.warn(`No cart found for user ${userId}`);
+      }
+
+      // (Tùy chọn) Gọi hàm `createBill` để tạo hóa đơn
       const discountAmount = data.total_details?.amount_discount || 0;
-     const couponId = data.discounts?.[0]?.coupon?.id || null;
-     console.log("Discount amount:", discountAmount);
-     console.log("Coupon ID:", couponId);
-      createBill(customer, data,couponId,discountAmount);
-    })
-    .catch((err) => console.log(err.message));
-}
+      const couponId = data.discounts?.[0]?.coupon?.id || null;
+      createBill(customer, data, couponId, discountAmount);
+    } catch (err) {
+      console.error("Error processing checkout.session.completed:", err.message);
+    }
+  }
 
-// Return a 200 response to acknowledge receipt of the event
-res.send().end();
+  // Trả về trạng thái 200 để Stripe biết webhook đã được xử lý
+  res.status(200).end();
 });
 
+
+
+// --------------------------------------------------------------- Hiển Thị hóa đơn của người dùng
+
+router.get("/orderuser/:userId", async (req, res) => {
+  const userId = req.params.userId;
+  try {
+    const db = await connectDb(); 
+    const ordersCollection = db.collection("bills");
+    const orders = await ordersCollection.find({ userId: new ObjectId(userId) }).toArray();
+    res.status(200).json(orders);
+  } catch (error) {
+    console.error("Error fetching orders:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
+router.get("/orders/:orderId", async (req, res) => {
+  const orderId = req.params.orderId;
+  try {
+    const db = await connectDb(); 
+    const ordersCollection = db.collection("bills");
+    const order = await ordersCollection.findOne({ _id: new ObjectId(orderId) });
+
+    if (!order) {
+      return res.status(404).json({ message: "Order not found" });
+    }
+
+    res.status(200).json(order);
+  } catch (error) {
+    console.error("Error fetching order details:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+});
 
 
 

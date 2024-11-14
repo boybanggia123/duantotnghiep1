@@ -15,7 +15,7 @@ import "../../public/css/sanpham.css";
 import "../../public/css/detail.css";
 import "../../public/css/style-dangnhap.css";
 import "../../public/css/style-dangky.css";
-import "../../public/css/style-info.css";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
