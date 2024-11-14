@@ -1,18 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { clearCartOnLogout } from "../../../redux/slices/cartslice";  
+import React, { useState, useEffect } from "react"; 
 import Link from "next/link";
 import "../../../../public/bootstrap/css/bootstrap.css";
 import "../../../../public/css/style-info.css";
 
 export default function Info({ user, handleUpdateUser, handleChange, handleFileChange,children }) {
-  const dispatch = useDispatch();
+  
 
   const handleLogout = () => {
-    dispatch(clearCartOnLogout());
+    
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/dangnhap";  // Redirect after logout
+    window.location.href = "/";  // Redirect after logout
     
   };
   return (

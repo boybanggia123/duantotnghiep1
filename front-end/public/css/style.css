@@ -1,3 +1,7 @@
+body.modal-open {
+  padding-right: 0 !important; /* Loại bỏ padding-right khi modal mở */
+}
+
 .relative video{
     width: 1399px;
     height: auto;

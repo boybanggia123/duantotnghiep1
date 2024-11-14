@@ -5,58 +5,93 @@ import { useRouter } from "next/navigation";
 import {
   removeFromCart,
   updateCartItemQuantity,
-} from "@/redux/slices/cartslice";
+  fetchCart,
+} from "../../redux/slices/cartslice";
+import Cookies from "js-cookie";
+import axios from "axios";
 import Link from "next/link";
-import { loadStripe } from "@stripe/stripe-js"; // Nhập loadStripe
+import { loadStripe } from "@stripe/stripe-js";
 
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
 import PayButton from "../components/PayButton";
+
 export default function Cart() {
-  const [isMounted, setIsMounted] = useState(false);
-  const cartItems = useSelector((state) => state.cart.items) || [];
   const router = useRouter();
   const dispatch = useDispatch();
-  const [customerEmail, setCustomerEmail] = useState(null);
+  const { items = [] } = useSelector((state) => state.cart || {});
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    setIsMounted(true);
-    // Lấy email từ localStorage
-    const email = localStorage.getItem("customerEmail");
-    setCustomerEmail(email); // Cập nhật state với email lấy được
-  }, []);
+    const fetchUserData = async () => {
+      try {
+        const token = Cookies.get("token");
+        if (token) {
+          const response = await axios.get("http://localhost:3000/detailuser", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const fetchedUserId = response.data._id;
+          if (fetchedUserId) {
+            setUserId(fetchedUserId);
+            dispatch(fetchCart(fetchedUserId));
+          }
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+      }
+    };
 
-  const total = cartItems.reduce(
+    fetchUserData();
+  }, [dispatch]);
+
+  const handleRemoveItem = async (item) => {
+    try {
+      // Xóa sản phẩm khỏi giỏ hàng
+      await dispatch(
+        removeFromCart({
+          userId,
+          productId: item.productId,
+          size: item.size,
+        })
+      );
+
+      // Sau khi xóa, cập nhật lại giỏ hàng từ server
+      dispatch(fetchCart(userId));
+    } catch (err) {
+      console.error("Error removing item:", err);
+    }
+  };
+
+  const total = (Array.isArray(items) ? items : []).reduce(
     (total, item) => total + item.discountedPrice * item.quantity,
     0
   );
-
 
   return (
     <>
       <div className="container mt-2">
         <span className="cart-giohang mt-4">MY BAG </span>
-        {isMounted && <span> ({cartItems.length} Item)</span>}
+        <span> ({items.length} Item)</span>
+
         <div className="row">
           <div className="col-lg-8 col-md-12">
             <div className="card-1 mb-4">
-              {isMounted &&
-                cartItems.map((item) => (
-                  <div className="row" key={item._id}>
+              {items.length > 0 ? (
+                items.map((item) => (
+                  <div
+                    className="row"
+                    key={`${item._id}-${item.productId}-${item.size}`}
+                  >
                     <div className="col-4 col-sm-3 col-md-2 product-image-container">
                       <img
-                        src={`${item.image}`}
+                        src={item.image}
                         className="img-fluid product-image"
                         alt="Product Image"
                       />
                       <div
                         className="remove-icon"
-                        onClick={() =>
-                          dispatch(
-                            removeFromCart({ _id: item._id, size: item.size })
-                          )
-                        }
+                        onClick={() => handleRemoveItem(item)}
                       >
                         <i className="fa-regular fa-trash-can"></i>
                       </div>
@@ -87,6 +122,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -108,6 +145,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -121,6 +160,8 @@ export default function Cart() {
                               dispatch(
                                 updateCartItemQuantity({
                                   _id: item._id,
+                                  userId,
+                                  productId: item.productId,
                                   quantity: newQuantity,
                                 })
                               );
@@ -136,7 +177,10 @@ export default function Cart() {
                       </div>
                     </div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <p>Giỏ hàng của bạn đang trống.</p>
+              )}
             </div>
             <div className="recommended-section mt-4">
               <h5>SẢN PHẨM LIÊN QUAN</h5>
@@ -144,7 +188,7 @@ export default function Cart() {
                 <div className="col-6 col-sm-4 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 1"
                     />
@@ -154,7 +198,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 2"
                     />
@@ -164,7 +208,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 3"
                     />
@@ -174,7 +218,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 4"
                     />
@@ -184,7 +228,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 1"
                     />
@@ -194,7 +238,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 2"
                     />
@@ -204,7 +248,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith1.webp"
+                      src="img/aokhoac1.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 3"
                     />
@@ -214,7 +258,7 @@ export default function Cart() {
                 <div className="col-6 col-md-3 mb-4">
                   <div className="text-center">
                     <img
-                      src="img/itwith2.webp"
+                      src="img/aokhoac2.jpg"
                       className="img-fluid mb-2"
                       alt="Rec 4"
                     />
@@ -227,9 +271,9 @@ export default function Cart() {
               </button>
             </div>
           </div>
-          {isMounted && (
+          {items.length > 0 ? (
             <div className="col-lg-4 col-md-12">
-              <div className="card p-3 mb-3 ">
+              <div className="card p-3 mb-3">
                 <div className="mb-3 text-center">
                   <p className="text-danger mb-2">
                     Nhập mã giảm giá <strong>FREECASH</strong>
@@ -276,7 +320,7 @@ export default function Cart() {
                     })}
                   </span>
                 </span>
-                <PayButton cartItems={cartItems} />
+                <PayButton items={items} />
                 <div className="mt-3">
                   <Link href="/" className="text-center">
                     Quay về trang chủ
@@ -284,7 +328,7 @@ export default function Cart() {
                 </div>
               </div>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </>

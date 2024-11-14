@@ -13,6 +13,9 @@ import "../../public/css/cart.css";
 import "../../public/css/style.css";
 import "../../public/css/sanpham.css";
 import "../../public/css/detail.css";
+import "../../public/css/style-dangnhap.css";
+import "../../public/css/style-dangky.css";
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,11 +23,6 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Providers>
-        <head>
-          <link href="css/style-info.css" rel="stylesheet" />
-          <link href="css/style-dangnhap.css" rel="stylesheet" />
-          <link href="css/style-dangky.css" rel="stylesheet" />
-        </head>
         <body className={inter.className}>
           <Header />
           {children} {/* Đây là nơi các trang như Checkout sẽ được render */}

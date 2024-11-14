@@ -1,91 +1,132 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import Cookies from "js-cookie";
+import axios from "axios";
 
-// Khởi tạo state với dữ liệu từ localStorage nếu có
-const initialState = {
-  items: typeof window !== 'undefined' && localStorage.getItem('cartItems')
-    ? JSON.parse(localStorage.getItem('cartItems'))
-    : [], // Kiểm tra nếu có window mới dùng localStorage
-};
+// Async thunk để lấy giỏ hàng từ server
+export const fetchCart = createAsyncThunk(
+  "cart/fetchCart",
+  async (userId, thunkAPI) => {
+    try {
+      const response = await axios.get(`http://localhost:3000/cart/${userId}`, {
+        headers: {
+          "Cache-Control": "no-store",
+        },
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const addToCart = createAsyncThunk(
+  "cart/addToCart",
+  async ({ userId, productId, quantity, size }, thunkAPI) => {
+    if (!userId) {
+      console.error("userId is missing");
+      return thunkAPI.rejectWithValue({ message: "userId is required" });
+    }
+
+    try {
+      const response = await axios.post(`http://localhost:3000/cart/${userId}/add`, { productId, quantity, size });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const removeFromCart = createAsyncThunk(
+  "cart/removeFromCart",
+  async ({ userId, productId, size }, thunkAPI) => {
+    try {
+      const response = await axios.delete("http://localhost:3000/cart", {
+        data: { userId, productId, size },
+      });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Async thunk để cập nhật số lượng sản phẩm trong giỏ
+export const updateCartItemQuantity = createAsyncThunk(
+  "cart/updateCartItemQuantity",
+  async ({ userId, productId, quantity, size }, thunkAPI) => {
+    try {
+      const response = await axios.put(`http://localhost:3000/cart`, { userId, productId, quantity, size });
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 // Slice cart để xử lý các hành động liên quan đến giỏ hàng
 const cartSlice = createSlice({
-  name: 'cart',
-  initialState,
+  name: "cart",
+  initialState: {
+    items: [],
+    loading: false,
+    error: null,
+  },
   reducers: {
-    // Thêm sản phẩm vào giỏ
-    addToCart: (state, action) => {
-      const existingItem = state.items.find(
-        (item) =>
-          item._id === action.payload.item._id &&
-          item.size === action.payload.size
-      );
-
-      if (existingItem) {
-        // Nếu sản phẩm đã có trong giỏ, cập nhật số lượng
-        existingItem.quantity =
-          Number(existingItem.quantity) + Number(action.payload.quantity);
-      } else {
-        // Thêm sản phẩm mới vào giỏ
-        state.items.push({
-          ...action.payload.item,
-          quantity: action.payload.quantity,
-          size: action.payload.size, // Lưu kích thước
-        });
-      }
-
-      // Cập nhật lại localStorage
-      localStorage.setItem('cartItems', JSON.stringify(state.items));
-    },
-
-    // Xóa sản phẩm khỏi giỏ
-    removeFromCart: (state, action) => {
-      const { _id, size } = action.payload;
-      // Xóa sản phẩm có _id và size khớp
-      state.items = state.items.filter(
-        (item) => !(item._id === _id && item.size === size)
-      );
-
-      // Cập nhật lại localStorage
-      localStorage.setItem('cartItems', JSON.stringify(state.items));
-    },
-
-    // Cập nhật số lượng của sản phẩm trong giỏ
-    updateCartItemQuantity: (state, action) => {
-      const item = state.items.find((item) => item._id === action.payload._id);
-      if (item) {
-        item.quantity = action.payload.quantity;
-      }
-
-      // Cập nhật lại localStorage
-      localStorage.setItem('cartItems', JSON.stringify(state.items));
-    },
-
-    // Xóa tất cả sản phẩm trong giỏ
     clearCart: (state) => {
       state.items = [];
-      // Cập nhật lại localStorage
-      localStorage.setItem('cartItems', JSON.stringify(state.items));
     },
-
-    // Đồng bộ giỏ hàng từ localStorage vào Redux (Khi đăng nhập)
     syncCartItems: (state) => {
-      if (typeof window !== 'undefined') {
-        const cartItems = localStorage.getItem('cartItems');
-        if (cartItems) {
-          state.items = JSON.parse(cartItems);
-        }
-      }
+      state.items = action.payload;
     },
-
-    // Dọn sạch giỏ hàng khi đăng xuất
-    clearCartOnLogout: (state) => {
-      state.items = [];
-      localStorage.removeItem("cartItems"); 
-    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(fetchCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(fetchCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(addToCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(addToCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(addToCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(removeFromCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeFromCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(removeFromCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      })
+      .addCase(updateCartItemQuantity.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateCartItemQuantity.fulfilled, (state, action) => {
+        state.loading = false;
+        state.items = action.payload;
+      })
+      .addCase(updateCartItemQuantity.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   },
 });
 
-// Export các hành động để sử dụng ở các nơi khác trong ứng dụng
-export const { addToCart, removeFromCart, updateCartItemQuantity, clearCart, syncCartItems, clearCartOnLogout } = cartSlice.actions;
-
-export default cartSlice;
+export const { clearCart, syncCartItems,setCart } = cartSlice.actions;
+export default cartSlice.reducer;

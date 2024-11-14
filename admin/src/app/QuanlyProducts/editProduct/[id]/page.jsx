@@ -11,12 +11,19 @@ export default function EditProduct({ params }) {
 
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState(null); // Để lưu thông tin sản phẩm
+<<<<<<< HEAD
+=======
   const [isProductLoaded, setIsProductLoaded] = useState(false); // Cờ kiểm soát sản phẩm đã được tải chưa
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
 
   // Lấy danh mục sản phẩm
   useEffect(() => {
     const getCategories = async () => {
+<<<<<<< HEAD
+      const res = await fetch('http://localhost:3000/categories');
+=======
       const res = await fetch("http://localhost:3000/categories");
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
       const data = await res.json();
       setCategories(data);
     };
@@ -27,6 +34,14 @@ export default function EditProduct({ params }) {
       const res = await fetch(`http://localhost:3000/productdetail/${id}`);
       const data = await res.json();
       setProduct(data);
+<<<<<<< HEAD
+    };
+
+    if (id) {
+      getProduct(); // Lấy thông tin sản phẩm khi có id
+    }
+  }, [id]); // Chỉ cần theo dõi id thôi
+=======
       setIsProductLoaded(true); 
     };
 
@@ -35,6 +50,7 @@ export default function EditProduct({ params }) {
     }
   }, [id]); 
 
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
 
   const formik = useFormik({
     initialValues: {
@@ -92,7 +108,11 @@ export default function EditProduct({ params }) {
         }
 
         alert("Cập nhật sản phẩm thành công");
+<<<<<<< HEAD
+        router.push("/QuanlyProducts"); // Quay về danh sách sản phẩm sau khi cập nhật
+=======
         router.push("/QuanlyProducts"); 
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
       } catch (error) {
         setFieldError("general", error.message);
       } finally {
@@ -101,6 +121,23 @@ export default function EditProduct({ params }) {
     },
   });
 
+<<<<<<< HEAD
+  // Đảm bảo khi thông tin sản phẩm được tải xong, form sẽ được cập nhật
+  useEffect(() => {
+    if (product && formik.setFieldValue) {
+      formik.setFieldValue('name', product.name);
+      formik.setFieldValue('price', product.price);
+      formik.setFieldValue('description', product.description);
+      formik.setFieldValue('categoryId', product.categoryId);
+      formik.setFieldValue('discountedPrice', product.discountedPrice);
+      formik.setFieldValue('size', product.size);
+      formik.setFieldValue('quantity', product.quantity);
+      formik.setFieldValue('status', product.status);
+      formik.setFieldValue('hot', product.hot);
+    }
+  }, [product, formik]);
+
+=======
 
   useEffect(() => {
     if (isProductLoaded && product) {
@@ -122,6 +159,7 @@ export default function EditProduct({ params }) {
   if (!isProductLoaded) {
     return <p>Đang tải dữ liệu...</p>;
   }
+>>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
   return (
     <>
       <h1 className="title">Quản lý Sản phẩm</h1>
