@@ -50,7 +50,7 @@ export default function Home() {
           </div>
         </div>
         <div className="banner-1">
-          <img src="image/banner1.3.webp" alt="" className="img-fluid w-100" />
+          <img src="img/banner1.3.webp" alt="" className="img-fluid w-100" />
         </div>
         {/* banner */}
 

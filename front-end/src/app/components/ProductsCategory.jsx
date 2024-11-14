@@ -34,6 +34,7 @@ function ProductsHome(props) {
               <div className="w-img gray-background">
                 <Link href={`/chitiet/${_id}`}>
                   <img
+<<<<<<< HEAD
 
                     src={`http://localhost:3000/${image}`}
 
@@ -41,6 +42,11 @@ function ProductsHome(props) {
 
                     alt={name}
                     className="img-fluid img-gray"
+=======
+                    src={`/img/${image}`}
+                    alt={image}
+                    className="img-fluid img-gray "
+>>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
                   />
                 </Link>
                 <button className="sup-wimg fw-medium">Quick Add</button>
