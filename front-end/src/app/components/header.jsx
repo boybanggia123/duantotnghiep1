@@ -4,20 +4,15 @@ import Link from "next/link";
 import Countdown from "../components/Countdown";
 import { useSelector } from "react-redux";
 import Search from "../components/Search";
-import SignInModal from "../dangnhap/page";
-import SignUpModal from "../dangky/page";
-import { useRouter } from "next/navigation";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
-  const cartItems = useSelector((state) => state.cart?.items) || [];
+  const cartItems = useSelector((state) => state.cart.items) || [];
   const [cartCount, setCartCount] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState(null);
 
   useEffect(() => {
-    // Cập nhật số lượng giỏ hàng ngay khi cartItems thay đổi
+    // Cập nhật giá trị số lượng sau khi render client hoàn tất
     setCartCount(cartItems.length);
   }, [cartItems]);
 
@@ -122,41 +117,17 @@ export default function Header() {
             </ul>
             <Search />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
-              <div className="position-relative user-icon-container">
-                <Link href={"/appinfo/info"} className="text-decoration-none">
-                  {isLoggedIn ? <span className="ms-3">{userName}</span> : null}
-                  <i className="bi bi-person-circle icon-h"></i>
-                </Link>
-                {!isLoggedIn && (
-                  <div className="user-dropdown">
-                    <button
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signInModal"
-                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
-                      className="btn btn-primary btn-sm w-100 mb-1"
-                    >
-                      Đăng nhập
-                    </button>
-                    <button
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signUpModal"
-                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
-                      className="btn btn-secondary btn-sm w-100"
-                    >
-                      Đăng ký
-                    </button>
-                    {/* <Link
-                      href="/dangky"
-                      className="btn btn-secondary btn-sm w-100"
-                    >
-                      Đăng ký
-                    </Link> */}
-                  </div>
+              <div>
+                {isLoggedIn ? (
+                  <Link href={"/info"}>
+                    <span className="ms-3">{userName}</span>
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
+                ) : (
+                  <Link href={"/dangnhap"}>
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
                 )}
-                <SignInModal />
-                <SignUpModal />
               </div>
 
               <div>
