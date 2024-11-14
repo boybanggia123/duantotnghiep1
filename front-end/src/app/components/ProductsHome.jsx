@@ -67,7 +67,6 @@ function ProductsHome(props) {
   
   return (
     <>
-<<<<<<< HEAD
        {notification.message && <div className={notificationClass}>{notification.message}</div>} {/* Hiển thị thông báo */}
         {currentItems.map((product) => {
           const { _id, name, image, price, discountedPrice, hot } = product;
@@ -87,28 +86,6 @@ function ProductsHome(props) {
                       alt={name}
                       className="img-fluid img-gray"
                     />
-=======
-      {currentItems.map((product) => {
-        const { _id, name, image, price, discountedPrice } = product;
-        return (
-          <div className="col-6 col-md-4 col-lg-3 mb-2 p-1 rounded" key={_id}>
-            <div className="sup-h">
-              <div className="w-img gray-background">
-                <Link href={`/chitiet/${_id}`}>
-                  <img
-                    
-                    src={`${image}`}
-                    alt={name}
-                    className="img-fluid img-gray "
-                  />
-                </Link>
-                <button className="sup-wimg fw-medium">Quick Add</button>
-              </div>
-              <div className="mt-2 fw-medium">
-                <div className="d-flex justify-content-between">
-                  <Link href={""} className="namesup">
-                    {name}
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
                   </Link>
                   <button className="sup-wimg fw-medium">Quick Add</button>
                 </div>
@@ -144,21 +121,9 @@ function ProductsHome(props) {
               )}
               {hot && <p className="hot position-absolute">HOT</p>}
             </div>
-<<<<<<< HEAD
           );
         })}
 
-=======
-          </div>
-        );
-      })}
-      {/* Phân trang */}
-      <Link href={"/sanpham"} className="namesup">
-        <div className="text-center my-3">
-          <button className="btn load-more-btn">Load more</button>
-        </div>
-      </Link>
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
     </>
   );
 }
