@@ -122,6 +122,9 @@
     margin-bottom: 1rem;
   }
   
+ 
+
+
 /* Đặt lại kích thước cho thanh đo đánh giá trên các màn hình nhỏ */
 @media (max-width: 768px) {
     .ratings-section {
@@ -183,7 +186,9 @@
       padding: 0.75rem;
     }
   }
-  
+  /* #product-test {
+    width: 100%;
+  } */
   /* Điều chỉnh form bình luận cho màn hình nhỏ */
   @media (max-width: 992px) {
     .comments-section form {
@@ -203,3 +208,47 @@
     }
   }
   
+  .btn-prev {
+    background-color: none;
+    padding: .5rem;
+    border-radius: 50%;
+    color: #000000;
+    border: none;
+ }
+ .btn-prev i {
+  font-size: 2rem;
+ }
+ .btn-prev:hover {
+  background-color: #000000;
+  color: #ddd;
+ }
+ .btn-next {
+    background-color: none;
+    padding: .5rem;
+    border-radius: 50%;
+    color: #000000;
+    border: none;
+
+ }
+ .btn-next i {
+  font-size: 2rem;
+ }
+ .btn-next:hover {
+  background-color: #000000;
+  color: #ddd;
+ }
+
+  .detail-page .product {
+    width: 100%; /* Đảm bảo sản phẩm trong trang chi tiết có chiều rộng 100% */
+}
+
+/* Định dạng cho các sản phẩm gợi ý */
+.detail-page .row {
+    display: flex;
+    flex-wrap: wrap; /* Đảm bảo các sản phẩm gợi ý có thể nằm trên cùng một hàng */
+}
+
+.detail-page .col-12 {
+    flex: 0 0 25%; /* 4 sản phẩm trên 1 hàng */
+    max-width: 25%; /* 4 sản phẩm trên 1 hàng */
+}

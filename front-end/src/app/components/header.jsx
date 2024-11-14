@@ -11,11 +11,18 @@ export default function Header() {
   const cartItems = useSelector((state) => state.cart.items) || [];
   const [cartCount, setCartCount] = useState(0);
 
+  const favouriteItems = useSelector((state) => state.favourites.items) || []; // Lấy danh sách sản phẩm yêu thích
+  const [favouriteCount, setFavouriteCount] = useState(0); // State để quản lý số lượng yêu thích
+
   useEffect(() => {
     // Cập nhật giá trị số lượng sau khi render client hoàn tất
     setCartCount(cartItems.length);
   }, [cartItems]);
 
+  useEffect(() => {
+    setFavouriteCount(favouriteItems.length); // Cập nhật số lượng yêu thích
+  }, [favouriteItems]);
+  
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
   const {data: categories} = useSWR("http://localhost:3000/categories", fetcher)
@@ -133,7 +140,7 @@ export default function Header() {
                 </span>
               </div>
             </form>> */}
-            <Search />
+            <Search setFavouriteCount={setFavouriteCount} />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
               <div>
                 {isLoggedIn ? (
@@ -147,8 +154,13 @@ export default function Header() {
                   </Link>
                 )}
               </div>
-              <div>
-                <i className="bi bi-suit-heart icon-h"></i>
+              <div className="fav-icon-container">
+                <Link href={"/yeuthich"} className="d-flex align-items-center">
+                  <i className="bi bi-suit-heart icon-h"></i>
+                  {favouriteCount > 0 && (
+                    <span className="fav-quantity">{favouriteCount}</span>
+                  )}
+                </Link>
               </div>
               <div className="cart-icon-container">
                 <Link href={"/cart"} className="d-flex align-items-center">

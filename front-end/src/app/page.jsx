@@ -1,19 +1,29 @@
+"use client"
+import { useState, useEffect } from "react"; // Thêm import useState\
+
 import Link from "next/link";
 import ProductsHome from "./components/ProductsHome";
+import Loadmore from "./components/Loadmore";
 
-export default async function Home() {
-  // Fetch dữ liệu bất đồng bộ
-  const res = await fetch("http://localhost:3000/products", {
-    cache: "no-store",
-  });
+export default function Home() {
+  const [data, setData] = useState([]); // Khởi tạo state cho dữ liệu
+  const [filter, setFilter] = useState("all"); // Thêm state để quản lý bộ lọc
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = await fetch("http://localhost:3000/products", {
+        cache: "no-store",
+      });
+      const result = await res.json();
+      setData(result); // Cập nhật state với dữ liệu nhận được
+    };
 
-  // Kiểm tra lỗi khi fetch
-  if (!res.ok) {
-    console.error("Failed to fetch data");
-    return <div>Error loading products.</div>;
-  }
+    fetchData(); // Gọi hàm fetchData
+  }, []); // Chạy một lần khi component được mount
 
-  const data = await res.json();
+  const handleFilterChange = (filterType) => {
+    setFilter(filterType); // Cập nhật bộ lọc khi nhấn nút
+  };
+  console.log(data);
 
   return (
     <>
@@ -95,42 +105,34 @@ export default async function Home() {
         </div>
         {/* list shoes */}
 
-        {/* body */}
-        <div className="container main-body custom-container">
+       {/* body */}
+       <div className="container main-body custom-container">
           <h2 className="text_h2 text-uppercase">shop the latest</h2>
           <div className="d-flex flex-wrap gap-2 mb-3 button_new">
-            <button>
+            <button onClick={() => handleFilterChange("all")}>
               <Link href={"#"} className="btn-outline-dark">
-                New in
+                All
               </Link>
             </button>
-            <button>
+            <button onClick={() => handleFilterChange("hot")}>
+              <Link href={"#"} className="btn-outline-dark">
+                Hot
+              </Link>
+            </button>
+            <button onClick={() => handleFilterChange("sale")}>
               <Link href={"#"} className="btn-outline-dark">
                 Sale
               </Link>
-            </button>
-            <button>
-              <Link href={"#"} className="btn-outline-dark">
-                Dresses
-              </Link>
-            </button>
-            <button>
-              <Link href={"#"} className="btn-outline-dark">
-                Jeans
-              </Link>
-            </button>
-            <button>
-              <Link href={"#"} className="btn-outline-dark">
-                Sets
-              </Link>
-            </button>
+            </button> 
           </div>
 
           <div className="row">
-            {/* Truyền data vào ProductsHome */}
-            <ProductsHome data={data} />
+            {/* <ProductsHome data={data} /> */}
+            <ProductsHome data={data.filter(product => filter === "hot" ? product.hot : filter === "sale" ? product.discountedPrice > 0 : true)} /> {/* Cập nhật để lọc sản phẩm */}
           </div>
+          <Loadmore/>
         </div>
+        {/* body */}
       </div>
     </>
   );
