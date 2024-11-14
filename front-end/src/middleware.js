@@ -4,7 +4,7 @@ export async function middleware(request) {
   const token = request.cookies.get("token");
 
   if (!token) {
-    return NextResponse.redirect(new URL("/dangnhap", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Gọi đến API xác thực token
@@ -15,7 +15,7 @@ export async function middleware(request) {
   });
 
   if (!res.ok) {
-    return NextResponse.redirect(new URL("/dangnhap", request.url));
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   // Nếu token hợp lệ, cho phép yêu cầu tiếp tục
