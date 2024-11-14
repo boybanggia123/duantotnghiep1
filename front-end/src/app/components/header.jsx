@@ -4,27 +4,21 @@ import Link from "next/link";
 import Countdown from "../components/Countdown";
 import { useSelector } from "react-redux";
 import Search from "../components/Search";
-import SignInModal from "../dangnhap/page";
-import SignUpModal from "../dangky/page";
-import { useRouter } from "next/navigation";
-import useSWR from "swr";
+import useSWR from "swr"
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
-  const cartItems = useSelector((state) => state.cart?.items) || [];
+  const cartItems = useSelector((state) => state.cart.items) || [];
   const [cartCount, setCartCount] = useState(0);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState(null);
 
   const favouriteItems = useSelector((state) => state.favourites.items) || []; // Lấy danh sách sản phẩm yêu thích
   const [favouriteCount, setFavouriteCount] = useState(0); // State để quản lý số lượng yêu thích
 
   useEffect(() => {
-    // Cập nhật số lượng giỏ hàng ngay khi cartItems thay đổi
+    // Cập nhật giá trị số lượng sau khi render client hoàn tất
     setCartCount(cartItems.length);
   }, [cartItems]);
 
-<<<<<<< HEAD
   useEffect(() => {
     setFavouriteCount(favouriteItems.length); // Cập nhật số lượng yêu thích
   }, [favouriteItems]);
@@ -32,12 +26,6 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState(null);
   const {data: categories} = useSWR("http://localhost:3000/categories", fetcher)
-=======
-  const { data: categories } = useSWR(
-    "http://localhost:3000/categories",
-    fetcher
-  );
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
 
   useEffect(() => {
     const token = document.cookie
@@ -92,7 +80,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="img/logo_fashion.png" alt="logo" />
+            <img src="image/logo_fashion.png" alt="logo" />
           </Link>
           <button
             className="navbar-toggler"
@@ -133,7 +121,6 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
-<<<<<<< HEAD
             {/* < <form className="d-flex mt-3" role="search">
               <div className="input-group">
                 <span className="input-group-text search-icon-left">
@@ -154,47 +141,19 @@ export default function Header() {
               </div>
             </form>> */}
             <Search setFavouriteCount={setFavouriteCount} />
-=======
-            <Search />
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
-              <div className="position-relative user-icon-container">
-                <Link href={"/appinfo/info"} className="text-decoration-none">
-                  {isLoggedIn ? <span className="ms-3">{userName}</span> : null}
-                  <i className="bi bi-person-circle icon-h"></i>
-                </Link>
-                {!isLoggedIn && (
-                  <div className="user-dropdown">
-                    <button
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signInModal"
-                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
-                      className="btn btn-primary btn-sm w-100 mb-1"
-                    >
-                      Đăng nhập
-                    </button>
-                    <button
-                      type="button"
-                      data-bs-toggle="modal"
-                      data-bs-target="#signUpModal"
-                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
-                      className="btn btn-secondary btn-sm w-100"
-                    >
-                      Đăng ký
-                    </button>
-                    {/* <Link
-                      href="/dangky"
-                      className="btn btn-secondary btn-sm w-100"
-                    >
-                      Đăng ký
-                    </Link> */}
-                  </div>
+              <div>
+                {isLoggedIn ? (
+                  <Link href={"/info"}>
+                    <span className="ms-3">{userName}</span>
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
+                ) : (
+                  <Link href={"/dangnhap"}>
+                    <i className="bi bi-person-circle icon-h"></i>
+                  </Link>
                 )}
-                <SignInModal />
-                <SignUpModal />
               </div>
-<<<<<<< HEAD
               <div className="fav-icon-container">
                 <Link href={"/yeuthich"} className="d-flex align-items-center">
                   <i className="bi bi-suit-heart icon-h"></i>
@@ -202,11 +161,6 @@ export default function Header() {
                     <span className="fav-quantity">{favouriteCount}</span>
                   )}
                 </Link>
-=======
-
-              <div>
-                <i className="bi bi-suit-heart icon-h"></i>
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
               </div>
               <div className="cart-icon-container">
                 <Link href={"/cart"} className="d-flex align-items-center">
@@ -222,10 +176,9 @@ export default function Header() {
       </nav>
       <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          {categories &&
-            categories.map((category) => (
-              <Link href={`/category/${category._id}`}>{category.name}</Link>
-            ))}
+          {categories && categories.map(category => (
+            <Link href={`/category/${category._id}`}>{category.name}</Link>
+          ))}
         </div>
       </div>
       <hr className="mt-0 mb-0" />

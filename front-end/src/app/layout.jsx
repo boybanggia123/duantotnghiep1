@@ -13,13 +13,7 @@ import "../../public/css/cart.css";
 import "../../public/css/style.css";
 import "../../public/css/sanpham.css";
 import "../../public/css/detail.css";
-<<<<<<< HEAD
 import "../../public/css/favourite.css";
-=======
-import "../../public/css/style-dangnhap.css";
-import "../../public/css/style-dangky.css";
-
->>>>>>> 16db798c41636f66c45ff1b68ab0e0f2b3445528
 
 const inter = Inter({ subsets: ["latin"] });
 
