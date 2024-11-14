@@ -7,16 +7,13 @@ const Search = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
   const handleSearch = async () => {
     if (!keyword) {
       return;
     }
-
     setLoading(true);
     setError(null);
     setProducts([]);
-
     try {
       const response = await fetch(
         `http://localhost:3000/search?key=${encodeURIComponent(keyword)}`
@@ -25,7 +22,6 @@ const Search = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || "Không tìm thấy sản phẩm");
       }
-
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -91,35 +87,37 @@ const Search = () => {
         </p>
       )}
       {products.length > 0 && keyword ? (
-  <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
-    {products.map((product) => (
-      <a
-        key={product._id}
-        href={`/chitiet/${product._id}`}
-        className="d-flex justify-content-center align-content-center product-item gap-3"
-      >
-        <div className="product-image">
-          <img
-            className="img-fluid"
-            src={`/img/${product.image}`}
-            alt={product.name}
-            style={{ maxWidth: "100px" }}
-            loading="lazy"
-          />
+        <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
+          {products.map((product) => (
+            <a
+              key={product._id}
+              href={`/chitiet/${product._id}`}
+              className="timkiem d-flex justify-content-center align-content-center product-item gap-3"
+            >
+              <div className="product-image">
+                <img
+                  className="img-fluid"
+                  src={`${product.image}`}
+                  alt={product.name}
+                  style={{ maxWidth: "60px" }}
+                  loading="lazy"
+                />
+              </div>
+              <div className="text_timkiem d-flex flex-column justify-content-center">
+                <span className="mb-0">{product.name}</span>
+                <span className="price">
+                  <p>${product.discountedPrice}</p>
+                  <del>${product.price}</del>
+                </span>
+              </div>
+            </a>
+          ))}
         </div>
-        <div className="d-flex flex-column justify-content-center">
-          <h4 className="mb-0">{product.name}</h4>
-          <p className="mb-0">{product.description}</p>
-        </div>
-      </a>
-    ))}
-  </div>
-) : (
-  !loading &&
-  !error &&
-  keyword && <p className="mb-0">Không có sản phẩm nào</p>
-)}
-
+      ) : (
+        !loading &&
+        !error &&
+        keyword && <p className="mb-0">Không có sản phẩm nào</p>
+      )}
     </div>
   );
 };

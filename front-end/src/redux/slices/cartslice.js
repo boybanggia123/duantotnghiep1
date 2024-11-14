@@ -59,17 +59,20 @@ export const updateCartItemQuantity = createAsyncThunk(
     }
 
     try {
-      // Chỉnh lại URL cho chính xác
+      // Chỉnh lại URL cho chính xác, giả sử API chạy trên http://localhost:5000
       const response = await axios.put(
-        `http://localhost:3000/cart`, 
+        `http://localhost:3000/cart`, // URL chính xác trỏ đến API PUT đã viết trong backend
         { userId, productId, quantity, size }
       );
       return response.data; // Trả về giỏ hàng đã được cập nhật từ API
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response.data);
+      // Xử lý lỗi và trả về giá trị reject với dữ liệu lỗi từ API
+      return thunkAPI.rejectWithValue(error.response?.data || "Lỗi không xác định");
     }
   }
 );
+
+
 
 const cartSlice = createSlice({
   name: "cart",

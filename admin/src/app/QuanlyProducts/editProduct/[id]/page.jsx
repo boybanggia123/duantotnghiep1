@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
@@ -7,23 +7,16 @@ import Link from "next/link";
 
 export default function EditProduct({ params }) {
   const router = useRouter();
-  const id = params.id; // Nhận id từ params trong Next.js.
+  const id = params.id;
 
   const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState(null); // Để lưu thông tin sản phẩm
-<<<<<<< HEAD
-=======
-  const [isProductLoaded, setIsProductLoaded] = useState(false); // Cờ kiểm soát sản phẩm đã được tải chưa
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+  const [product, setProduct] = useState(null);
+  const [isProductLoaded, setIsProductLoaded] = useState(false);
 
   // Lấy danh mục sản phẩm
   useEffect(() => {
     const getCategories = async () => {
-<<<<<<< HEAD
-      const res = await fetch('http://localhost:3000/categories');
-=======
       const res = await fetch("http://localhost:3000/categories");
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
       const data = await res.json();
       setCategories(data);
     };
@@ -34,23 +27,13 @@ export default function EditProduct({ params }) {
       const res = await fetch(`http://localhost:3000/productdetail/${id}`);
       const data = await res.json();
       setProduct(data);
-<<<<<<< HEAD
+      setIsProductLoaded(true);
     };
 
     if (id) {
-      getProduct(); // Lấy thông tin sản phẩm khi có id
+      getProduct();
     }
-  }, [id]); // Chỉ cần theo dõi id thôi
-=======
-      setIsProductLoaded(true); 
-    };
-
-    if (id) {
-      getProduct(); 
-    }
-  }, [id]); 
-
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+  }, [id]);
 
   const formik = useFormik({
     initialValues: {
@@ -93,14 +76,20 @@ export default function EditProduct({ params }) {
       formData.append("categoryId", values.categoryId);
 
       try {
-        const res = await fetch(`http://localhost:3000/uploads/updateproduct/${id}`, {
-          method: "PUT",
-          body: formData,
-        });
+        const res = await fetch(
+          `http://localhost:3000/uploads/updateproduct/${id}`,
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
 
         if (!res.ok) {
           const errorData = await res.json();
-          if (res.status === 400 && errorData.message === "Sản phẩm đã tồn tại") {
+          if (
+            res.status === 400 &&
+            errorData.message === "Sản phẩm đã tồn tại"
+          ) {
             setFieldError("name", "Sản phẩm đã tồn tại");
           } else {
             throw new Error(errorData.message || "Cập nhật sản phẩm thất bại");
@@ -108,11 +97,7 @@ export default function EditProduct({ params }) {
         }
 
         alert("Cập nhật sản phẩm thành công");
-<<<<<<< HEAD
-        router.push("/QuanlyProducts"); // Quay về danh sách sản phẩm sau khi cập nhật
-=======
-        router.push("/QuanlyProducts"); 
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+        router.push("/QuanlyProducts");
       } catch (error) {
         setFieldError("general", error.message);
       } finally {
@@ -120,24 +105,6 @@ export default function EditProduct({ params }) {
       }
     },
   });
-
-<<<<<<< HEAD
-  // Đảm bảo khi thông tin sản phẩm được tải xong, form sẽ được cập nhật
-  useEffect(() => {
-    if (product && formik.setFieldValue) {
-      formik.setFieldValue('name', product.name);
-      formik.setFieldValue('price', product.price);
-      formik.setFieldValue('description', product.description);
-      formik.setFieldValue('categoryId', product.categoryId);
-      formik.setFieldValue('discountedPrice', product.discountedPrice);
-      formik.setFieldValue('size', product.size);
-      formik.setFieldValue('quantity', product.quantity);
-      formik.setFieldValue('status', product.status);
-      formik.setFieldValue('hot', product.hot);
-    }
-  }, [product, formik]);
-
-=======
 
   useEffect(() => {
     if (isProductLoaded && product) {
@@ -154,20 +121,26 @@ export default function EditProduct({ params }) {
         categoryId: product.categoryId || "",
       });
     }
-  }, [isProductLoaded, product]); 
+  }, [isProductLoaded, product]);
 
   if (!isProductLoaded) {
     return <p>Đang tải dữ liệu...</p>;
   }
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+
   return (
     <>
       <h1 className="title">Quản lý Sản phẩm</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
-          <li><Link href="/">Home</Link></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
           <li className="divider">/</li>
-          <li><Link href="/addProduct" className="active">Sửa sản phẩm</Link></li>
+          <li>
+            <Link href="/addProduct" className="active">
+              Sửa sản phẩm
+            </Link>
+          </li>
         </ul>
       </div>
       <div className="container-add">
@@ -244,9 +217,10 @@ export default function EditProduct({ params }) {
                 onBlur={formik.handleBlur}
                 placeholder="Giá giảm giá (tùy chọn)"
               />
-              {formik.touched.discountedPrice && formik.errors.discountedPrice && (
-                <div className="error">{formik.errors.discountedPrice}</div>
-              )}
+              {formik.touched.discountedPrice &&
+                formik.errors.discountedPrice && (
+                  <div className="error">{formik.errors.discountedPrice}</div>
+                )}
             </div>
 
             <div className="form-groupadd-1">
@@ -293,20 +267,6 @@ export default function EditProduct({ params }) {
                 <option value="out of stock">Hết hàng</option>
                 <option value="in stock">Còn hàng</option>
               </select>
-              {formik.touched.status && formik.errors.status && (
-                <div className="error">{formik.errors.status}</div>
-              )}
-            </div>
-
-            <div className="form-groupadd-1">
-              <label >Sản phẩm hot</label>
-              <input
-                className="checkboxpro"
-                type="checkbox"
-                name="hot"
-                checked={formik.values.hot}
-                onChange={formik.handleChange}
-              />
             </div>
 
             <div className="form-groupadd-1">
@@ -316,25 +276,30 @@ export default function EditProduct({ params }) {
                 value={formik.values.categoryId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-            >
-                <option value="" label="Chọn danh mục" />
-                        {categories.length > 0 ? (
-                        categories.map((category) => (
-                            <option key={category._id} value={category._id}>
-                            {category.name}
-                            </option>
-                        ))
-                        ) : (
-                        <option disabled>Đang tải danh mục...</option>
-                        )}
-            </select>
+              >
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
               {formik.touched.categoryId && formik.errors.categoryId && (
                 <div className="error">{formik.errors.categoryId}</div>
               )}
             </div>
 
-            <button className="buttonadd" type="submit" disabled={formik.isSubmitting}>
-              Cập nhật Sản phẩm
+            <div className="form-groupadd-1">
+              <label>Sản phẩm nổi bật</label>
+              <input
+                type="checkbox"
+                name="hot"
+                checked={formik.values.hot}
+                onChange={formik.handleChange}
+              />
+            </div>
+
+            <button type="submit" disabled={formik.isSubmitting}>
+              Cập nhật sản phẩm
             </button>
           </form>
         </div>
@@ -342,4 +307,3 @@ export default function EditProduct({ params }) {
     </>
   );
 }
-

@@ -1,6 +1,7 @@
 "use client";
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartslice";
+import Comments from "@/app/components/comments";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import useSWR from "swr";
@@ -126,24 +127,24 @@ export default function Detail({ params }) {
           <div className="product-container">
             <div className="thumbnail-images d-flex flex-column">
               <img
-                src={`/img/${product.image}`}
+                src={`${product.image}`}
                 alt="Hình thu nhỏ 1"
                 className="mb-2"
               />
               <img
-                src={`/img/${product.image}`}
+                src={`${product.image}`}
                 alt="Hình thu nhỏ 2"
                 className="mb-2"
               />
               <img
-                src={`/img/${product.image}`}
+                src={`${product.image}`}
                 alt="Hình thu nhỏ 3"
                 className="mb-2"
               />
             </div>
             <div className="main-product-image">
               <img
-                src={`/img/${product.image}`}
+                src={`${product.image}`}
                 alt="Hình sản phẩm chính"
                 className="w-100"
               />
@@ -264,89 +265,11 @@ export default function Detail({ params }) {
           ))}
         </div>
       </div>
-      {/* Phần chi tiết sản phẩm */}
-      <div className="comment-section mt-4">
-        <h5 className="comment-title mb-3">Nhận xét</h5>
-
-        <div className="comments-box p-3 rounded bg-light">
-          {userComments.map((review, index) => (
-            <div key={index} className="review-item mb-3">
-              <div className="d-flex align-items-center mb-2">
-                <img
-                  src="/img/user1.jpg"
-                  alt="Người dùng"
-                  className="user-avatar me-2"
-                  style={{ width: "40px", height: "40px", borderRadius: "50%" }}
-                />
-                <div>
-                  <strong className="user-name">{review.userId}</strong>
-                  <span
-                    className="user-date d-block text-muted"
-                    style={{ fontSize: "0.85rem" }}
-                  >
-                    {review.date}
-                  </span>
-                </div>
-              </div>
-              <div className="user-rating mb-2">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    className={`me-1 ${
-                      star <= review.rating ? "text-warning" : "text-muted"
-                    }`}
-                  >
-                    ★
-                  </span>
-                ))}
-              </div>
-              <div className="user-comment">
-                <p>{review.comment}</p>
-              </div>
-              {index < userComments.length - 1 && <hr />}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Phần form bình luận và đánh giá */}
-      <div className="comment-form-section mt-5 mb-5">
-        <h5 className="comment-title mb-3">Gửi đánh giá của bạn</h5>
-
-        <form className="p-3 bg-light rounded">
-          <div className="mb-3">
-            <label className="form-label">Chọn số sao:</label>
-            <div className="rating-input d-flex">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() => handleStarClick(star)}
-                  className={`btn btn-sm me-1 ${
-                    star <= rating ? "btn-warning" : "btn-outline-warning"
-                  }`}
-                >
-                  ★
-                </button>
-              ))}
-            </div>
-          </div>
-          <div className="mb-3">
-            <label htmlFor="comment" className="form-label">
-              Bình luận:
-            </label>
-            <textarea
-              id="comment"
-              rows="3"
-              className="form-control"
-              placeholder="Nhập bình luận của bạn..."
-            ></textarea>
-          </div>
-          <button type="submit" className="btn btn-primary">
-            Gửi đánh giá
-          </button>
-        </form>
-      </div>
+      <Comments
+        userComments={userComments}
+        rating={rating}
+        handleStarClick={handleStarClick}
+      />
     </div>
   );
 }

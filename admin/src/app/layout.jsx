@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Inter } from "next/font/google";
 import Link from "next/link";
@@ -7,16 +7,15 @@ import "../../public/css/style.css";
 import "../../public/css/formmodal.css";
 import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
-import { useRouter } from 'next/navigation';
-
+import { useRouter } from "next/navigation";
 
 export default function RootLayout({ children }) {
   const router = useRouter();
-  const handleLogout = () =>{
+  const handleLogout = () => {
     document.cookie = "token=; path=/; max-age=-1";
 
-    router.push('http://localhost:3001/dangnhap');
-  }
+    router.push("http://localhost:3001/");
+  };
   return (
     <html lang="en">
       <head>
@@ -124,12 +123,15 @@ export default function RootLayout({ children }) {
                   </Link>
                 </li>
                 <li>
-                <Link href={"#"} onClick={(e) => {
+                  <Link
+                    href={"#"}
+                    onClick={(e) => {
                       e.preventDefault();
                       handleLogout();
-                    }}>
-                      <i className="bx bxs-log-out-circle"></i> Logout
-                    </Link>
+                    }}
+                  >
+                    <i className="bx bxs-log-out-circle"></i> Logout
+                  </Link>
                 </li>
               </ul>
             </div>
