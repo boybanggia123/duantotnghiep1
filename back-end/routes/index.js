@@ -106,11 +106,22 @@ router.get("/productdetail/:id/reviews", async (req, res, next) => {
 router.get("/products", async (req, res, next) => {
   const db = await connectDb();
   const productCollection = db.collection("products");
-  const products = await productCollection.find().toArray();
-  if (products) {
+  
+  // Khởi tạo điều kiện tìm kiếm
+  const query = {};
+  
+  // Kiểm tra xem categoryId có trong query parameters không
+  if (req.query.categoryId) {
+    query.categoryId = new ObjectId(req.query.categoryId);
+  }
+  
+  // Lấy sản phẩm theo điều kiện
+  const products = await productCollection.find(query).toArray();
+  
+  if (products.length > 0) {
     res.status(200).json(products);
   } else {
-    res.status(404).json({ message: "Không tìm thấy" });
+    res.status(404).json({ message: "Không tìm thấy sản phẩm" });
   }
 });
 //lấy sản phẩm hot

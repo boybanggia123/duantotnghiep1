@@ -1,10 +1,26 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  addToFavourites,
+  removeFromFavourites,
+} from "../../redux/slices/favouriteSlice"; // Import action
 
 function ProductsHome(props) {
+  const dispatch = useDispatch(); // Khởi tạo dispatch
+  const favouriteItems = useSelector((state) => state.favourites.items); // Lấy danh sách yêu thích từ Redux
   const [currentPage, setCurrentPage] = useState(1); // State quản lý trang hiện tại
   const itemsPerPage = 16; // Số lượng sản phẩm hiển thị mỗi trang
+  const [favouriteIds, setFavouriteIds] = useState(new Set()); // Thêm trạng thái để quản lý sản phẩm yêu thích
+  const [notification, setNotification] = useState({ message: "", type: "" }); // Thêm trạng thái để quản lý thông báo
+  const { setFavouriteCount } = props; // Nhận prop để cập nhật số lượng yêu thích
+
+  // Cập nhật favouriteIds khi component mount
+  useEffect(() => {
+    const ids = new Set(favouriteItems.map((item) => item._id)); // Lấy danh sách ID từ sản phẩm yêu thích
+    setFavouriteIds(ids); // Cập nhật favouriteIds
+  }, [favouriteItems]);
 
   // Tính toán sản phẩm hiện tại để hiển thị
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -21,20 +37,65 @@ function ProductsHome(props) {
     }
   };
 
+  // Hàm để xử lý việc yêu thích sản phẩm
+  const toggleFavourite = (product) => {
+    setFavouriteIds((prev) => {
+      const newFavourites = new Set(prev);
+      if (newFavourites.has(product._id)) {
+        newFavourites.delete(product._id); // Nếu đã yêu thích, xóa khỏi danh sách
+        dispatch(removeFromFavourites(product)); // Gọi action xóa sản phẩm yêu thích
+        setNotification({
+          message: "Đã xóa khỏi mục yêu thích!",
+          type: "error",
+        }); // Cập nhật thông báo
+      } else {
+        newFavourites.add(product._id); // Nếu chưa yêu thích, thêm vào danh sách
+        dispatch(addToFavourites(product)); // Gọi action thêm sản phẩm yêu thích
+        setNotification({
+          message: "Đã thêm vào mục yêu thích!",
+          type: "success",
+        }); // Cập nhật thông báo
+      }
+      return newFavourites;
+    });
+
+    // Xóa thông báo sau 3 giây
+    setTimeout(() => {
+      setNotification({ message: "", type: "" });
+    }, 3000);
+  };
+
+  // Thêm lớp 'show' vào thông báo
+  const notificationClass = notification.message
+    ? `notification show ${notification.type}`
+    : "notification";
+
+  // const handleAddToFavorites = (product) => {
+  //   // Logic to add product to favorites
+  //   setFavouriteCount(prevCount => prevCount + 1); // Update favorite count
+  // };
+
   return (
     <>
+      {notification.message && (
+        <div className={notificationClass}>{notification.message}</div>
+      )}{" "}
+      {/* Hiển thị thông báo */}
       {currentItems.map((product) => {
-        const { _id, name, image, price, discountedPrice } = product;
+        const { _id, name, image, price, discountedPrice, hot } = product;
+        const isFavourite = favouriteIds.has(_id); // Kiểm tra xem sản phẩm có được yêu thích không
         return (
-          <div className="col-6 col-md-4 col-lg-3 mb-2 p-1 rounded" key={_id}>
+          // col-12 col-sm-6 col-md-4 col-lg-3
+          <div className="product rounded position-relative border" key={_id}>
             <div className="sup-h">
               <div className="w-img gray-background">
                 <Link href={`/chitiet/${_id}`}>
                   <img
-                    // src={`http://localhost:3001/images/${image}`}
-                    src={`${image}`}
+                    src={`http://localhost:3000/${image}`}
+                    // src={`img/${image}`}
+
                     alt={name}
-                    className="img-fluid img-gray "
+                    className="img-fluid img-gray"
                   />
                 </Link>
                 <button className="sup-wimg fw-medium">Quick Add</button>
@@ -44,29 +105,42 @@ function ProductsHome(props) {
                   <Link href={""} className="namesup">
                     {name}
                   </Link>
-                  <svg
-                    className="icon-svg"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
+                  <span
+                    className="icon-favourite"
+                    onClick={() => toggleFavourite(product)}
                   >
-                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3c2.08 0 4.5 2.42 4.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
-                  </svg>
+                    <svg
+                      className={`icon-svg ${isFavourite ? "active" : ""}`} // Thêm lớp 'active' nếu sản phẩm được yêu thích
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41 0.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3c2.08 0 4.5 2.42 4.5 5.5 0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+                    </svg>
+                  </span>
                 </div>
                 <span className="price">
-                  <p>${discountedPrice}</p>
-                  <del>${price}</del>
+                  {discountedPrice > 0 ? (
+                    <>
+                      <p className="priceSale">
+                        ${price - (price * discountedPrice) / 100}
+                      </p>
+                      <del>${price}</del>
+                    </>
+                  ) : (
+                    <p className="priceSale">${price}</p>
+                  )}
                 </span>
               </div>
             </div>
+            {discountedPrice > 0 && (
+              <p className="discount position-absolute">
+                {discountedPrice}% OFF
+              </p>
+            )}
+            {hot && <p className="hot position-absolute">HOT</p>}
           </div>
         );
       })}
-      {/* Phân trang */}
-      <Link href={"/sanpham"} className="namesup">
-        <div className="text-center my-3">
-          <button className="btn load-more-btn">Load more</button>
-        </div>
-      </Link>
     </>
   );
 }
