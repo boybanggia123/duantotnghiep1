@@ -50,11 +50,11 @@
   }
  /* Ẩn checkbox mặc định */
  .label_trai{
-    
     font-weight: 400;
     letter-spacing: .015625rem;
     color: #000;
  }
+
 .input_checkbox {
     position: absolute;
     opacity: 0;
@@ -185,7 +185,7 @@
   /* Ẩn thanh cuộn cho phần sản phẩm */
   .custom-product-section {
     padding-left: 30px;
-    height: calc(200vh - 200px); /* Chiều cao cố định */
+    height: auto;
     overflow-y: scroll; /* Cho phép cuộn dọc */
   }
   

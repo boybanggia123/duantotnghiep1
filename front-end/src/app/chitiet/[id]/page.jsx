@@ -2,45 +2,32 @@
 import { useSelector, useDispatch } from "react-redux";
 import { addToCart } from "@/redux/slices/cartslice";
 import Comments from "@/app/components/comments";
+import SignInModal from "@/app/components/SignInModal";
 import { useState, useEffect } from "react";
+
 import Link from "next/link";
 import useSWR from "swr";
-import { useRef } from "react"; // Thêm import useRef
-import ProductsHome from "../../components/ProductsHome";
+import axios from "axios";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Detail({ params }) {
+  const [rating, setRating] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
   const [notification, setNotification] = useState("");
+  const [userComments, setUserComments] = useState([]);
+  const [showModal, setShowModal] = useState(false); // Quản lý trạng thái modal
   const dispatch = useDispatch();
+  const [user, setUser] = useState(null);
   const cart = useSelector((state) => state.cart);
-  const [currentIndex, setCurrentIndex] = useState(0); // Thêm state để theo dõi chỉ số sản phẩm hiện tại
-  // const [data, setData] = useState([]); // Khởi tạo state cho dữ liệu
   console.log(cart);
+  const router = useRouter();
 
-  const handleNext = () => {
-    if (currentIndex < relatedProducts.length - 4) {
-      setCurrentIndex(currentIndex + 1);
-    }
+  const handleStarClick = (star) => {
+    setRating(rating === star ? 0 : star);
   };
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      setCurrentIndex(currentIndex - 1);
-    }
-  };
-
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const res = await fetch("http://localhost:3000/products", {
-  //       cache: "no-store",
-  //     });
-  //     const result = await res.json();
-  //     setData(result); // Cập nhật state với dữ liệu nhận được
-  //   };
-
-  //   fetchData(); // Gọi hàm fetchData
-  // }, []); // Chạy một lần khi component được mount
 
   const {
     data: product,
@@ -49,24 +36,31 @@ export default function Detail({ params }) {
   } = useSWR(`http://localhost:3000/productdetail/${params.id}`, fetcher, {
     refreshInterval: 6000,
   });
-
-  const [relatedProducts, setRelatedProducts] = useState([]); // Khởi tạo state cho sản phẩm liên quan
-
   useEffect(() => {
-    const fetchRelatedProducts = async () => {
-      if (product && product.categoryId) {
-        // Kiểm tra nếu product đã được khởi tạo và có categoryId
-        const res = await fetch(
-          `http://localhost:3000/products?categoryId=${product.categoryId}`
-        );
-        const result = await res.json();
-        setRelatedProducts(result.filter((item) => item._id !== product._id)); // Lọc bỏ sản phẩm hiện tại
+    if (product) {
+      // Lấy danh sách bình luận của sản phẩm khi có dữ liệu sản phẩm
+      setUserComments(product.reviews || []);
+    }
+  }, [product]);
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const token = Cookies.get("token");
+        if (token) {
+          const response = await axios.get("http://localhost:3000/detailuser", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setUser(response.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
       }
     };
 
-    fetchRelatedProducts(); // Gọi hàm fetchRelatedProducts khi sản phẩm thay đổi
-  }, [product]); // Chạy lại khi product thay đổi
-
+    fetchUserDetails();
+  }, []);
   if (error) return <div>Lỗi tải dữ liệu.</div>;
   if (isLoading) return <div>Đang tải...</div>;
 
@@ -74,14 +68,47 @@ export default function Detail({ params }) {
     setSelectedSize(selectedSize === size ? "" : size);
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    if (!user) {
+      alert("Vui lòng đăng nhập để thêm sản phẩm vào giỏ hàng.");
+      setShowModal(true);
+      return;
+    }
     if (!selectedSize) {
       alert("Vui lòng chọn kích thước trước khi thêm vào giỏ hàng.");
       return;
     }
-    dispatch(addToCart({ item: product, quantity, size: selectedSize }));
-    setNotification("Đã thêm sản phẩm vào giỏ hàng!");
-    setTimeout(() => setNotification(""), 3000);
+
+    try {
+      // Lấy userId từ thông tin người dùng trong Redux hoặc cookie
+      const userId = user._id; // Hoặc lấy từ Cookies nếu lưu trong cookie
+
+      // Gửi yêu cầu tới API để thêm sản phẩm vào giỏ hàng
+      const response = await axios.post(
+        "http://localhost:3000/cart", // Địa chỉ API thêm sản phẩm vào giỏ hàng
+        {
+          userId, // Thêm userId vào yêu cầu
+          productId: product._id, // ID sản phẩm
+          quantity: quantity, // Số lượng sản phẩm
+          size: selectedSize, // Kích thước đã chọn
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${Cookies.get("token")}`, // Token của người dùng
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        // Nếu thành công, cập nhật lại thông báo và Redux
+        dispatch(addToCart({ item: product, quantity, size: selectedSize }));
+        setNotification("Đã thêm sản phẩm vào giỏ hàng!");
+        setTimeout(() => setNotification(""), 3000);
+      }
+    } catch (error) {
+      console.error("Lỗi khi thêm sản phẩm vào giỏ hàng:", error);
+      alert("Có lỗi xảy ra khi thêm sản phẩm vào giỏ hàng. Vui lòng thử lại.");
+    }
   };
 
   return (
@@ -133,21 +160,8 @@ export default function Detail({ params }) {
           <div className="name_detail">{product.name}</div>
           <p className="price_giam mb-2">
             <div className="gia_detail">
-              {product.discountedPrice > 0 ? (
-                <>
-                  $
-                  {product.price -
-                    (product.price * product.discountedPrice) / 100}{" "}
-                  <del className="price_goc">${product.price}</del>
-                </>
-              ) : (
-                <span
-                  className="price_goc"
-                  style={{ color: "#9d2226", fontSize: "1rem" }}
-                >
-                  ${product.price}
-                </span>
-              )}
+              ${product.discountedPrice}{" "}
+              <del className="price_goc">${product.price}</del>
             </div>
             <div className="text-warning_1 fs-6">
               ★★★★☆<span className="sl_ratings">(3)</span>
@@ -207,17 +221,18 @@ export default function Detail({ params }) {
               className="form-control"
             />
           </div>
-
-          <button className="button_detail" onClick={handleAddToCart}>
-            Thêm vào giỏ hàng
-          </button>
-
           {/* Hiển thị thông báo */}
           {notification && (
             <div className="alert alert-success mt-2" role="alert">
               {notification}
             </div>
           )}
+          <button
+            className="button_detail"
+            onClick={() => handleAddToCart("M", 1)}
+          >
+            Thêm vào giỏ hàng
+          </button>
 
           <div className="mt-4">
             <h6>Thông tin sản phẩm</h6>
@@ -229,30 +244,37 @@ export default function Detail({ params }) {
       </div>
 
       {/* Phần đánh giá sản phẩm */}
-      <div className="ratings-section d-flex justify-content-between pt-4">
-        <div className="align-items-center">
-          <div className="danhgia">4.7/5</div>
+      <div className="ratings-section d-flex flex-column flex-md-row align-items-center pt-4">
+        <div className="text-center mb-3 mb-md-0" style={{ width: "150px" }}>
+          <div className="display-4 font-weight-bold text-primary">4.7/5</div>
           <div className="text-warning fs-2">★★★★☆</div>
-          <span className="view_ratings">(3 đánh giá)</span>
+          <span className="text-muted">(3 đánh giá)</span>
         </div>
-
-        {/* <div className="rating-bar">
-          {Array.from({ length: 5 }, (_, i) => (
-            <div className="d-flex align-items-center mb-1" key={i}>
-              <span className="me-2">{5 - i} ★</span>
-              <div className="progress flex-grow-1 me-2" style={{ width: `${(2 / 3) * 100}%` }}>
-                <div className="progress-bar bg-warning" style={{ width: `${(i === 2 ? 50 : 0)}%` }}></div>
+        <div className="rating-bars flex-grow-1 ms-md-4 w-100">
+          {[5, 4, 3, 2, 1].map((rating, index) => (
+            <div className="d-flex align-items-center mb-1" key={index}>
+              <span className="me-2">{rating} ★</span>
+              <div
+                className="progress flex-grow-1 me-2"
+                style={{ height: "8px" }}
+              >
+                <div
+                  className="progress-bar bg-warning"
+                  role="progressbar"
+                  style={{ width: `${(index + 1) * 20}%` }}
+                ></div>
               </div>
-              <span>{i === 2 ? 2 : 0}</span>
+              <span>{index === 2 ? 2 : 0}</span>
             </div>
           ))}
-        </div> */}
+        </div>
       </div>
       <Comments
         userComments={userComments}
         rating={rating}
         handleStarClick={handleStarClick}
       />
+      <SignInModal showModal={showModal} setShowModal={setShowModal} />
     </div>
   );
 }

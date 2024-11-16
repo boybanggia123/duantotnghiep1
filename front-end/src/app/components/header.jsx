@@ -1,20 +1,34 @@
 "use client";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { fetchCart } from "../../redux/slices/cartslice";
+import { useSelector, useDispatch } from "react-redux";
 import Countdown from "../components/Countdown";
-import { useSelector } from "react-redux";
+import { useEffect, useState } from "react";
 import Search from "../components/Search";
+import SignInModal from "../dangnhap/page";
+import SignUpModal from "../dangky/page";
+import { useRouter } from "next/router";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import axios from "axios";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
-  const cartItems = useSelector((state) => state.cart.items) || [];
+  const { items = [] } = useSelector((state) => state.cart || {});
   const [cartCount, setCartCount] = useState(0);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userName, setUserName] = useState(null);
+  const dispatch = useDispatch();
+  const favouriteItems = useSelector((state) => state.favourites.items) || [];
+  const [favouriteCount, setFavouriteCount] = useState(0);
 
   useEffect(() => {
-    // Cập nhật giá trị số lượng sau khi render client hoàn tất
-    setCartCount(cartItems.length);
-  }, [cartItems]);
+    setCartCount(items.length); // Cập nhật số lượng từ
+  }, [items]);
+
+  useEffect(() => {
+    setFavouriteCount(favouriteItems.length); // Cập nhật số lượng yêu thích
+  }, [favouriteItems]);
 
   const { data: categories } = useSWR(
     "http://localhost:3000/categories",
@@ -29,7 +43,6 @@ export default function Header() {
 
     if (token) {
       setIsLoggedIn(true);
-
       fetch("http://localhost:3000/detailuser", {
         method: "GET",
         headers: {
@@ -45,13 +58,15 @@ export default function Header() {
         .then((data) => {
           if (data?.fullname) {
             setUserName(data.fullname);
+            dispatch(fetchCart(data._id)); // Lấy giỏ hàng khi người dùng đăng nhập
+            setCartCount(items.length); // Cập nhật số lượng từ
           }
         })
         .catch((error) => {
           console.error("Error fetching user info:", error);
         });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
@@ -74,7 +89,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="/img/logo_fashion.png" alt="logo" />
+            <img src="img/logo_fashion.png" alt="logo" />
           </Link>
           <button
             className="navbar-toggler"
@@ -115,23 +130,45 @@ export default function Header() {
                 </Link>
               </li>
             </ul>
-            <Search />
+            <Search setFavouriteCount={setFavouriteCount} />
             <div className="d-flex grid gap-3 mt-3 ms-4 align-items-center">
-              <div>
-                {isLoggedIn ? (
-                  <Link href={"/info"}>
-                    <span className="ms-3">{userName}</span>
-                    <i className="bi bi-person-circle icon-h"></i>
-                  </Link>
-                ) : (
-                  <Link href={"/dangnhap"}>
-                    <i className="bi bi-person-circle icon-h"></i>
-                  </Link>
+              <div className="position-relative user-icon-container">
+                <Link href={"/appinfo/info"} className="text-decoration-none">
+                  {isLoggedIn ? <span className="ms-3">{userName}</span> : null}
+                  <i className="bi bi-person-circle icon-h"></i>
+                </Link>
+                {!isLoggedIn && (
+                  <div className="user-dropdown">
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signInModal"
+                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
+                      className="btn btn-primary btn-sm w-100 mb-1"
+                    >
+                      Đăng nhập
+                    </button>
+                    <button
+                      type="button"
+                      data-bs-toggle="modal"
+                      data-bs-target="#signUpModal"
+                      onClick={() => true} // Mở modal khi nhấn Đăng nhập
+                      className="btn btn-secondary btn-sm w-100"
+                    >
+                      Đăng ký
+                    </button>
+                  </div>
                 )}
+                <SignInModal />
+                <SignUpModal />
               </div>
-
-              <div>
-                <i className="bi bi-suit-heart icon-h"></i>
+              <div className="fav-icon-container">
+                <Link href={"/yeuthich"} className="d-flex align-items-center">
+                  <i className="bi bi-suit-heart icon-h"></i>
+                  {favouriteCount > 0 && (
+                    <span className="fav-quantity">{favouriteCount}</span>
+                  )}
+                </Link>
               </div>
               <div className="cart-icon-container">
                 <Link href={"/cart"} className="d-flex align-items-center">

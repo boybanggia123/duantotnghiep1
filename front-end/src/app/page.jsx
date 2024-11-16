@@ -1,6 +1,5 @@
-"use client"
+"use client";
 import { useState, useEffect } from "react"; // Thêm import useState\
-
 import Link from "next/link";
 import ProductsHome from "./components/ProductsHome";
 import Loadmore from "./components/Loadmore";
@@ -105,8 +104,8 @@ export default function Home() {
         </div>
         {/* list shoes */}
 
-       {/* body */}
-       <div className="container main-body custom-container">
+        {/* body */}
+        <div className="container main-body custom-container">
           <h2 className="text_h2 text-uppercase">shop the latest</h2>
           <div className="d-flex flex-wrap gap-2 mb-3 button_new">
             <button onClick={() => handleFilterChange("all")}>
@@ -123,14 +122,23 @@ export default function Home() {
               <Link href={"#"} className="btn-outline-dark">
                 Sale
               </Link>
-            </button> 
+            </button>
           </div>
 
           <div className="row">
             {/* <ProductsHome data={data} /> */}
-            <ProductsHome data={data.filter(product => filter === "hot" ? product.hot : filter === "sale" ? product.discountedPrice > 0 : true)} /> {/* Cập nhật để lọc sản phẩm */}
+            <ProductsHome
+              data={data.filter((product) =>
+                filter === "hot"
+                  ? product.hot
+                  : filter === "sale"
+                  ? product.discountedPrice > 0
+                  : true
+              )}
+            />{" "}
+            {/* Cập nhật để lọc sản phẩm */}
           </div>
-          <Loadmore/>
+          <Loadmore />
         </div>
         {/* body */}
       </div>

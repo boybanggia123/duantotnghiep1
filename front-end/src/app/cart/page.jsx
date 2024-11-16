@@ -38,7 +38,7 @@ export default function Cart() {
           }
         }
       } catch (err) {
-        console.error("Error fetching user data:", err);
+        console.error("Lỗi khi tìm nạp dữ liệu người dùng:", err);
       }
     };
 
@@ -56,12 +56,12 @@ export default function Cart() {
       );
       dispatch(fetchCart(userId));
     } catch (err) {
-      console.error("Error removing item:", err);
+      console.error("Lỗi khi xóa mục:", err);
     }
   };
 
   const handleQuantityChange = async (item, newQuantity) => {
-    if (newQuantity < 1) return; // Prevent setting quantity below 1
+    if (newQuantity < 1) return;
     try {
       await dispatch(
         updateCartItemQuantity({
@@ -71,9 +71,9 @@ export default function Cart() {
           size: item.size,
         })
       );
-      dispatch(fetchCart(userId)); // Refresh the cart after updating quantity
+      dispatch(fetchCart(userId));
     } catch (err) {
-      console.error("Error updating quantity:", err);
+      console.error("Lỗi cập nhật số lượng:", err);
     }
   };
 
