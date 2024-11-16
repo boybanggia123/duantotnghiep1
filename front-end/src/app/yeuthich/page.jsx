@@ -24,7 +24,7 @@ export default function Favourite() {
       <div aria-label="breadcrumb">
         <ol className="breadcrumb">
           <li className="fav-fs">
-            <Link href="#">Home</Link>
+            <Link href="/">Home</Link>
           </li>
           <li className="item-fav">
             <i className="fa-solid fa-chevron-right"></i>
