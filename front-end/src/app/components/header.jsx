@@ -106,27 +106,17 @@ export default function Header() {
             <ul className="navbar-nav text-uppercase fw-bold list-h me-auto mb-2 mb-lg-0">
               <li className="nav-item">
                 <Link className="nav-link active" href="#">
-                  Women
+                  Home
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link" href="/contact">
+                  Contact
                 </Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" href="#">
-                  Plus+Curve
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="#">
-                  Men
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="#">
-                  Kids
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link className="nav-link" href="#">
-                  Beauty
+                  About Us
                 </Link>
               </li>
             </ul>

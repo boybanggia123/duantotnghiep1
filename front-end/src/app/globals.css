@@ -547,6 +547,22 @@ a {
 #avatar-input {
   display: none;
 }
+/* checkout */
+.checkout svg {
+  display: block;
+  height: 300px;  
+  transform-origin: center top;
+  animation: swing_31 1.3s ease-in-out infinite alternate;
+}
+
+@keyframes swing_31 {
+  0% {
+    transform: rotate(18deg);
+  }
+  100% {
+    transform: rotate(-18deg);
+  }
+}
 
 
 
