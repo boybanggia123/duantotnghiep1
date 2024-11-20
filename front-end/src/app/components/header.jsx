@@ -79,7 +79,7 @@ export default function Header() {
           <Countdown initialSeconds={3721} />
         </div>
         <Link
-          href="/shop"
+          href="/sanpham"
           className="shop-now d-block d-md-inline-block mt-2 mt-md-0"
         >
           SHOP NOW
@@ -115,7 +115,7 @@ export default function Header() {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link" href="#">
+                <Link className="nav-link" href="/about">
                   About Us
                 </Link>
               </li>
