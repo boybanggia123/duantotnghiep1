@@ -86,38 +86,39 @@ const Search = () => {
           {error}
         </p>
       )}
-      {products.length > 0 && keyword ? (
-        <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
-          {products.map((product) => (
-            <a
-              key={product._id}
-              href={`/chitiet/${product._id}`}
-              className="timkiem d-flex justify-content-center align-content-center product-item gap-3"
-            >
-              <div className="product-image">
-                <img
-                  className="img-fluid"
-                  src={`${product.image}`}
-                  alt={product.name}
-                  style={{ maxWidth: "60px" }}
-                  loading="lazy"
-                />
-              </div>
-              <div className="text_timkiem d-flex flex-column justify-content-center">
-                <span className="mb-0">{product.name}</span>
-                <span className="price">
-                  <p>${product.discountedPrice}</p>
-                  <del>${product.price}</del>
-                </span>
-              </div>
-            </a>
-          ))}
+   {products.length > 0 && keyword ? (
+  <div className="suggestions mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
+    {products.map((product) => (
+      <a
+        key={product._id}
+        href={`/chitiet/${product._id}`}
+        className="timkiem d-flex justify-content-center align-content-center product-item gap-3"
+      >
+        <div className="product-image">
+          <img
+            className="img-fluid"
+            src={`${product.image}`}
+            alt={product.name}
+            style={{ maxWidth: "60px" }}
+            loading="lazy"
+          />
         </div>
-      ) : (
-        !loading &&
-        !error &&
-        keyword && <p className="mb-0">Không có sản phẩm nào</p>
-      )}
+        <div className="text_timkiem d-flex flex-column justify-content-center">
+          <span className="mb-0">{product.name}</span>
+          <span className="price">
+            <p>${product.discountedPrice}</p>
+            <del>${product.price}</del>
+          </span>
+        </div>
+      </a>
+    ))}
+  </div>
+) : (
+  !loading &&
+  !error &&
+  keyword && <p className="mb-0">Không có sản phẩm nào</p>
+)}
+
     </div>
   );
 };
