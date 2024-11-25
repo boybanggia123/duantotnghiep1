@@ -1,7 +1,104 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding-top: 60px; /* Chiều cao của header */
+}
 body.modal-open {
-  padding-right: 0 !important; /* Loại bỏ padding-right khi modal mở */
+  overflow: hidden; /* Ẩn thanh cuộn dọc */
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+  padding-right: 0 !important; /* Loại bỏ padding-right */
+}
+body{
+  overflow: hidden; /* Ẩn thanh cuộn dọc */
+  overflow-x: hidden; /* Ẩn thanh cuộn ngang */
+  padding-right: 0 !important; /* Loại bỏ padding-right */
+  margin: 0;
+}
+.container-xl{
+  width: 1044px;
+}
+/* ----------------danhmuc-------------------- */
+.button_category{
+  top: 42%;
+}
+.category-item {
+  text-align: center;
 }
 
+.category-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.category-circle img {
+  width: 75%;
+  height: auto;
+}
+
+.category-item p {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.category-circle:hover {
+  transform: scale(0.9);
+}
+
+.transition-transform {
+  transition: transform 0.5s ease-in-out;
+}
+
+/* Nút điều hướng */
+.category-btn {
+  background-color: #efeff0; /* Màu nền nhạt */
+  border: 1px solid #f1eeee;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #333; /* Màu chữ */
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.category-btn i {
+  font-size: 16px;
+}
+
+.category-btn:hover {
+  background-color: #000000; /* Màu khi hover */
+  transform: scale(1.1);
+  color: white;
+}
+
+.category-btn:disabled {
+  background-color: #f0f2f3;
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.prev-btn {
+  position: absolute;
+  left: -50px;
+}
+
+.next-btn {
+  position: absolute;
+  right: -50px;
+}
+
+/* ----------------danhmuc-------------------- */
 .relative video{
     width: 1399px;
     height: auto;
@@ -50,26 +147,30 @@ body.modal-open {
     margin: 0 auto;
 }
 .text_h2{
-    font-size: 20px;
-    font-weight: bolder;
+    font-size: 25px;
+    font-weight: 500;
 }
 .button_new button{
-    border-radius: 30px;
-    height: 30px;
+    width: 50px;
+    padding: 3px;
+    border-radius: 20px;
+    font-weight: 500;
+    font-size: 14px;
+    height: auto;
     color: black;
     background: white;
-    border: 0.5px solid #000;
+    border: 0.5px solid #b1adad;
 }
 .button_new button:hover{
     background: #000;
     color: white;
-    transition: all 0.7s;
+    transition: all 0.5s;
 }
-.button_new button a{
-    padding: 15px;
+/* .button_new button{
+    padding: 10px;
     font-size: 14px;
     font-weight: 500;
-}
+} */
 .w-img .sup-wimg{
     font-size: 14px;
     height: 13%;
@@ -111,8 +212,8 @@ body.modal-open {
 }
 .price del{
   color: #000000;
-  padding-left: 10px;
-  padding-top: 3px;
+  padding-left: 5px;
+  /* padding-top: 3px; */
   font-size: .75rem;
   font-weight: 400;
 }
@@ -176,6 +277,8 @@ body.modal-open {
   background-color: #000000; /* Màu nền khi hover */
   color: white; /* Màu chữ khi hover */
 }
+
+
 
 /* Responsive: khi màn hình nhỏ hơn 768px */
 @media (max-width: 768px) {

@@ -57,9 +57,8 @@ export default function Users() {
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Tên & Email</th>
+                  <th>Ảnh & Tên & Email</th>
                   <th>SĐT & Địa chỉ</th>
-                  <th>Mật khẩu</th>
                   <th>Quyền</th>
                   <th>Ngày đăng ký</th>
                   <th>Thao tác</th>
@@ -72,7 +71,7 @@ export default function Users() {
                     <td>
                       <div className="author-info">
                         <img
-                          src={`http://localhost:3000/img/${user.avatar}`}
+                          src={`${user.avatar}`}
                           alt="John Michael"
                           className="avatar"
                         />
@@ -86,9 +85,7 @@ export default function Users() {
                       <p className="sdt">(+84) {user.phone}</p>
                       <small className="address">{user.address}</small>
                     </td>
-                    <td className="password">
-                      <small>*********</small>
-                    </td>
+
                     <td>
                       <span
                         className={`badge ${

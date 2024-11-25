@@ -32,7 +32,10 @@ function ProductsHome(props) {
         const { _id, name, image, price, discountedPrice, hot } = product;
         return (
           // col-12 col-sm-6 col-md-4 col-lg-3
-          <div className="product rounded position-relative border" key={_id}>
+          <div
+            className="product rounded position-relative border mt-2"
+            key={_id}
+          >
             <div className="sup-h">
               <div className="w-img gray-background">
                 <Link href={`/chitiet/${_id}`}>
@@ -43,7 +46,7 @@ function ProductsHome(props) {
                     className="img-fluid img-gray"
                   />
                 </Link>
-                <button className="sup-wimg fw-medium">Quick Add</button>
+                {/* <button className="sup-wimg fw-medium">Quick Add</button> */}
               </div>
               <div className="mt-2 fw-medium">
                 <div className="d-flex justify-content-between">

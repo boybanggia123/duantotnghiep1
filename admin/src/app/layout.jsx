@@ -30,6 +30,7 @@ export default function RootLayout({ children }) {
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
+
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <Script src="js/script.js"></Script>
       </head>
@@ -64,7 +65,7 @@ export default function RootLayout({ children }) {
               </Link>
             </li>
             <li>
-              <Link href={"#"}>
+              <Link href={"/QuanlyComments"}>
                 <i className="fa-solid fa-comment icon"></i> Quản lý Comments
               </Link>
             </li>

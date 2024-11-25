@@ -53,7 +53,7 @@ const Search = () => {
   return (
     <div className="flex-column">
       <form
-        className="d-flex mt-3 gap-3"
+        className="d-flex gap-3"
         role="search"
         onSubmit={(e) => e.preventDefault()}
       >
@@ -105,7 +105,7 @@ const Search = () => {
               </div>
               <div className="text_timkiem d-flex flex-column justify-content-center">
                 <span className="mb-0">{product.name}</span>
-                <span className="price">
+                <span className="price-1">
                   <p>${product.discountedPrice}</p>
                   <del>${product.price}</del>
                 </span>

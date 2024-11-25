@@ -18,22 +18,26 @@ export const fetchCart = createAsyncThunk(
   }
 );
 
-// Thêm sản phẩm vào giỏ hàng
 export const addToCart = createAsyncThunk(
   "cart/addToCart",
   async ({ userId, productId, quantity, size }, thunkAPI) => {
     if (!userId) {
-      return thunkAPI.rejectWithValue({ message: "userId is required" });
+      return thunkAPI.rejectWithValue({ message: "User is not logged in" });
     }
-
     try {
-      const response = await axios.post(`http://localhost:3000/cart/${userId}/add`, { productId, quantity, size });
+      const response = await axios.post("http://localhost:3000/cart", {
+        userId,
+        productId,
+        quantity,
+        size,
+      });
       return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Error adding to cart");
     }
   }
 );
+
 
 // Xóa sản phẩm khỏi giỏ hàng
 export const removeFromCart = createAsyncThunk(
@@ -96,25 +100,35 @@ const cartSlice = createSlice({
         state.error = action.payload;
       })
       // addToCart
-      .addCase(addToCart.pending, (state) => {
-        state.loading = true;
-      })
+      // Khi thêm sản phẩm thành công
       .addCase(addToCart.fulfilled, (state, action) => {
-        state.loading = false;
+        state.status = "succeeded";
+
         const existingItem = state.items.find(
           (item) =>
-            item.productId === action.payload.productId && item.size === action.payload.size
+            item.id === action.payload.productId && item.size === action.payload.size
         );
+
         if (existingItem) {
+          // Nếu sản phẩm đã có trong giỏ, tăng số lượng
           existingItem.quantity += action.payload.quantity;
         } else {
-          state.items.push(action.payload);
-          
+          // Thêm sản phẩm mới vào giỏ
+          state.items.push({
+            id: action.payload.productId,
+            name: action.payload.name, // Đảm bảo backend trả về `name` và các thông tin cần thiết
+            image: action.payload.image,
+            size: action.payload.size,
+            price: action.payload.price,
+            discountedPrice: action.payload.discountedPrice,
+            quantity: action.payload.quantity,
+          });
         }
       })
+      // Khi thêm sản phẩm thất bại
       .addCase(addToCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.status = "failed";
+        state.error = action.payload.message;
       })
       // removeFromCart
       .addCase(removeFromCart.pending, (state) => {

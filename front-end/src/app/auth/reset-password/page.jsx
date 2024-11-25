@@ -1,12 +1,11 @@
 "use client";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import PasswordResetForm from "../../components/PasswordResetForm";
 import SignInModal from "@/app/components/SignInModal";
 
 export default function ResetPasswordPage() {
   const [showModal, setShowModal] = useState(false); // Quản lý trạng thái modal
-  const router = useRouter();
   const searchParams = useSearchParams();
   const [email, setEmail] = useState(null);
 

@@ -18,10 +18,10 @@ export default function ProductByCategoryPage() {
     fetcher
   );
 
-  // Hàm mở/đóng menu
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+  // // Hàm mở/đóng menu
+  // const toggleMenu = () => {
+  //   setIsMenuOpen(!isMenuOpen);
+  // };
 
   useEffect(() => {
     async function fetchProducts() {
@@ -92,12 +92,12 @@ export default function ProductByCategoryPage() {
         <div className="container-fluid m-0">
           <div className="row">
             {/* Nút mở menu trên mobile */}
-            <button
+            {/* <button
               className="btn btn-primary m-0 d-md-none mb-3"
               onClick={toggleMenu}
             >
               {isMenuOpen ? "Close Filter" : "Open Filter"}
-            </button>
+            </button> */}
 
             {/* Bộ lọc bên trái */}
             <div
@@ -224,7 +224,7 @@ export default function ProductByCategoryPage() {
                     />
                   </div>
                   <select
-                    className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
+                    className="form-select form-select-sm custom-select mt-2 mt-md-0 m-0 rounded-0"
                     onChange={handleSortChange}
                   >
                     <option value="asc">Giá tăng dần</option>
@@ -233,7 +233,7 @@ export default function ProductByCategoryPage() {
                 </div>
               </div>
               {/* Lưới sản phẩm */}
-              <div className="row g-4 custom-product-grid">
+              <div className="row g-3 custom-product-grid">
                 <ProductsCategory
                   data={handleSortAndFilter(categories || [])}
                 />

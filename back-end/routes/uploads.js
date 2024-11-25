@@ -76,7 +76,7 @@ router.post("/addproduct", upload.single("image"), async (req, res) => {
       dayadd: dayadd ? new Date(dayadd) : new Date(),
       hot: hot === " ",
       categoryId,
-      reviews: reviews ? JSON.parse(reviews) : [],
+      reviews: Array.isArray(reviews) ? reviews : reviews ? JSON.parse(reviews) : [],
       image: imageUrl,
     };
 
