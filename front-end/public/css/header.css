@@ -33,7 +33,7 @@
   transition: all 0.5s ease-in;
 }
 
-.nav-item > a{
+.dropdown > a{
   font-size: 14px;
   display: block;
   padding: 20px 20px;
@@ -276,7 +276,7 @@ hr{
   height: 65px;
 }
 .container{
-  max-width: 1157px;
+  max-width: 1044px;
 }
 .promotion-bar{
   padding: 5px 20px;
@@ -304,15 +304,15 @@ hr{
 .a-h{
   font-size: 14px;
 }
-.card {
+/* .card {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-.card{
+} */
+/* .card{
   box-shadow: none;
   border-radius: 0px;
   width: 400px;
   height: 600px;
-}
+} */
 .recommended-section h5 {
   font-weight: bold;
   margin-bottom: 1rem;

@@ -244,7 +244,7 @@ function ProductsHome(props) {
         const isFavourite = favouriteIds.has(_id);
         return (
           <div
-            className="product position-relative border col-sm-6 col-md-4 col-lg-3 mb-4"
+            className="product position-relative col-sm-6 m-0 col-md-4 col-lg-3"
             key={_id}
           >
             <div className="sup-h">

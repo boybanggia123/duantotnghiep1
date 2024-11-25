@@ -37,7 +37,7 @@ export default function Home() {
         {/* end danh muc */}
 
         {/* body */}
-        <div className="container main-body custom-container">
+        <div className="container-xl main-body custom-container">
           <div className="text_h2 text-uppercase mb-1">Shop the Latest</div>
           <div className="d-flex flex-wrap gap-2 mb-3 button_new">
             <button

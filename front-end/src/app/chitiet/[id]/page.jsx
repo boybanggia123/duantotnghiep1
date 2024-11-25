@@ -281,7 +281,7 @@ export default function Detail({ params }) {
     return comments.filter((review) => review.rating === rating).length;
   };
   return (
-    <div className="container-xl">
+    <div className="container">
       <div aria-label="breadcrumb" className="mt-3">
         <ol className="breadcrumb">
           <li className="Detail">

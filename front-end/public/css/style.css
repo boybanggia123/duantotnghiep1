@@ -1,8 +1,8 @@
-*{
+/* *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-}
+} */
 body {
   margin: 0;
   padding-top: 60px; /* Chiều cao của header */
@@ -17,9 +17,6 @@ body{
   overflow-x: hidden; /* Ẩn thanh cuộn ngang */
   padding-right: 0 !important; /* Loại bỏ padding-right */
   margin: 0;
-}
-.container-xl{
-  width: 1044px;
 }
 /* ----------------danhmuc-------------------- */
 .button_category{

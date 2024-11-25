@@ -83,9 +83,9 @@ export default function Cart() {
   );
 
   return (
-    <div className="container-xl mt-2">
+    <div className="container mt-2">
       <span className="cart-giohang mt-4">MY BAG </span>
-      <span> ({items.length} item)</span>container
+      <span> ({items.length} item)</span>
       <div className="row">
         <div className="col-lg-8 col-md-12">
           <div className="card-1 mb-4">

@@ -33,7 +33,7 @@ function ProductsHome(props) {
         return (
           // col-12 col-sm-6 col-md-4 col-lg-3
           <div
-            className="product rounded position-relative border mt-2"
+            className="product rounded position-relative ml-0 p-1 mt-2"
             key={_id}
           >
             <div className="sup-h">

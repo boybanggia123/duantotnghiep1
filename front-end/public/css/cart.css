@@ -2,7 +2,10 @@
 .col-md-2{
     margin-top: 5px;
 }
-
+.card{
+    max-height: none;
+    overflow-y: hidden;
+}
 .cart_price{
     display: flex;
 }
@@ -42,8 +45,8 @@
     width: 80px;
     margin-right:10px;
 }
-input[type="number"]::-webkit-inner-spin-button,
-input[type="number"]::-webkit-outer-spin-button {
+.form-control-2::-webkit-inner-spin-button,
+.form-control-2::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }

@@ -120,9 +120,9 @@ export default function Header() {
             </button>
             <div className="collapse navbar-collapse" id="navbarNav">
               <ul className="navbar-nav text-uppercase fw-bold list-h me-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link className="nav-link active" href="#">
-                    Women
+                <li className="nav-item dropdown">
+                  <Link className="nav-link active " href={"/"}>
+                    Home
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
@@ -153,19 +153,19 @@ export default function Header() {
                       ))}
                   </ul>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" href="#">
-                    Men
+                <li className="nav-item dropdown">
+                  <Link className="nav-link" href={"/about"}>
+                    About Us
                   </Link>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" href="#">
-                    Kids
+                <li className="nav-item dropdown">
+                  <Link className="nav-link" href={"/contact"}>
+                    Contact
                   </Link>
                 </li>
-                <li className="nav-item">
+                <li className="nav-item dropdown">
                   <Link className="nav-link" href="#">
-                    Beauty
+                    Blog
                   </Link>
                 </li>
               </ul>

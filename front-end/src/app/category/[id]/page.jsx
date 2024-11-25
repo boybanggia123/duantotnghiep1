@@ -20,10 +20,10 @@ export default function ProductByCategoryPage() {
     fetcher
   );
 
-  // // Hàm mở/đóng menu
-  // const toggleMenu = () => {
-  //   setIsMenuOpen(!isMenuOpen);
-  // };
+  // Hàm mở/đóng menu
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   useEffect(() => {
     async function fetchProducts() {
@@ -110,29 +110,26 @@ export default function ProductByCategoryPage() {
   };
 
   return (
-    <>
-      <div>
-        {/* products */}
-        <div className="container-fluid m-0">
-          <div className="row">
-            {/* Nút mở menu trên mobile */}
-            {/* <button
-              className="btn btn-primary m-0 d-md-none mb-3"
-              onClick={toggleMenu}
-            >
-              {isMenuOpen ? "Close Filter" : "Open Filter"}
-            </button> */}
+    <div>
+      <div className="container-fluid m-0">
+        <div className="row">
+          <button
+            className="btn btn-primary m-0 d-md-none mb-3"
+            onClick={toggleMenu}
+          >
+            {isMenuOpen ? "Close Filter" : "Open Filter"}
+          </button>
 
-            {/* Bộ lọc bên trái */}
-            <div
-              className={`col-md-2 custom-filter-section m-0 rounded-0 ${
-                isMenuOpen ? "d-block" : "d-none"
-              } d-md-block`}
-            >
-              <div className="Categories_phai">REFINE BY</div>
-              {/* <hr /> */}
-              {/* Danh mục */}
-              {/* <div className="custom-filter">
+          {/* Bộ lọc bên trái */}
+          <div
+            className={`col-md-2 custom-filter-section m-0 rounded-0 ${
+              isMenuOpen ? "d-block" : "d-none"
+            } d-md-block`}
+          >
+            <div className="Categories_phai">REFINE BY</div>
+            {/* <hr /> */}
+            {/* Danh mục */}
+            {/* <div className="custom-filter">
               <h6>Danh mục</h6>
               <ul className="list-unstyled">
                 {categories &&
@@ -155,138 +152,85 @@ export default function ProductByCategoryPage() {
                   ))}
               </ul>
             </div> */}
-              <hr />
+            <hr />
 
-              {/* Kích thước */}
-              <div className="custom-filter">
-                <h6>Size</h6>
-                <ul className="list-unstyled">
-                  {["S", "M", "L", "XL", "40", "41", "42"].map((size) => (
-                    <li key={size}>
-                      <input
-                        className="input_checkbox"
-                        type="checkbox"
-                        id={`size${size}`}
-                        checked={selectedSizes.includes(size)}
-                        onChange={() => handleSizeChange(size)}
-                      />
-                      <label
-                        htmlFor={`size${size}`}
-                        className="label_trai ms-0"
-                      >
-                        {size}
-                      </label>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <hr />
-            </div>
-
-            {/* Lưới sản phẩm bên phải */}
-            <div className="col-md-10 custom-product-section">
-              <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
-                <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
-                <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
-                  <div className="price-filter d-flex align-items-center">
-                    <label htmlFor="minPrice" className="me-2">
-                      Price range:
+            {/* Kích thước */}
+            <div className="custom-filter">
+              <h6>Size</h6>
+              <ul className="list-unstyled">
+                {["S", "M", "L", "XL", "40", "41", "42"].map((size) => (
+                  <li key={size}>
+                    <input
+                      className="input_checkbox"
+                      type="checkbox"
+                      id={`size${size}`}
+                      checked={selectedSizes.includes(size)}
+                      onChange={() => handleSizeChange(size)}
+                    />
+                    <label htmlFor={`size${size}`} className="label_trai ms-0">
+                      {size}
                     </label>
-                    <input
-                      type="number"
-                      id="minPrice"
-                      className="form-control rounded-0"
-                      placeholder="Min"
-                      value={minPrice}
-                      onChange={handleMinPriceChange}
-                      style={{
-                        width: "100px",
-                        height: "28px",
-                        fontSize: ".75rem",
-                      }}
-                    />
-                    <span className="mx-2">-</span>
-                    <input
-                      type="number"
-                      id="maxPrice"
-                      className="form-control rounded-0"
-                      placeholder="Max"
-                      value={maxPrice}
-                      onChange={handleMaxPriceChange}
-                      style={{
-                        width: "100px",
-                        height: "28px",
-                        fontSize: ".75rem",
-                      }}
-                    />
-                  </div>
-                  <select
-                    className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
-                    onChange={handleSortChange}
-                  >
-                    <option value="asc">Giá tăng dần</option>
-                    <option value="desc">Giá giảm dần</option>
-                  </select>
-                </div>
-              </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <hr />
+          </div>
 
-              {/* Lưới sản phẩm bên phải */}
-              <div className="col-md-10 custom-product-section">
-                <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
-                  <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
-                  <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
-                    <div className="price-filter d-flex align-items-center">
-                      <label htmlFor="minPrice" className="me-2">
-                        Price range:
-                      </label>
-                      <input
-                        type="number"
-                        id="minPrice"
-                        className="form-control rounded-0"
-                        placeholder="Min"
-                        value={minPrice}
-                        onChange={handleMinPriceChange}
-                        style={{
-                          width: "100px",
-                          height: "28px",
-                          fontSize: ".75rem",
-                        }}
-                      />
-                      <span className="mx-2">-</span>
-                      <input
-                        type="number"
-                        id="maxPrice"
-                        className="form-control rounded-0"
-                        placeholder="Max"
-                        value={maxPrice}
-                        onChange={handleMaxPriceChange}
-                        style={{
-                          width: "100px",
-                          height: "28px",
-                          fontSize: ".75rem",
-                        }}
-                      />
-                    </div>
-                    <select
-                      className="form-select form-select-sm custom-select mt-2 mt-md-0 m-0 rounded-0"
-                      onChange={handleSortChange}
-                    >
-                      <option value="asc">Giá tăng dần</option>
-                      <option value="desc">Giá giảm dần</option>
-                    </select>
-                  </div>
-                </div>
-                {/* Lưới sản phẩm */}
-                <div className="row g-3 custom-product-grid">
-                  <ProductsCategory
-                    data={handleSortAndFilter(categories || [])}
+          {/* Lưới sản phẩm bên phải */}
+          <div className="col-md-10 custom-product-section p-4">
+            <div className="d-flex justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
+              <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
+              <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0 m-0">
+                <div className="price-filter d-flex align-items-center">
+                  <label htmlFor="minPrice" className="me-2">
+                    Price range:
+                  </label>
+                  <input
+                    type="number"
+                    id="minPrice"
+                    className="form-control rounded-0"
+                    placeholder="Min"
+                    value={minPrice}
+                    onChange={handleMinPriceChange}
+                    style={{
+                      width: "100px",
+                      height: "28px",
+                      fontSize: ".75rem",
+                    }}
+                  />
+                  <span className="mx-2">-</span>
+                  <input
+                    type="number"
+                    id="maxPrice"
+                    className="form-control rounded-0"
+                    placeholder="Max"
+                    value={maxPrice}
+                    onChange={handleMaxPriceChange}
+                    style={{
+                      width: "100px",
+                      height: "28px",
+                      fontSize: ".75rem",
+                    }}
                   />
                 </div>
+                <select
+                  className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
+                  onChange={handleSortChange}
+                >
+                  <option value="asc">Giá tăng dần</option>
+                  <option value="desc">Giá giảm dần</option>
+                </select>
               </div>
+            </div>
+
+            {/* Lưới sản phẩm */}
+            <div className="row g-3 custom-product-grid">
+              <ProductsCategory data={handleSortAndFilter(categories || [])} />
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
