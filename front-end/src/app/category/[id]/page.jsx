@@ -1,14 +1,16 @@
 "use client";
-import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import ProductsCategory from "../../components/ProductsCategory";
-const fetcher = (url) => fetch(url).then((res) => res.json());
 
+const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function ProductByCategoryPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
+
+  const [selectedCategories, setSelectedCategories] = useState([]); // Trạng thái danh mục đã chọn
+  const [selectedSizes, setSelectedSizes] = useState([]); // Trạng thái kích thước đã chọn
   const [sortOption, setSortOption] = useState("asc");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { id } = useParams();
@@ -38,6 +40,13 @@ export default function ProductByCategoryPage() {
   const handleSortAndFilter = (products) => {
     let filteredProducts = products;
 
+    // Lọc theo danh mục
+    if (selectedCategories.length > 0) {
+      filteredProducts = filteredProducts.filter((product) =>
+        selectedCategories.includes(product.categoryId)
+      );
+    }
+
     // Lọc theo giá
     if (minPrice) {
       filteredProducts = filteredProducts.filter(
@@ -48,6 +57,15 @@ export default function ProductByCategoryPage() {
     if (maxPrice) {
       filteredProducts = filteredProducts.filter(
         (product) => product.price <= maxPrice
+      );
+    }
+
+    // Lọc theo kích thước
+    if (selectedSizes.length > 0) {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          Array.isArray(product.size) &&
+          selectedSizes.some((size) => product.size.includes(size))
       );
     }
 
@@ -68,6 +86,15 @@ export default function ProductByCategoryPage() {
     }
   };
 
+  // Sự kiện chọn kích thước
+  const handleSizeChange = (size) => {
+    if (selectedSizes.includes(size)) {
+      setSelectedSizes(selectedSizes.filter((s) => s !== size)); // Bỏ chọn nếu đã chọn trước đó
+    } else {
+      setSelectedSizes([...selectedSizes, size]); // Thêm vào kích thước đã chọn
+    }
+  };
+
   // Sự kiện thay đổi giá
   const handleMinPriceChange = (e) => {
     setMinPrice(e.target.value);
@@ -82,9 +109,6 @@ export default function ProductByCategoryPage() {
     setSortOption(e.target.value);
   };
 
-  // const handleSortAndFilter = (data) => {
-  //   return data;
-  // };
   return (
     <>
       <div>
@@ -106,84 +130,57 @@ export default function ProductByCategoryPage() {
               } d-md-block`}
             >
               <div className="Categories_phai">REFINE BY</div>
-
+              {/* <hr /> */}
               {/* Danh mục */}
+              {/* <div className="custom-filter">
+              <h6>Danh mục</h6>
+              <ul className="list-unstyled">
+                {categories &&
+                  categories.map((category) => (
+                    <li key={category.id}>
+                      <input
+                        className="input_checkbox"
+                        type="checkbox"
+                        id={`category${category.id}`}
+                        checked={selectedCategories.includes(category.id)}
+                        onChange={() => handleCategoryChange(category.id)}
+                      />
+                      <label
+                        htmlFor={`category${category.id}`}
+                        className="label_trai ms-0"
+                      >
+                        {category.name}
+                      </label>
+                    </li>
+                  ))}
+              </ul>
+            </div> */}
               <hr />
 
               {/* Kích thước */}
               <div className="custom-filter">
                 <h6>Size</h6>
                 <ul className="list-unstyled">
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="sizeS"
-                    />
-                    <label htmlFor="sizeS" className="label_trai ms-0">
-                      S
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="sizeM"
-                    />
-                    <label htmlFor="sizeM" className="label_trai ms-0">
-                      M
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="sizeL"
-                    />
-                    <label htmlFor="sizeL" className="label_trai ms-0">
-                      L
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="sizeXL"
-                    />
-                    <label htmlFor="sizeXL" className="label_trai ms-0">
-                      L/XL
-                    </label>
-                  </li>
+                  {["S", "M", "L", "XL", "40", "41", "42"].map((size) => (
+                    <li key={size}>
+                      <input
+                        className="input_checkbox"
+                        type="checkbox"
+                        id={`size${size}`}
+                        checked={selectedSizes.includes(size)}
+                        onChange={() => handleSizeChange(size)}
+                      />
+                      <label
+                        htmlFor={`size${size}`}
+                        className="label_trai ms-0"
+                      >
+                        {size}
+                      </label>
+                    </li>
+                  ))}
                 </ul>
               </div>
               <hr />
-
-              {/* Màu sắc */}
-              <div className="custom-filter">
-                <h6>Colors</h6>
-                <ul className="list-unstyled">
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="colorBlack"
-                    />
-                    <label htmlFor="colorBlack" className="label_trai ms-0">
-                      Black
-                    </label>
-                  </li>
-                  <li>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id="colorBrown"
-                    />
-                    <label htmlFor="colorBrown" className="label_trai ms-0">
-                      Brown
-                    </label>
-                  </li>
-                </ul>
-              </div>
             </div>
 
             {/* Lưới sản phẩm bên phải */}
@@ -224,7 +221,7 @@ export default function ProductByCategoryPage() {
                     />
                   </div>
                   <select
-                    className="form-select form-select-sm custom-select mt-2 mt-md-0 m-0 rounded-0"
+                    className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
                     onChange={handleSortChange}
                   >
                     <option value="asc">Giá tăng dần</option>
@@ -232,11 +229,59 @@ export default function ProductByCategoryPage() {
                   </select>
                 </div>
               </div>
-              {/* Lưới sản phẩm */}
-              <div className="row g-3 custom-product-grid">
-                <ProductsCategory
-                  data={handleSortAndFilter(categories || [])}
-                />
+
+              {/* Lưới sản phẩm bên phải */}
+              <div className="col-md-10 custom-product-section">
+                <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
+                  <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
+                  <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
+                    <div className="price-filter d-flex align-items-center">
+                      <label htmlFor="minPrice" className="me-2">
+                        Price range:
+                      </label>
+                      <input
+                        type="number"
+                        id="minPrice"
+                        className="form-control rounded-0"
+                        placeholder="Min"
+                        value={minPrice}
+                        onChange={handleMinPriceChange}
+                        style={{
+                          width: "100px",
+                          height: "28px",
+                          fontSize: ".75rem",
+                        }}
+                      />
+                      <span className="mx-2">-</span>
+                      <input
+                        type="number"
+                        id="maxPrice"
+                        className="form-control rounded-0"
+                        placeholder="Max"
+                        value={maxPrice}
+                        onChange={handleMaxPriceChange}
+                        style={{
+                          width: "100px",
+                          height: "28px",
+                          fontSize: ".75rem",
+                        }}
+                      />
+                    </div>
+                    <select
+                      className="form-select form-select-sm custom-select mt-2 mt-md-0 m-0 rounded-0"
+                      onChange={handleSortChange}
+                    >
+                      <option value="asc">Giá tăng dần</option>
+                      <option value="desc">Giá giảm dần</option>
+                    </select>
+                  </div>
+                </div>
+                {/* Lưới sản phẩm */}
+                <div className="row g-3 custom-product-grid">
+                  <ProductsCategory
+                    data={handleSortAndFilter(categories || [])}
+                  />
+                </div>
               </div>
             </div>
           </div>

@@ -31,7 +31,7 @@ export default function QuanlyCategories() {
 
   return (
     <>
-      <h1 className="title">Quản lý Categories</h1>
+      <h1 className="title">Quản lý Products</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
           <li>
@@ -40,7 +40,7 @@ export default function QuanlyCategories() {
           <li className="divider">/</li>
           <li>
             <Link href={"#"} className="active">
-              Categories
+              Products
             </Link>
           </li>
         </ul>
