@@ -230,13 +230,6 @@ export default function SignUpModal() {
                   Đăng nhập
                 </Link>
               </p>
-              <button
-                type="button"
-                className="btn signup_dong"
-                data-bs-dismiss="modal"
-              >
-                Đóng
-              </button>
             </div>
           </div>
         </div>

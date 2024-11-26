@@ -1,57 +1,55 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
 export default function AddProduct() {
+  const [categories, setCategories] = useState([]);
+  useEffect(() => {
+    const getCategories = async () => {
+      const res = await fetch("http://localhost:3000/categories");
+      const data = await res.json();
+      setCategories(data);
+    };
+    getCategories();
+  }, []);
 
-    const [categories, setCategories] = useState([]);
-    useEffect(() => {
-        const getCategories = async () => {
-          const res = await fetch('http://localhost:3000/categories');
-          const data = await res.json();
-          setCategories(data);
-        };
-        getCategories();
-      }, []);
+  const handleAddProduct = async (values, { setSubmitting, setFieldError }) => {
+    const formData = new FormData();
+    formData.append("image", values.image);
+    formData.append("name", values.name);
+    formData.append("description", values.description);
+    formData.append("price", values.price);
+    formData.append("discountedPrice", values.discountedPrice);
+    formData.append("size", JSON.stringify(values.size));
+    formData.append("quantity", values.quantity);
+    formData.append("status", values.status);
+    formData.append("hot", values.hot);
+    formData.append("categoryId", values.categoryId);
 
-      const handleAddProduct = async (values, { setSubmitting, setFieldError }) => {
-        const formData = new FormData();
-        formData.append("image", values.image); 
-        formData.append("name", values.name);
-        formData.append("description", values.description);
-        formData.append("price", values.price);
-        formData.append("discountedPrice", values.discountedPrice);
-        formData.append("size", JSON.stringify(values.size));
-        formData.append("quantity", values.quantity);
-        formData.append("status", values.status);
-        formData.append("hot", values.hot);
-        formData.append("categoryId", values.categoryId);
-        
-        try {
-          const res = await fetch("http://localhost:3000/uploads/addproduct", {
-            method: "POST",
-            body: formData,
-          });
-          if (!res.ok) {
-            const errorData = await res.json();
-            if (res.status === 400 && errorData.message === "Sản phẩm đã tồn tại") {
-              setFieldError("name", "Sản phẩm đã tồn tại");
-            } else {
-              throw new Error(errorData.message || "Thêm sản phẩm thất bại");
-            }
-          }
-          alert("Thêm sản phẩm thành công");
-          router.push("/QuanlyProducts");
-        } catch (error) {
-          setFieldError("general", error.message);
-        } finally {
-          setSubmitting(false);
+    try {
+      const res = await fetch("http://localhost:3000/uploads/addproduct", {
+        method: "POST",
+        body: formData,
+      });
+      if (!res.ok) {
+        const errorData = await res.json();
+        if (res.status === 400 && errorData.message === "Sản phẩm đã tồn tại") {
+          setFieldError("name", "Sản phẩm đã tồn tại");
+        } else {
+          throw new Error(errorData.message || "Thêm sản phẩm thất bại");
         }
-      };
-     
+      }
+      alert("Thêm sản phẩm thành công");
+      router.push("/QuanlyProducts");
+    } catch (error) {
+      setFieldError("general", error.message);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   const router = useRouter();
   const formik = useFormik({
@@ -82,9 +80,7 @@ export default function AddProduct() {
       categoryId: Yup.string().required("Vui lòng chọn danh mục sản phẩm"),
     }),
     onSubmit: handleAddProduct,
-    
   });
- 
 
   return (
     <>
@@ -175,9 +171,10 @@ export default function AddProduct() {
                 onBlur={formik.handleBlur}
                 placeholder="Giá giảm giá (tùy chọn)"
               />
-              {formik.touched.discountedPrice && formik.errors.discountedPrice && (
-                <div className="error">{formik.errors.discountedPrice}</div>
-              )}
+              {formik.touched.discountedPrice &&
+                formik.errors.discountedPrice && (
+                  <div className="error">{formik.errors.discountedPrice}</div>
+                )}
             </div>
 
             <div className="form-groupadd-1">
@@ -230,7 +227,7 @@ export default function AddProduct() {
             </div>
 
             <div className="form-groupadd-1">
-              <label >Sản phẩm hot</label>
+              <label>Sản phẩm hot</label>
               <input
                 className="checkboxpro"
                 type="checkbox"
@@ -247,24 +244,28 @@ export default function AddProduct() {
                 value={formik.values.categoryId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-            >
+              >
                 <option value="" label="Chọn danh mục" />
-                        {categories.length > 0 ? (
-                        categories.map((category) => (
-                            <option key={category._id} value={category._id}>
-                            {category.name}
-                            </option>
-                        ))
-                        ) : (
-                        <option disabled>Đang tải danh mục...</option>
-                        )}
-            </select>
+                {categories.length > 0 ? (
+                  categories.map((category) => (
+                    <option key={category._id} value={category._id}>
+                      {category.name}
+                    </option>
+                  ))
+                ) : (
+                  <option disabled>Đang tải danh mục...</option>
+                )}
+              </select>
               {formik.touched.categoryId && formik.errors.categoryId && (
                 <div className="error">{formik.errors.categoryId}</div>
               )}
             </div>
 
-            <button className="buttonadd" type="submit" disabled={formik.isSubmitting}>
+            <button
+              className="buttonadd"
+              type="submit"
+              disabled={formik.isSubmitting}
+            >
               Thêm Sản phẩm
             </button>
           </form>

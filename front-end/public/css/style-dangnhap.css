@@ -33,16 +33,6 @@ body.modal-open {
     background-color: rgb(53, 52, 52);
     color: white;
 }
-.login_dong{
-    background-color: #ddd;
-    font-size: 12px;
-    color: black;
-    font-weight: 500;
-}
-.login_dong:hover{
-    background-color: #000000;
-    color: white;
-}
 .signup_dong{
     background-color: #ddd;
     font-size: 12px;

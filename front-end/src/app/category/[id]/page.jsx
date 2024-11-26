@@ -260,10 +260,8 @@ export default function ProductByCategoryPage() {
             </div>
 
             {/* Lưới sản phẩm */}
-            <div className="row g-4 custom-product-grid">
-              <ProductsCategory
-                data={handleSortAndFilter(categories || [])}
-              />
+            <div className="row g-3 custom-product-grid">
+              <ProductsCategory data={handleSortAndFilter(categories || [])} />
             </div>
           </div>
         </div>

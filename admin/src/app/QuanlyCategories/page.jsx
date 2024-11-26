@@ -1,30 +1,33 @@
 "use client";
-import { useState, useEffect } from 'react';
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 export default function QuanlyCategories() {
-
   const [data, setData] = useState([]);
-  const [categories, setCategories] = useState([]);
-   
 
-  const fetchProducts = async () => {
+  const fetchCategories = async () => {
     const res = await fetch("http://localhost:3000/categories", {
-      cache: 'no-store'
+      cache: "no-store",
     });
     const newData = await res.json();
     setData(newData);
   };
 
-
   useEffect(() => {
-    fetchProducts();
-    
+    fetchCategories();
   }, []);
 
-
-  
+  const deleteCategory = async (id) => {
+    if (confirm("Bạn có chắc chắn muốn xóa danh mục này không?")) {
+      const res = await fetch(`http://localhost:3000/deletecategory/${id}`, {
+        method: "DELETE",
+      });
+      const result = await res.json();
+      if (result.message) {
+        fetchCategories();
+      }
+    }
+  };
 
   return (
     <>
@@ -41,8 +44,8 @@ export default function QuanlyCategories() {
             </Link>
           </li>
         </ul>
-        <Link href="/QuanlyCategories/addCategory" className="add">
-          Thêm sản phẩm
+        <Link href={"QuanlyCategories/addCategory"} className="add">
+          Thêm danh mục
         </Link>
       </div>
       <div className="container">
@@ -55,34 +58,42 @@ export default function QuanlyCategories() {
               <thead>
                 <tr>
                   <th>STT</th>
-                  <th>Tên sản phẩm</th>
+                  <th>Tên danh mục</th>
                   <th>Mô tả</th>
                   <th>Thao tác</th>
                 </tr>
               </thead>
-              <tbody>
-              {data.length > 0 ? (
-                  data.map((product, index) => (
-                    <tr key={product._id}>
-                      <td>{index + 1}</td>
-                      
-                      <td><small>{product.name}</small></td>
-                      <td><small>{product.description}</small></td>
-                      <td>
-                        <Link href={`QuanlyProducts/editProduct/${product._id}`} className="edit-link">
-                          <i className="fa-solid fa-pen-to-square"></i>
-                        </Link>
-                        <Link href={"#"} className="delete-link" onClick={() => deleteProduct(product._id)}>
-                          <i className="fa-solid fa-trash"></i>
-                        </Link>
-                      </td>
-                    </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan="8">Đang tải dữ liệu...</td>
+              <tbody className="tableProduct">
+                {data.map((category, index) => (
+                  <tr key={category._id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      <div className="author-info">
+                        <div>
+                          <small>{category.name}</small>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <p className="sdt">{category.description}</p>
+                    </td>
+                    <td>
+                      <Link
+                        href={`QuanlyCategories/editCategory/${category._id}`}
+                        className="edit-link"
+                      >
+                        <i className="fa-solid fa-pen-to-square"></i>
+                      </Link>
+                      <Link
+                        href={"#"}
+                        className="delete-link"
+                        onClick={() => deleteCategory(category._id)}
+                      >
+                        <i className="fa-solid fa-trash"></i>
+                      </Link>
+                    </td>
                   </tr>
-                )}
+                ))}
               </tbody>
             </table>
           </div>

@@ -4,6 +4,7 @@ import React, { useEffect } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import EmailInputForm from "./EmailInputForm";
 
 export default function SignInModal({ showModal, setShowModal }) {
   const formik = useFormik({
@@ -130,10 +131,10 @@ export default function SignInModal({ showModal, setShowModal }) {
                 {/* Thêm phần "Quên mật khẩu" ở đây */}
                 <div
                   className="text-rigth"
+                  data-bs-dismiss="modal"
                   onClick={() => setShowModal(false)}
-                  data-bs-toggle="modal"
                 >
-                  <Link href="/auth/email" className="text-muted small">
+                  <Link href={"/auth/email"} className="text-muted small">
                     Quên mật khẩu?
                   </Link>
                 </div>
@@ -167,14 +168,6 @@ export default function SignInModal({ showModal, setShowModal }) {
                   Đăng Ký
                 </Link>
               </p>
-              <button
-                type="button"
-                className="login_dong btn"
-                data-bs-dismiss="modal"
-                onClick={() => setShowModal(false)} // Đóng modal
-              >
-                Đóng
-              </button>
             </div>
           </div>
         </div>

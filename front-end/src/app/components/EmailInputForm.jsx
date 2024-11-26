@@ -1,5 +1,6 @@
 "use client";
 import React, { useState } from "react";
+import "../../../public/css/email.css";
 
 const EmailInputForm = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
@@ -10,24 +11,40 @@ const EmailInputForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className="auth-container mt-5 my-5 ">
-      <h3 className="auth-title">Nhập Email</h3>
-      <form onSubmit={handleSubmit} className="auth-form mt-3">
-        <div className="auth-mb-3">
-          <label className="auth-form-label">Email</label>
-          <input
-            type="email"
-            className="auth-input form-control"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Nhập email của bạn"
-            required
-          />
+    <div className="container">
+      <div className="row justify-content-center">
+        <div className="col-12 col-md-6 col-lg-4">
+          <div className="auth-container mt-5 my-5 rounded-0">
+            <div className="mb-3 text-center">
+              <img
+                src="/img/logo_fashion.png" // Thay bằng icon tương tự
+                alt="Verify Icon"
+                className="mb-3"
+                style={{ width: "auto", height: "45px" }}
+              />
+              <h6>Nhập Email</h6>
+            </div>
+            <form onSubmit={handleSubmit}>
+              <div className="mb-4">
+                <input
+                  type="email"
+                  className="form-control rounded-1"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Nhập email để gửi mã OTP"
+                  required
+                />
+              </div>
+              <button
+                type="submit"
+                className="email_button rounded-1 btn-primary w-100"
+              >
+                Gửi OTP
+              </button>
+            </form>
+          </div>
         </div>
-        <button type="submit" className="auth-button btn btn-primary w-100 ">
-          Gửi OTP
-        </button>
-      </form>
+      </div>
     </div>
   );
 };

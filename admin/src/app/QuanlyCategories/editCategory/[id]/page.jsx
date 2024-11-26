@@ -1,12 +1,17 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
-export default function AddCategory() {
+export default function EditCategory({ params }) {
   const router = useRouter();
+  const { id } = params;
+  const [loading, setLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
+  // Formik setup
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -14,43 +19,64 @@ export default function AddCategory() {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .max(50, "Tên danh mục không được vượt quá 50 kí tự")
+        .max(50, "Tên danh mục không được vượt quá 50 ký tự")
         .required("Vui lòng nhập tên danh mục"),
       description: Yup.string()
-        .max(200, "Mô tả không được vượt quá 200 kí tự")
+        .max(200, "Mô tả không được vượt quá 200 ký tự")
         .required("Vui lòng nhập mô tả danh mục"),
     }),
-    onSubmit: async (values, { setSubmitting, setFieldError }) => {
+    onSubmit: async (values, { setSubmitting }) => {
       try {
-        const res = await fetch("http://localhost:3000/addcategory", {
-          method: "POST",
+        const res = await fetch(`http://localhost:3000/updatecategory/${id}`, {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(values),
         });
-        const result = await res.json();
 
+        const result = await res.json();
         if (!res.ok) {
-          if (
-            res.status === 400 &&
-            result.error === "Tên danh mục đã tồn tại"
-          ) {
-            setFieldError("name", "Tên danh mục đã tồn tại");
-          } else {
-            throw new Error(result.message || "Thêm danh mục thất bại");
-          }
-        } else {
-          alert("Thêm danh mục thành công");
-          router.push("/QuanlyCategories");
+          throw new Error(result.error || "Cập nhật danh mục thất bại");
         }
+
+        alert("Cập nhật danh mục thành công!");
+        router.push("/QuanlyCategories");
       } catch (error) {
-        setFieldError("general", error.message);
+        setErrorMessage(error.message);
       } finally {
         setSubmitting(false);
       }
     },
   });
+
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const res = await fetch(`http://localhost:3000/categorydetail/${id}`);
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Không tìm thấy danh mục");
+        }
+
+        formik.setValues({
+          name: data.name || "",
+          description: data.description || "",
+        });
+      } catch (error) {
+        setErrorMessage(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCategory();
+  }, [id]);
+
+  if (loading) {
+    return <p>Đang tải dữ liệu...</p>;
+  }
 
   return (
     <>
@@ -62,8 +88,8 @@ export default function AddCategory() {
           </li>
           <li className="divider">/</li>
           <li>
-            <Link href="/addCategory" className="active">
-              Thêm danh mục
+            <Link href="" className="active">
+              Sửa danh mục
             </Link>
           </li>
         </ul>
@@ -71,34 +97,37 @@ export default function AddCategory() {
       <div className="container">
         <div className="form_adduser">
           <form onSubmit={formik.handleSubmit}>
+            {errorMessage && <div className="errors">{errorMessage}</div>}
             <div className="form-group-1">
-              <label>Tên danh mục</label>
+              <label htmlFor="name">Tên danh mục</label>
               <input
                 type="text"
+                id="name"
                 name="name"
+                placeholder="Tên danh mục"
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="Tên danh mục"
               />
               {formik.touched.name && formik.errors.name && (
-                <div className="error">{formik.errors.name}</div>
+                <div className="errors">{formik.errors.name}</div>
               )}
             </div>
 
             <div className="form-group-1">
-              <label>Mô tả</label>
+              <label htmlFor="description">Mô tả</label>
               <input
-                type="description"
+                type="text"
+                id="description"
                 name="description"
+                placeholder="Mô tả danh mục"
+                rows="4"
                 value={formik.values.description}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="Mô tả danh mục"
-                rows="4"
               ></input>
               {formik.touched.description && formik.errors.description && (
-                <div className="error">{formik.errors.description}</div>
+                <div className="errors">{formik.errors.description}</div>
               )}
             </div>
 
@@ -107,11 +136,8 @@ export default function AddCategory() {
               className="submit-btn"
               disabled={formik.isSubmitting}
             >
-              Thêm danh mục
+              Cập nhật danh mục
             </button>
-            {formik.errors.general && (
-              <div className="error">{formik.errors.general}</div>
-            )}
           </form>
         </div>
       </div>

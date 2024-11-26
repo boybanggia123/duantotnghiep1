@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import OtpVerificationForm from "../../components/OtpVerificationForm";
@@ -9,7 +9,7 @@ export default function OtpPage() {
   const [email, setEmail] = useState(null);
 
   useEffect(() => {
-    const emailParam = searchParams.get('email');
+    const emailParam = searchParams.get("email");
     if (emailParam) {
       setEmail(emailParam);
     }
@@ -28,10 +28,10 @@ export default function OtpPage() {
       const data = await response.json();
 
       if (response.ok) {
-        alert(data.message);  // Nếu thành công, hiển thị thông báo thành công
+        alert(data.message); // Nếu thành công, hiển thị thông báo thành công
         router.push(`/auth/reset-password?email=${encodeURIComponent(email)}`);
       } else {
-        alert(data.message);  // Nếu có lỗi, hiển thị thông báo lỗi
+        alert(data.message); // Nếu có lỗi, hiển thị thông báo lỗi
       }
     } catch (error) {
       console.error("Có lỗi xảy ra:", error);
@@ -39,5 +39,9 @@ export default function OtpPage() {
     }
   };
 
-  return email ? <OtpVerificationForm onSubmit={handleOtpSubmit} /> : <p>Loading...</p>;
+  return email ? (
+    <OtpVerificationForm onSubmit={handleOtpSubmit} />
+  ) : (
+    <p>Loading...</p>
+  );
 }
