@@ -5,22 +5,22 @@ import useSWR from "swr";
 import ProductsCategory from "../../components/ProductsCategory";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
+
 export default function ProductByCategoryPage() {
   const [minPrice, setMinPrice] = useState("");
   const [maxPrice, setMaxPrice] = useState("");
-  
-  const [selectedCategories, setSelectedCategories] = useState([]); // Trạng thái danh mục đã chọn
-  const [selectedSizes, setSelectedSizes] = useState([]); // Trạng thái kích thước đã chọn
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedSizes, setSelectedSizes] = useState([]);
   const [sortOption, setSortOption] = useState("asc");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { id } = useParams();
   const [products, setProducts] = useState([]);
-  const { data: categories, error } = useSWR(
+  const { data: categories } = useSWR(
     `http://localhost:3000/products/${id}`,
     fetcher
   );
 
-  // Hàm mở/đóng menu
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
@@ -36,7 +36,6 @@ export default function ProductByCategoryPage() {
     fetchProducts();
   }, [id]);
 
-  // Hàm xử lý lọc sản phẩm theo danh mục, giá và sắp xếp
   const handleSortAndFilter = (products) => {
     let filteredProducts = products;
 
@@ -50,17 +49,17 @@ export default function ProductByCategoryPage() {
     // Lọc theo giá
     if (minPrice) {
       filteredProducts = filteredProducts.filter(
-        (product) => product.price >= minPrice
+        (product) => product.price >= parseFloat(minPrice)
       );
     }
 
     if (maxPrice) {
       filteredProducts = filteredProducts.filter(
-        (product) => product.price <= maxPrice
+        (product) => product.price <= parseFloat(maxPrice)
       );
     }
 
-    // Lọc theo kích thước
+    // Lọc theo kích thước (kiểm tra dữ liệu)
     if (selectedSizes.length > 0) {
       filteredProducts = filteredProducts.filter(
         (product) =>
@@ -69,30 +68,42 @@ export default function ProductByCategoryPage() {
       );
     }
 
+    // Lọc theo màu sắc (kiểm tra dữ liệu)
+    if (selectedColors.length > 0) {
+      filteredProducts = filteredProducts.filter(
+        (product) =>
+          Array.isArray(product.color) &&
+          selectedColors.some((color) => product.color.includes(color))
+      );
+    }
+
     // Sắp xếp sản phẩm theo giá
-    return filteredProducts.sort((a, b) => {
-      return sortOption === "asc" ? a.price - b.price : b.price - a.price;
-    });
+    return filteredProducts.sort((a, b) =>
+      sortOption === "asc" ? a.price - b.price : b.price - a.price
+    );
   };
 
   // Sự kiện chọn danh mục
   const handleCategoryChange = (categoryId) => {
-    if (selectedCategories.includes(categoryId)) {
-      setSelectedCategories(
-        selectedCategories.filter((id) => id !== categoryId)
-      ); // Bỏ chọn nếu đã chọn trước đó
-    } else {
-      setSelectedCategories([...selectedCategories, categoryId]); // Thêm vào danh mục đã chọn
-    }
+    setSelectedCategories((prev) =>
+      prev.includes(categoryId)
+        ? prev.filter((id) => id !== categoryId)
+        : [...prev, categoryId]
+    );
   };
 
   // Sự kiện chọn kích thước
   const handleSizeChange = (size) => {
-    if (selectedSizes.includes(size)) {
-      setSelectedSizes(selectedSizes.filter((s) => s !== size)); // Bỏ chọn nếu đã chọn trước đó
-    } else {
-      setSelectedSizes([...selectedSizes, size]); // Thêm vào kích thước đã chọn
-    }
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+  };
+
+  // Sự kiện chọn màu sắc
+  const handleColorChange = (color) => {
+    setSelectedColors((prev) =>
+      prev.includes(color) ? prev.filter((c) => c !== color) : [...prev, color]
+    );
   };
 
   // Sự kiện thay đổi giá
@@ -127,61 +138,85 @@ export default function ProductByCategoryPage() {
             } d-md-block`}
           >
             <div className="Categories_phai">REFINE BY</div>
-            {/* <hr /> */}
-            {/* Danh mục */}
-            {/* <div className="custom-filter">
-              <h6>Danh mục</h6>
-              <ul className="list-unstyled">
-                {categories &&
-                  categories.map((category) => (
-                    <li key={category.id}>
-                      <input
-                        className="input_checkbox"
-                        type="checkbox"
-                        id={`category${category.id}`}
-                        checked={selectedCategories.includes(category.id)}
-                        onChange={() => handleCategoryChange(category.id)}
-                      />
-                      <label
-                        htmlFor={`category${category.id}`}
-                        className="label_trai ms-0"
-                      >
-                        {category.name}
-                      </label>
-                    </li>
-                  ))}
-              </ul>
-            </div> */}
             <hr />
 
             {/* Kích thước */}
-            <div className="custom-filter">
-              <h6>Size</h6>
-              <ul className="list-unstyled">
-                {["S", "M", "L", "XL", "40", "41", "42"].map((size) => (
-                  <li key={size}>
-                    <input
-                      className="input_checkbox"
-                      type="checkbox"
-                      id={`size${size}`}
-                      checked={selectedSizes.includes(size)}
-                      onChange={() => handleSizeChange(size)}
-                    />
-                    <label htmlFor={`size${size}`} className="label_trai ms-0">
-                      {size}
-                    </label>
-                  </li>
-                ))}
-              </ul>
-            </div>
+{/* Kích thước */}
+<div className="custom-filter">
+  <h6>Size</h6>
+  <div className="row row-cols-1 row-cols-md-2">
+    {["S", "39", "L", "41", "M", "40", "XL", "42"].map((size) => (
+      <div className="col mb-2" key={size}>
+        <div className="d-flex align-items-center">
+          <input
+            className="input_checkbox"
+            type="checkbox"
+            id={`size${size}`}
+            checked={selectedSizes.includes(size)}
+            onChange={() => handleSizeChange(size)}
+          />
+          <label htmlFor={`size${size}`} className="label_trai ms-2">
+            {size}
+          </label>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+{/* màu sắc */}
+<div className="custom-filter">
+  <h6>Colors</h6>
+  <div className="row row-cols-2">
+    {[
+      { color: "Black", code: "#000000" },
+      { color: "Brown", code: "#8B4513" },
+      { color: "Blue", code: "#0000FF" },
+      { color: "Green", code: "#008000" },
+      { color: "Grey", code: "#808080" },
+      { color: "Pink", code: "#FFC0CB" },
+      { color: "Red", code: "#FF0000" },
+      { color: "White", code: "#FFFFFF" },
+    ].map(({ color, code }) => (
+      <div
+        key={color}
+        className="col d-flex align-items-center gap-2 mb-2"
+      >
+        <div
+          className="color-circle"
+          style={{
+            background: code,
+            border: color === "White" ? "1px solid #ddd" : "none",
+          }}
+        >
+          {selectedColors.includes(color) && (
+            <span className="check-mark">&#10003;</span>
+          )}
+        </div>
+        <label htmlFor={`color${color}`} className="label_trai m-0">
+          {color}
+        </label>
+        <input
+          className="input_checkbox ms-auto"
+          type="checkbox"
+          id={`color${color}`}
+          checked={selectedColors.includes(color)}
+          onChange={() => handleColorChange(color)}
+        />
+      </div>
+    ))}
+  </div>
+</div>
+
+
+
             <hr />
           </div>
 
           {/* Lưới sản phẩm bên phải */}
           <div className="col-md-10 custom-product-section">
             <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
-              <div className="Products_show fw-bold">DANH MỤC SẢN PHẨM</div>
-              <div className="d-flex flex-column flex-md-row gap-2 align-items-center mt-2 mt-md-0">
+              <div className="Products_show fw-bold">PRODUCT LIST</div>
+              <div className="d-flex flex-column flex-md-row gap-2 align-items-center">
                 <div className="price-filter d-flex align-items-center">
                   <label htmlFor="minPrice" className="me-2">
                     Price range:
@@ -215,11 +250,11 @@ export default function ProductByCategoryPage() {
                   />
                 </div>
                 <select
-                  className="form-select form-select-sm custom-select mt-2 mt-md-0 rounded-0"
+                  className="form-select form-select-sm custom-select rounded-0"
                   onChange={handleSortChange}
                 >
-                  <option value="asc">Giá tăng dần</option>
-                  <option value="desc">Giá giảm dần</option>
+                  <option value="asc">Price increases gradually</option>
+                  <option value="desc">Price decreasing</option>
                 </select>
               </div>
             </div>
