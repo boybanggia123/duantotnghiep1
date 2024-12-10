@@ -4,9 +4,9 @@ export default function About() {
   return (
     <div className="container my-5 position-relative">
       <div className="text-center mb-4">
-        <h2 className="display-4 font-weight-bold">ABOUT US</h2>
+        <h2 className="display-4 font-weight-bold">Về chúng tôi</h2>
         <p className="sub-header text-uppercase">
-        Introduction | Fashion Verse | Who We Are
+        Lời giới thiệu | Fashion Verse | Chúng tôi là ai ?
         </p>
         <div
           className="horizontal-line mx-auto bg-danger"
@@ -80,51 +80,35 @@ export default function About() {
 
       <div className="text-center mt-4">
         <p>
-          Fashion Verse 2024 not only includes highly practical clothing designs,
-          from elegant bodycon dresses to professional suits, but also a range of
-          accompanying accessories, such as handbags, shoes, jewelry, and scarves.
-          Each product is carefully selected, ensuring quality and innovation,
-          providing every woman with a perfect look from head to toe.
+        Fashion Verse 2024 không chỉ bao gồm các thiết kế trang phục cực kỳ thiết thực, từ những chiếc váy bodycon thanh lịch đến những bộ vest chuyên nghiệp, mà còn có nhiều phụ kiện đi kèm, chẳng hạn như túi xách, giày dép, trang sức và khăn quàng cổ. Mỗi sản phẩm đều được lựa chọn cẩn thận, đảm bảo chất lượng và sự đổi mới, mang đến cho mọi phụ nữ vẻ ngoài hoàn hảo từ đầu đến chân.
         </p>
       </div>
 
       <div className="mt-5">
-        <h4 className="text-center font-weight-bold">ABOUT THE PRODUCT</h4>
+        <h4 className="text-center font-weight-bold">GIỚI THIỆU VỀ SẢN PHẨM</h4>
         <div
           className="horizontal-line mx-auto bg-danger"
           style={{ width: "100px", height: "2px" }}
         ></div>
         <p className="text-center mt-3">
-          Fashion Verse 2024 offers fashion products designed with meticulous
-          attention to detail. From elegant, dynamic office wear to comfortable
-          streetwear, we focus on precise tailoring, creative color combinations,
-          and the selection of premium materials to ensure that each piece offers
-          both comfort and style. Additionally, the accessories, such as handbags,
-          shoes, and jewelry, are carefully crafted to elevate any outfit. Not only
-          do we provide a wide range of products for women, but Fashion Verse also
-          offers diverse fashion choices for men and children, catering to various
-          styles and needs.
+        Fashion Verse 2024 cung cấp các sản phẩm thời trang được thiết kế với sự chú ý tỉ mỉ đến từng chi tiết. Từ trang phục công sở thanh lịch, năng động đến trang phục dạo phố thoải mái, chúng tôi tập trung vào việc may đo chính xác, kết hợp màu sắc sáng tạo và lựa chọn chất liệu cao cấp để đảm bảo rằng mỗi sản phẩm đều mang lại sự thoải mái và phong cách. Ngoài ra, các phụ kiện như túi xách, giày dép và trang sức được chế tác cẩn thận để nâng tầm bất kỳ trang phục nào. Chúng tôi không chỉ cung cấp nhiều loại sản phẩm cho phụ nữ mà Fashion Verse còn cung cấp nhiều lựa chọn thời trang đa dạng cho nam giới và trẻ em, đáp ứng nhiều phong cách và nhu cầu khác nhau.
         </p>
       </div>
 
       <div className="mt-5">
-        <h4 className="text-center font-weight-bold">ABOUT CUSTOMERS</h4>
+        <h4 className="text-center font-weight-bold">GIỚI THIỆU KHÁCH HÀNG</h4>
         <div
           className="horizontal-line mx-auto bg-danger"
           style={{ width: "100px", height: "2px" }}
         ></div>
         <p className="text-center mt-3">
-          Customers of Fashion Verse are not only fashion enthusiasts, but also
-          those seeking innovation in every outfit, from professional office attire
-          to comfortable streetwear. Whether male or female, adult or child, Fashion
-          Verse is proud to be the ideal destination for those who want to express
-          their personality and lifestyle through every fashion piece.
+        Khách hàng của Fashion Verse không chỉ là những người đam mê thời trang mà còn là những người tìm kiếm sự đổi mới trong từng bộ trang phục, từ trang phục công sở chuyên nghiệp đến trang phục dạo phố thoải mái. Dù là nam hay nữ, người lớn hay trẻ em, Fashion Verse tự hào là điểm đến lý tưởng cho những ai muốn thể hiện cá tính và phong cách sống của mình qua từng món đồ thời trang.
         </p>
       </div>
 
       <div className="container my-5 position-relative">
         <div className="text-center mb-4">
-          <h4 className="text-center font-weight-bold">ABOUT THE COLLECTION</h4>
+          <h4 className="text-center font-weight-bold">GIỚI THIỆU VỀ BỘ SƯU TẬP</h4>
           <div
             className="horizontal-line mx-auto bg-danger"
             style={{ width: "100px", height: "2px" }}
@@ -143,17 +127,11 @@ export default function About() {
           <div className="col-md-7">
             <div className="text-content text-start">
               <h2 className="mb-3 font-weight-bold">
-                “Christmas Tribute” - Fashion Verse
+              “Lời tri ân Giáng sinh” - Fashion Verse
+
               </h2>
               <p>
-                In celebration of Christmas, Fashion Verse introduces the
-                “Christmas Tribute” collection, featuring elegant and stylish
-                designs that embody the festive spirit. These chic outfits,
-                including shirts, skirts, and suits, are perfect for both
-                professional settings and casual gatherings, allowing you to
-                celebrate the season in style. With soft colors and high-quality
-                fabrics, this collection ensures you feel confident and graceful
-                during all your Christmas festivities.
+              Để chào mừng Giáng sinh, Fashion Verse giới thiệu bộ sưu tập “Christmas Tribute”, với những thiết kế thanh lịch và phong cách thể hiện tinh thần lễ hội. Những bộ trang phục sang trọng này, bao gồm áo sơ mi, váy và vest, hoàn hảo cho cả bối cảnh chuyên nghiệp và các buổi tụ họp bình thường, cho phép bạn ăn mừng mùa lễ theo phong cách. Với màu sắc nhẹ nhàng và chất liệu vải cao cấp, bộ sưu tập này đảm bảo bạn cảm thấy tự tin và duyên dáng trong suốt lễ hội Giáng sinh.
               </p>
             </div>
           </div>

@@ -38,7 +38,7 @@ export default function Home() {
 
         {/* body */}
         <div className="container-xl main-body custom-container">
-          <div className="text_h2 text-uppercase mb-1">Shop the Latest</div>
+          <div className="text_h2 text-uppercase mb-1">Mua sắm ngay!</div>
           <div className="d-flex flex-wrap gap-2 mb-3 button_new">
             <button
               onClick={() => handleFilterChange("all")}
@@ -46,7 +46,7 @@ export default function Home() {
                 filter === "all" ? "active" : ""
               }`}
             >
-              All
+              Tất cả
             </button>
             <button
               onClick={() => handleFilterChange("hot")}
@@ -79,7 +79,7 @@ export default function Home() {
           </div>
           <Link href={"/sanpham"} className="namesup">
             <div className="text-center my-3">
-              <button className="btn load-more-btn">Load more</button>
+              <button className="btn load-more-btn">Xem thêm</button>
             </div>
           </Link>
         </div>

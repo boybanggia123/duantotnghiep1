@@ -137,13 +137,13 @@ export default function ProductByCategoryPage() {
               isMenuOpen ? "d-block" : "d-none"
             } d-md-block`}
           >
-            <div className="Categories_phai">REFINE BY</div>
+            <div className="Categories_phai">Tùy chỉnh </div>
             <hr />
 
             {/* Kích thước */}
 {/* Kích thước */}
 <div className="custom-filter">
-  <h6>Size</h6>
+  <h6>Kích thước</h6>
   <div className="row row-cols-1 row-cols-md-2">
     {["S", "39", "L", "41", "M", "40", "XL", "42"].map((size) => (
       <div className="col mb-2" key={size}>
@@ -165,7 +165,7 @@ export default function ProductByCategoryPage() {
 </div>
 {/* màu sắc */}
 <div className="custom-filter">
-  <h6>Colors</h6>
+  <h6>Màu sắc</h6>
   <div className="row row-cols-2">
     {[
       { color: "Black", code: "#000000" },
@@ -215,17 +215,17 @@ export default function ProductByCategoryPage() {
           {/* Lưới sản phẩm bên phải */}
           <div className="col-md-10 custom-product-section">
             <div className="d-flex mt-3 justify-content-between align-items-center mb-4 flex-column flex-md-row gap-2">
-              <div className="Products_show fw-bold">PRODUCT LIST</div>
+              <div className="Products_show fw-bold">Sản Phẩm</div>
               <div className="d-flex flex-column flex-md-row gap-2 align-items-center">
                 <div className="price-filter d-flex align-items-center">
                   <label htmlFor="minPrice" className="me-2">
-                    Price range:
+                    Khoảng giá:
                   </label>
                   <input
                     type="number"
                     id="minPrice"
                     className="form-control rounded-0"
-                    placeholder="Min"
+                    placeholder="Nhỏ nhất"
                     value={minPrice}
                     onChange={handleMinPriceChange}
                     style={{
@@ -239,7 +239,7 @@ export default function ProductByCategoryPage() {
                     type="number"
                     id="maxPrice"
                     className="form-control rounded-0"
-                    placeholder="Max"
+                    placeholder="Lớn nhất"
                     value={maxPrice}
                     onChange={handleMaxPriceChange}
                     style={{
@@ -253,8 +253,8 @@ export default function ProductByCategoryPage() {
                   className="form-select form-select-sm custom-select rounded-0"
                   onChange={handleSortChange}
                 >
-                  <option value="asc">Price increases gradually</option>
-                  <option value="desc">Price decreasing</option>
+                  <option value="asc">Sắp xếp với giá tăng dần</option>
+                  <option value="desc">Sắp xếp với giá giảm dần</option>
                 </select>
               </div>
             </div>

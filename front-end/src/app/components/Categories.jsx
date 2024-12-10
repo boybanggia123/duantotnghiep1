@@ -27,7 +27,7 @@ const Categories = () => {
 
   return (
     <div className="container my-4 position-relative">
-      <h4 className="text-center mb-4">CATEGORIES</h4>
+      <h4 className="text-center mb-4">Danh mục sản phẩm </h4>
       <div className="d-flex align-items-center justify-content-center">
         {/* Nút trái */}
         <button

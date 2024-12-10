@@ -5,48 +5,48 @@ export default function Contact() {
         <div className="row">
           {/* Contact Form Column */}
           <div className="col-md-6">
-            <h2 className="text-center mb-4">Contact</h2>
+            <h2 className="text-center mb-4">LIÊN HỆ</h2>
             
             <form>
               <div className="form-group mb-3">
-                <label htmlFor="name">Name</label>
-                <input type="text" className="form-control" id="name" placeholder="Enter your full name" required />
+                <label htmlFor="name">Tên</label>
+                <input type="text" className="form-control" id="name" placeholder="Nhập tên đầy đủ của bạn" required />
               </div>
   
               <div className="form-group mb-3">
                 <label htmlFor="email">Email </label>
-                <input type="email" className="form-control" id="email" placeholder="Enter your email" required />
+                <input type="email" className="form-control" id="email" placeholder="Nhập email của bạn" required />
               </div>
   
               <div className="form-group mb-3">
-                <label htmlFor="phone">Phone Number (optional)</label>
-                <input type="text" className="form-control" id="phone" placeholder="Enter your phone number" />
+                <label htmlFor="phone">Số điện thoại </label>
+                <input type="text" className="form-control" id="phone" placeholder="Nhập số điện thoại của bạn" />
               </div>
   
               <div className="form-group mb-3">
-                <label htmlFor="subject">Subject</label>
-                <input type="text" className="form-control" id="subject" placeholder="Enter the subject" required />
+                <label htmlFor="subject">Vấn đề</label>
+                <input type="text" className="form-control" id="subject" placeholder="Nhập vấn đề của bạn" required />
               </div>
   
               <div className="form-group mb-3">
-                <label htmlFor="message">Message</label>
-                <textarea className="form-control" id="message" rows="5" placeholder="Write your message here" required></textarea>
+                <label htmlFor="message">Lời nhắn</label>
+                <textarea className="form-control" id="message" rows="5" placeholder="Viết lời nhắn của bạn cho chúng tôi" required></textarea>
               </div>
   
               <div className="form-check mb-3">
                 <input className="form-check-input" type="checkbox" id="newsletter" />
                 <label className="form-check-label" htmlFor="newsletter">
-                  Subscribe to our newsletter
+                  Đăng ký nhận hồi đáp của chúng tôi
                 </label>
               </div>
   
-              <button type="submit" className="btn btn-primary btn-lg w-100 mt-3" style={{ backgroundColor: 'black', color: 'white' }}>Send Message</button>
+              <button type="submit" className="btn btn-primary btn-lg w-100 mt-3" style={{ backgroundColor: 'black', color: 'white' }}>Gửi</button>
             </form>
           </div>
   
           {/* Google Map and Contact Info Column */}
           <div className="col-md-6">
-            <h2 className="text-center mb-4">Location</h2>
+            <h2 className="text-center mb-4">ĐỊA CHỈ</h2>
             <div className="embed-responsive embed-responsive-16by9 mb-4">
               <iframe
                 title="Google Map - Công Viên Phần Mềm Quang Trung"
@@ -60,7 +60,7 @@ export default function Contact() {
               ></iframe>
             </div>
             <div className="text-center">
-              <p><strong>Phone:</strong> 0123456789- <strong>Hotline:</strong> 1900 9999</p>
+              <p><strong>Số điện thoại:</strong> 0123456789- <strong>Hotline:</strong> 1900 9999</p>
               <p><strong>Email:</strong> <a href="mailto:fashionverse@gmail.com">fashionverse@gmail.com</a></p>
               <p><strong>Website:</strong> <a href="#" target="_blank" rel="noopener noreferrer">fashionverse</a></p>
               <p><strong>Fanpage:</strong> <a href="#" target="_blank" rel="noopener noreferrer">https://facebook.com/fashionverse</a></p>

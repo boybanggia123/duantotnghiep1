@@ -122,7 +122,7 @@ export default function Header() {
               <ul className="navbar-nav text-uppercase fw-bold list-h me-auto mb-2 mb-lg-0">
                 <li className="nav-item dropdown">
                   <Link className="nav-link active " href={"/"}>
-                    Home
+                    Trang chủ
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
@@ -134,7 +134,7 @@ export default function Header() {
                     data-bs-toggle="dropdown"
                     aria-expanded="false"
                   >
-                    Categories
+                    Danh mục
                   </Link>
                   <ul
                     className="dropdown-menu shadow-sm"
@@ -155,17 +155,17 @@ export default function Header() {
                 </li>
                 <li className="nav-item dropdown">
                   <Link className="nav-link" href={"/about"}>
-                    About Us
+                    Giới thiệu
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <Link className="nav-link" href={"/contact"}>
-                    Contact
+                    Liên hệ
                   </Link>
                 </li>
                 <li className="nav-item dropdown">
                   <Link className="nav-link" href="#">
-                    Blog
+                    Bài viết
                   </Link>
                 </li>
               </ul>
@@ -192,7 +192,7 @@ export default function Header() {
                         onClick={() => true} // Mở modal khi nhấn Đăng nhập
                         className="user_dn"
                       >
-                        Sign In
+                        Đăng nhập
                       </button>
                       <button
                         type="button"
@@ -201,7 +201,7 @@ export default function Header() {
                         onClick={() => true} // Mở modal khi nhấn Đăng nhập
                         className="user_dk "
                       >
-                        Sign Up
+                        Đăng ký
                       </button>
                     </div>
                   )}

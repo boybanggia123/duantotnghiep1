@@ -92,7 +92,7 @@ export default function SignInModal({ showModal, setShowModal }) {
                 {/* Các trường form nhập email và password */}
                 <div className="mb-3">
                   <label className="form-label" htmlFor="email">
-                    Email address
+                    Địa chỉ email
                   </label>
                   <input
                     type="email"
@@ -111,7 +111,7 @@ export default function SignInModal({ showModal, setShowModal }) {
 
                 <div className="mb-3">
                   <label className="form-label" htmlFor="password">
-                    Password
+                    Mật khẩu
                   </label>
                   <input
                     type="password"

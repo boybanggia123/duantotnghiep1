@@ -84,7 +84,7 @@ export default function Cart() {
 
   return (
     <div className="container mt-2">
-      <span className="cart-giohang mt-4">MY BAG </span>
+      <span className="cart-giohang mt-4">Giỏ hàng của tôi </span>
       <span> ({items.length} item)</span>
       <div className="row">
         <div className="col-lg-8 col-md-12">
@@ -157,7 +157,7 @@ export default function Cart() {
                       </div>
 
                       <Link href="#" className="text-danger">
-                        Move to Wishlist <i className="fa-solid fa-heart"></i>
+                        Chọn vào danh sách yêu thích <i className="fa-solid fa-heart"></i>
                       </Link>
                     </div>
                   </div>
@@ -193,7 +193,7 @@ export default function Cart() {
               ))}
             </div>
             <button className="btn btn-outline-secondary w-100 mb-4">
-              Load More
+              Xem thêm
             </button>
           </div>
         </div>
@@ -230,7 +230,7 @@ export default function Cart() {
             </ul>
             <hr />
             <span className="d-flex justify-content-between">
-              <span className="Total">Total</span>
+              <span className="Total">Tổng giá</span>
               <span className="tongtien">
                 {total.toLocaleString("en-US", {
                   style: "currency",

@@ -98,7 +98,7 @@ const PayButton = () => {
         className="form-control rounded-0"
         value={couponCode}
         onChange={(e) => setCouponCode(e.target.value)}
-        placeholder="Enter discount code"
+        placeholder="Nhập mã giảm giá"
       />
 
       <button
@@ -106,7 +106,7 @@ const PayButton = () => {
         onClick={handleCheckout}
         disabled={loading}
       >
-        Apply
+        Áp dụng
       </button>
       <p>{loading ? "Đang xử lý..." : " "}</p>
     </>
