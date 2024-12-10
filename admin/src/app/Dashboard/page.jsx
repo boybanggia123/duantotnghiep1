@@ -2,15 +2,15 @@ import Link from "next/link";
 export default function Dashboard() {
   return (
     <>
-      <h1 className="title">Dashboard</h1>
+      <h1 className="title">Bảng dữ liệu</h1>
       <ul className="breadcrumbs">
         <li>
-          <Link href={"#"}>Home</Link>
+          <Link href={"#"}>Trang chủ</Link>
         </li>
         <li className="divider">/</li>
         <li>
           <Link href={"#"} className="active">
-            Dashboard
+            Bảng dữ liệu
           </Link>
         </li>
       </ul>
@@ -19,7 +19,7 @@ export default function Dashboard() {
           <div className="head">
             <div>
               <h2>1500</h2>
-              <p>Traffic</p>
+              <p>Vận chuyển</p>
             </div>
             <i className="bx bx-trending-up icon"></i>
           </div>
@@ -30,7 +30,7 @@ export default function Dashboard() {
           <div className="head">
             <div>
               <h2>234</h2>
-              <p>Sales</p>
+              <p>Số hàng bán được</p>
             </div>
             <i className="bx bx-trending-down icon down"></i>
           </div>
@@ -41,7 +41,7 @@ export default function Dashboard() {
           <div className="head">
             <div>
               <h2>465</h2>
-              <p>Pageviews</p>
+              <p>Số lượt xem trang</p>
             </div>
             <i className="bx bx-trending-up icon"></i>
           </div>
@@ -52,7 +52,7 @@ export default function Dashboard() {
           <div className="head">
             <div>
               <h2>235</h2>
-              <p>Visitors</p>
+              <p>Khách hàng</p>
             </div>
             <i className="bx bx-trending-up icon"></i>
           </div>
@@ -68,13 +68,13 @@ export default function Dashboard() {
               <i className="bx bx-dots-horizontal-rounded icon"></i>
               <ul className="menu-link">
                 <li>
-                  <Link href={"#"}>Edit</Link>
+                  <Link href={"#"}>Sửa</Link>
                 </li>
                 <li>
-                  <Link href={"#"}>Save</Link>
+                  <Link href={"#"}>Lưu</Link>
                 </li>
                 <li>
-                  <Link href={"#"}>Remove</Link>
+                  <Link href={"#"}>Xóa</Link>
                 </li>
               </ul>
             </div>
@@ -85,25 +85,25 @@ export default function Dashboard() {
         </div>
         <div className="content-data">
           <div className="head">
-            <h3>Commet</h3>
+            <h3>Bình luận</h3>
             <div className="menu">
               <i className="bx bx-dots-horizontal-rounded icon"></i>
               <ul className="menu-link">
                 <li>
-                  <Link href={"#"}>Edit</Link>
+                  <Link href={"#"}>Sửa</Link>
                 </li>
                 <li>
-                  <Link href={"#"}>Save</Link>
+                  <Link href={"#"}>Lưu</Link>
                 </li>
                 <li>
-                  <Link href={"#"}>Remove</Link>
+                  <Link href={"#"}>Xóa</Link>
                 </li>
               </ul>
             </div>
           </div>
           <div className="chat-box">
             <p className="day">
-              <span>Today</span>
+              <span>Hôm nay</span>
             </p>
             <div className="msg">
               <img
@@ -115,7 +115,7 @@ export default function Dashboard() {
                   <span className="username">Alan</span>
                   <span className="time">18:30</span>
                 </div>
-                <p>Hello</p>
+                <p>Xin chào</p>
               </div>
             </div>
             <div className="msg me">
@@ -124,9 +124,9 @@ export default function Dashboard() {
                   <span className="time">18:30</span>
                 </div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque
-                  voluptatum eos quam dolores eligendi exercitationem animi
-                  nobis reprehenderit laborum! Nulla.
+                Bản thân công ty đã là một công ty rất thành công. Và cô ấy
+                  rèn luyện trí óc để lựa chọn niềm vui thay vì nỗi đau
+                  Anh ấy sẽ đổ lỗi cho chúng tôi về những rắc rối! KHÔNG
                 </p>
               </div>
             </div>
@@ -136,8 +136,8 @@ export default function Dashboard() {
                   <span className="time">18:30</span>
                 </div>
                 <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Ipsam, architecto!
+                Bản thân công ty đã là một công ty rất thành công. Cô ấy, kiến ​​trúc sư!
+
                 </p>
               </div>
             </div>
@@ -146,13 +146,14 @@ export default function Dashboard() {
                 <div className="profile">
                   <span className="time">18:30</span>
                 </div>
-                <p>Lorem ipsum, dolor sit amet.</p>
+                <p>Cảm ơn bạn rất nhiều, đó là một nỗi đau.
+</p>
               </div>
             </div>
           </div>
           <form action="#">
             <div className="form-group">
-              <input type="text" placeholder="Type..." />
+              <input type="text" placeholder="Nhắn..." />
               <button type="submit" className="btn-send">
                 <i className="bx bxs-send"></i>
               </button>

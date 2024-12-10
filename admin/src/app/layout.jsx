@@ -42,36 +42,36 @@ export default function RootLayout({ children }) {
           <ul className="side-menu">
             <li>
               <Link href={"/"}>
-                <i className="fa-solid fa-gauge icon"></i> Dashboard
+                <i className="fa-solid fa-gauge icon"></i> Bảng dữ liệu
               </Link>
             </li>
             <li className="divider" data-text="main">
-              Main
+              Chính
             </li>
             <li>
               <Link href={"/QuanlyUsers"}>
-                <i className="fa-solid fa-users-line icon"></i> Quản lý Users
+                <i className="fa-solid fa-users-line icon"></i> Quản lý khách hàng
               </Link>
             </li>
             <li>
               <Link href={"/QuanlyProducts"}>
-                <i className="fa-solid fa-shirt icon"></i> Quản lý Products
+                <i className="fa-solid fa-shirt icon"></i> Quản lý Sản Phẩm
               </Link>
             </li>
             <li>
               <Link href={"/QuanlyCategories"}>
                 <i className="fa-solid fa-layer-group icon"></i> Quản lý
-                Categories
+                Danh mục
               </Link>
             </li>
             <li>
               <Link href={"/QuanlyComments"}>
-                <i className="fa-solid fa-comment icon"></i> Quản lý Comments
+                <i className="fa-solid fa-comment icon"></i> Quản lý Bình luận
               </Link>
             </li>
             <li>
               <Link href={"#"}>
-                <i className="fa-solid fa-briefcase icon"></i> Quản lý Order
+                <i className="fa-solid fa-briefcase icon"></i> Quản lý đơn hàng
               </Link>
             </li>
             <li>
@@ -80,11 +80,11 @@ export default function RootLayout({ children }) {
               </Link>
             </li>
             <li className="divider" data-text="table and forms">
-              Table and forms
+              Bảng và biểu mẫu
             </li>
             <li>
               <Link href={"#"}>
-                <i className="bx bx-table icon"></i> Tables
+                <i className="bx bx-table icon"></i> Bảng
               </Link>
             </li>
           </ul>
@@ -94,7 +94,7 @@ export default function RootLayout({ children }) {
             <i className="bx bx-menu toggle-sidebar"></i>
             <form action="#">
               <div className="form-group">
-                <input type="text" placeholder="Search..." />
+                <input type="text" placeholder="Tìm kiếm..." />
                 <i className="bx bx-search icon"></i>
               </div>
             </form>
@@ -115,12 +115,12 @@ export default function RootLayout({ children }) {
               <ul className="profile-link">
                 <li>
                   <Link href={"#"}>
-                    <i className="bx bxs-user-circle icon"></i> Profile
+                    <i className="bx bxs-user-circle icon"></i> Hồ sơ
                   </Link>
                 </li>
                 <li>
                   <Link href={"#"}>
-                    <i className="bx bxs-cog"></i> Settings
+                    <i className="bx bxs-cog"></i> Cài đặt
                   </Link>
                 </li>
                 <li>
@@ -131,7 +131,7 @@ export default function RootLayout({ children }) {
                       handleLogout();
                     }}
                   >
-                    <i className="bx bxs-log-out-circle"></i> Logout
+                    <i className="bx bxs-log-out-circle"></i> Đăng xuất
                   </Link>
                 </li>
               </ul>

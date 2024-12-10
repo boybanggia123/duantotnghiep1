@@ -31,16 +31,16 @@ export default function QuanlyCategories() {
 
   return (
     <>
-      <h1 className="title">Quản lý Products</h1>
+      <h1 className="title">Quản lý danh mục</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
           <li>
-            <Link href={"#"}>Home</Link>
+            <Link href={"#"}>Trang chủ</Link>
           </li>
           <li className="divider">/</li>
           <li>
             <Link href={"#"} className="active">
-              Products
+              Quản lý danh mục
             </Link>
           </li>
         </ul>

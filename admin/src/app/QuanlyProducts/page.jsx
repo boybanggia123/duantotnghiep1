@@ -52,16 +52,16 @@ export default function QuanlyProducts() {
 
   return (
     <>
-      <h1 className="title">Quản lý Products</h1>
+      <h1 className="title">Quản lý Sản phẩm</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
           <li>
-            <Link href={"#"}>Home</Link>
+            <Link href={"#"}>Trang chủ</Link>
           </li>
           <li className="divider">/</li>
           <li>
             <Link href={"#"} className="active">
-              Products
+              Sản phẩm
             </Link>
           </li>
         </ul>

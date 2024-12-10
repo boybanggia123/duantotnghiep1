@@ -30,16 +30,16 @@ export default function Users() {
 
   return (
     <>
-      <h1 className="title">Quản lý Users</h1>
+      <h1 className="title">Quản lý khách hàng</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
           <li>
-            <Link href={"#"}>Home</Link>
+            <Link href={"#"}>Trang chủ</Link>
           </li>
           <li className="divider">/</li>
           <li>
             <Link href={"#"} className="active">
-              User List
+              Danh sách khách hàng
             </Link>
           </li>
         </ul>

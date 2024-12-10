@@ -32,7 +32,7 @@ export default function QuanlyComments() {
       <div className="add-title">
         <ul className="breadcrumbs">
           <li>
-            <Link href={"#"}>Home</Link>
+            <Link href={"#"}>Trang chủ</Link>
           </li>
           <li className="divider">/</li>
           <li>
