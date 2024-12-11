@@ -606,3 +606,161 @@ main .btn-send:hover {
 		display: none;
 	}
 }
+
+/* star ---------------------------------------------------*/
+
+
+.star {
+	font-size: 20px;
+	cursor: pointer;
+  }
+  
+  .star.filled {
+	color: gold;
+  }
+  
+  .review-item {
+	padding: 10px;
+	border: 1px solid #ccc;
+	margin-bottom: 10px;
+	position: relative;
+  }
+  
+  .review-content {
+	display: flex;
+	align-items: center;
+  }
+  
+  .review-content span {
+	margin-left: 10px;
+	font-style: italic;
+	color: gray;
+  }
+  
+  /* Khi bình luận bị ẩn */
+  .review-hidden {
+	opacity: 0.5;
+	text-decoration: line-through;
+  }
+
+  
+  .form-groupadd-1 {
+	margin-bottom: 20px;
+	font-family: Arial, sans-serif;
+  }
+  
+  label {
+	display: block;
+	font-weight: bold;
+	margin-bottom: 10px;
+	font-size: 14px;
+  }
+  
+  .color-input-container {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 20px;
+  }
+  
+  .color-input-container input {
+	padding: 10px;
+	font-size: 14px;
+	width: 200px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	outline: none;
+	transition: border-color 0.3s ease;
+  }
+  
+  .color-input-container input:focus {
+	border-color: #007bff;
+  }
+  
+  .add-color-btn {
+	padding: 10px 15px;
+	background-color: #28a745;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .add-color-btn:hover {
+	background-color: #218838;
+  }
+  
+  .color-list-container {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 15px;
+  }
+  
+  .color-item {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	background-color: #f9f9f9;
+	padding: 10px;
+	border-radius: 8px;
+	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .color-box {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	border: 2px solid #ccc;
+	cursor: pointer;
+	transition: transform 0.3s ease;
+  }
+  
+  .color-box:hover {
+	transform: scale(1.1);
+  }
+  
+  .remove-color-btn {
+	padding: 5px 10px;
+	background-color: #ff4d4d;
+	color: #fff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	font-size: 14px;
+	transition: background-color 0.3s ease;
+  }
+  
+  .remove-color-btn:hover {
+	background-color: #e04343;
+  }
+  
+  .error {
+	color: red;
+	font-size: 14px;
+	margin-top: 5px;
+  }
+  
+  
+  .additional-images-preview {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+  }
+  
+  .additional-image-item {
+	position: relative;
+	display: inline-block;
+  }
+  
+  .additional-image-item img {
+	max-width: 100px;
+	max-height: 100px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+  }
+
+  
+  
+  

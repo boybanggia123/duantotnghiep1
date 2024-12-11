@@ -2,6 +2,9 @@ import Link from "next/link";
 import ProductsHome from "./components/ProductsHome";
 
 export default async function Home() {
+
+
+  
   // Fetch dữ liệu bất đồng bộ
   const res = await fetch("http://localhost:3000/products", {
     cache: "no-store",

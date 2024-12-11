@@ -32,7 +32,7 @@ function ProductsHome(props) {
                 <Link href={`/chitiet/${_id}`}>
                   <img
                     
-                    src={`${image}`}
+                    src={image}
                     alt={name}
                     className="img-fluid img-gray "
                   />

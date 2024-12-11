@@ -1,4 +1,5 @@
 import Link from "next/link";
+import SalesChart from "../components/SalesChart";
 export default function Dashboard() {
   return (
     <>
@@ -80,7 +81,7 @@ export default function Dashboard() {
             </div>
           </div>
           <div className="chart">
-            <div id="chart"></div>
+          <SalesChart />
           </div>
         </div>
         <div className="content-data">

@@ -1,8 +1,9 @@
 "use client";
 import React, { useState, useEffect } from "react"; 
 import Link from "next/link";
-import "../../../../public/bootstrap/css/bootstrap.css";
-import "../../../../public/css/style-info.css";
+
+
+
 
 export default function Info({ user, handleUpdateUser, handleChange, handleFileChange,children }) {
   
@@ -24,6 +25,7 @@ export default function Info({ user, handleUpdateUser, handleChange, handleFileC
           <ul id="list-nav-info" className="nav flex-column gap-3">
             <li className="fw-bold d-flex gap-1">
               <i className="bi bi-pencil-square"></i>
+              <Link href='/info'></Link>
               <span>Thông tin của tôi</span>
             </li>
             <li className="fw-bold d-flex gap-1">

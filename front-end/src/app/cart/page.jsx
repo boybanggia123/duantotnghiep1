@@ -63,10 +63,7 @@ export default function Cart() {
     }
   };
 
-  const total = (Array.isArray(items) ? items : []).reduce(
-    (total, item) => total + item.discountedPrice * item.quantity,
-    0
-  );
+
 
   return (
     <>
@@ -271,64 +268,7 @@ export default function Cart() {
               </button>
             </div>
           </div>
-          {items.length > 0 ? (
-            <div className="col-lg-4 col-md-12">
-              <div className="card p-3 mb-3">
-                <div className="mb-3 text-center">
-                  <p className="text-danger mb-2">
-                    Nhập mã giảm giá <strong>FREECASH</strong>
-                  </p>
-                  <div className="codegiamgia input-group-2">
-                    <input
-                      type="text"
-                      className="form-control"
-                      id="discountCode"
-                      placeholder="Enter discount code"
-                    />
-                    <button className="btn btn-success" type="submit">
-                      Apply
-                    </button>
-                  </div>
-                </div>
-                <hr />
-                <ul className="list-unstyled mb-2">
-                  <li className="d-flex justify-content-between">
-                    <span>Tổng phụ</span>
-                    <span>
-                      {total.toLocaleString("en-US", {
-                        style: "currency",
-                        currency: "USD",
-                      })}
-                    </span>
-                  </li>
-                  <li className="d-flex justify-content-between">
-                    <span>Vận chuyển ước tính</span>
-                    <span>Được tính khi thanh toán</span>
-                  </li>
-                  <li className="d-flex justify-content-between">
-                    <span>Thuế ước tính</span>
-                    <span>Được tính khi thanh toán</span>
-                  </li>
-                </ul>
-                <hr />
-                <span className="d-flex justify-content-between">
-                  <span className="Total">Total</span>
-                  <span className="tongtien">
-                    {total.toLocaleString("en-US", {
-                      style: "currency",
-                      currency: "USD",
-                    })}
-                  </span>
-                </span>
-                <PayButton items={items} />
-                <div className="mt-3">
-                  <Link href="/" className="text-center">
-                    Quay về trang chủ
-                  </Link>
-                </div>
-              </div>
-            </div>
-          ) : null}
+          <PayButton items={items} />
         </div>
       </div>
     </>

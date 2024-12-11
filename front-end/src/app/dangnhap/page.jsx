@@ -2,6 +2,7 @@
 import React from "react";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import Link from "next/link";
 
 export default function SignInModal({ showModal, setShowModal }) {
   const formik = useFormik({
@@ -119,9 +120,9 @@ export default function SignInModal({ showModal, setShowModal }) {
                       Remember me
                     </label>
                   </div>
-                  <a href="#!" className="text-body">
+                  <Link href="/auth/email" className="text-body">
                     Forgot password?
-                  </a>
+                  </Link>
                 </div>
 
                 <div className="login_text text-center mt-4">
@@ -143,9 +144,9 @@ export default function SignInModal({ showModal, setShowModal }) {
             <div className="modal-footer">
               <p className="small fw-bold mb-0">
                 Bạn chưa có tài khoản?{" "}
-                <a href="/dangky" className="link-danger">
+                <Link href="/dangky" className="link-danger">
                   Đăng ký
-                </a>
+                </Link>
               </p>
               <button
                 type="button"

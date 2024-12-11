@@ -6,19 +6,31 @@ const billSchema = new mongoose.Schema({
     paymentIntentId: { type: String }, 
     products: [{ 
         name: { type: String }, 
-        description: { type: String }, 
         price: { type: Number }, 
+        discountedPrice: { type: Number },
         image: { type: String }, 
         size: { type: String }, 
-        cartQuantity: { type: Number }, 
+        quantity: { type: Number }, 
     }],
     subtotal: { type: Number, required: true },
     total: { type: Number, required: true },
-    discount: { type: Number, default: 0 }, 
-    couponId: { type: String, default: null },
+    discountPercent: { type: Number, default: 0 },
+    discount: { type: String, default: 0 }, 
+    coupon: { type: String, default: null },
     shipping: { type: Object, required: true },
-    delivery_status: { type: String, default: "pending" },
-    payment_status: { type: String, required: true }, 
+
+    phone: { type: String },
+  payment_status: { 
+    type: String, 
+    enum: ['đã thanh toán'], 
+    default: 'đã thanh toán'
+  },
+  order_status: {
+    type: String,
+    enum: ['đang chờ xử lý',  'đã vận chuyển', 'đã giao hàng','chưa giải quyết','đã hủy đơn hàng'],
+    default: 'chưa giải quyết'
+  },
+ 
     
 }, { timestamps: true });
 

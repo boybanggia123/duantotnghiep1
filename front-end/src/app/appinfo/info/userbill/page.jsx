@@ -1,23 +1,24 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Cookies from "js-cookie";  // Import the js-cookie library
+import Cookies from "js-cookie"; // Import the js-cookie librar
+import ClientModal from "../../../components/modalinfo";
+import Link from "next/link";
 
-export default function InfoBill() {
+
+export default function InfoBillModern() {
   const [orders, setOrders] = useState([]);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [userId, setUserId] = useState(null); // Add state to store userId
-
+  const [selectedOrder, setSelectedOrder] = useState("");
+  const [userId, setUserId] = useState("");
+ 
+ 
   useEffect(() => {
-    // Retrieve the JWT token from cookies
-    const token = Cookies.get("token");  // Replace with your cookie name for the token
-
+    const token = Cookies.get("token");
     if (token) {
-      // Decode the JWT token (you can use jwt-decode or manually if you prefer)
-      const decodedToken = JSON.parse(atob(token.split('.')[1])); // Decode the token
-
-      setUserId(decodedToken.userId); // Set the userId from the decoded token
+      const decodedToken = JSON.parse(atob(token.split(".")[1]));
+      setUserId(decodedToken.userId);
     }
-  }, []); // This effect runs once when the component mounts
+    
+  }, []);
 
   useEffect(() => {
     if (userId) {
@@ -33,13 +34,13 @@ export default function InfoBill() {
 
       fetchOrders();
     }
-  }, [userId]); // Fetch orders when userId is available
+  }, [userId]);
 
   const handleOrderClick = async (orderId) => {
     try {
       const response = await fetch(`http://localhost:3000/stripe/orders/${orderId}`);
       const data = await response.json();
-      setSelectedOrder(data); // Cập nhật thông tin chi tiết đơn hàng
+      setSelectedOrder(data);
     } catch (error) {
       console.error("Error fetching order details:", error);
     }
@@ -48,11 +49,11 @@ export default function InfoBill() {
   return (
     <div className="col-9">
       <div className="container mt-3">
-        <h2>Thông tin mua hàng</h2>
-        <table className="table table-striped">
-          <thead>
+        <h2 className="text-primary">Thông tin mua hàng</h2>
+        <table className="table table-hover shadow p-3 mb-5 bg-body rounded mt-4">
+          <thead className="table-light ">
             <tr>
-              <th>Họ tên</th>
+              <th>Tên thanh toán</th>
               <th>Email</th>
               <th>Địa chỉ</th>
               <th>Action</th>
@@ -64,54 +65,41 @@ export default function InfoBill() {
                 <tr key={order._id}>
                   <td>{order.shipping.name}</td>
                   <td>{order.shipping.email}</td>
-                  <td>{order.shipping.address.line1}, {order.shipping.address.city}</td>
+                  <td>
+                    {order.shipping.address.line1}, {order.shipping.address.city}
+                  </td>
                   <td>
                     <button
-                      className="btn btn-info"
+                      className="btn btn-info btn-sm"
+                      data-bs-toggle="modal"
+                      data-bs-target="#orderDetailsModal"
                       onClick={() => handleOrderClick(order._id)}
                     >
                       Xem chi tiết
                     </button>
+                    <Link
+                      className="btn btn-info btn-sm"
+                      href={`/appinfo/info/feedback/${order._id}`}
+                    >
+                      Đánh giá sản phẩm 
+                    </Link>
                   </td>
                 </tr>
               ))
             ) : (
               <tr>
-                <td colSpan="4">Không có đơn hàng nào.</td>
+                <td colSpan="4" className="text-center">
+                  Không có đơn hàng nào.
+                </td>
               </tr>
             )}
           </tbody>
         </table>
-
-        {selectedOrder && (
-          <div className="order-details mt-4 p-4 border border-muted rounded">
-            <h3>Chi tiết đơn hàng</h3>
-            <p><strong>Địa chỉ giao hàng:</strong> {selectedOrder.shipping.address.line1}, {selectedOrder.shipping.address.city}, {selectedOrder.shipping.country}</p>
-            <p><strong>Email:</strong> {selectedOrder.shipping.email}</p>
-            <p><strong>Số điện thoại:</strong> {selectedOrder.shipping.phone || "Không có thông tin"}</p>
-            <p><strong>Trạng thái giao hàng:</strong> {selectedOrder.shipping.delivery_status}</p>
-            <p><strong>Trạng thái thanh toán:</strong> {selectedOrder.shipping.payment_status}</p>
-            <p><strong>Sản phẩm:</strong> {selectedOrder.products.map((product) => (
-              <div key={product._id}>
-                <p><strong>{product.name}</strong></p>
-                <ul>
-                  <li>Size: {product.size}</li>
-                  <li>Giá: {product.price} VND</li>
-                  <li>Subtotal: {product.subtotal} VND</li>
-                  <li>Discount: {product.discount} VND</li>
-                </ul>
-              </div>
-            ))}</p>
-            <p><strong>Mã khuyến mãi:</strong> {selectedOrder.products[0].couponId || "Không có"}</p>
-            <p><strong>Tổng tiền thanh toán:</strong> {selectedOrder.total} VND</p>
-
-            <hr />
-            <h4>Thông tin thanh toán</h4>
-            <p><strong>Payment Intent ID:</strong> {selectedOrder.paymentIntentId}</p>
-            <p><strong>Customer ID:</strong> {selectedOrder.customeId}</p>
-          </div>
-        )}
       </div>
+
+      {/* Modal for Order Details */}
+      <ClientModal selectedOrder={selectedOrder} modalId="orderDetailsModal" />
+      
     </div>
   );
 }

@@ -4,7 +4,6 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import { Inter } from "next/font/google";
 import Providers from "../redux/Provider";
-
 import "../../public/bootstrap/css/bootstrap.css";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import "../../public/css/header.css";

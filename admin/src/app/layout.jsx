@@ -6,16 +6,44 @@ import "../../public/css/products.css";
 import "../../public/css/style.css";
 import "../../public/css/formmodal.css";
 import Script from "next/script";
+import { useEffect,useState } from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "bootstrap-icons/font/bootstrap-icons.css";
 const inter = Inter({ subsets: ["latin"] });
 import { useRouter } from 'next/navigation';
+import { io } from 'socket.io-client';
 
+const socket = io('http://localhost:3000');
 
 export default function RootLayout({ children }) {
+  const [notificationCount, setNotificationCount] = useState(0);
   const router = useRouter();
+
+  useEffect(() => {
+    // Lắng nghe sự kiện từ server
+    socket.on('notification', (message) => {
+      console.log('Thông báo mới:', message);
+      setNotificationCount(prevCount => prevCount + 1); // Tăng số thông báo
+    });
+
+    // Dọn dẹp kết nối khi component bị hủy
+    return () => {
+      socket.off('notification');
+    };
+  }, []);
+
+
+  useEffect(() => {
+   
+    require('bootstrap/dist/js/bootstrap.bundle.min.js');
+  }, []);
+
+
+
   const handleLogout = () =>{
     document.cookie = "token=; path=/; max-age=-1";
 
-    router.push('http://localhost:3001/dangnhap');
+    router.push('http://localhost:3001');
   }
   return (
     <html lang="en">
@@ -70,7 +98,7 @@ export default function RootLayout({ children }) {
               </Link>
             </li>
             <li>
-              <Link href={"#"}>
+              <Link href={"/Quanlydonhang"}>
                 <i className="fa-solid fa-briefcase icon"></i> Quản lý Order
               </Link>
             </li>
@@ -100,7 +128,7 @@ export default function RootLayout({ children }) {
             </form>
             <Link href={"#"} className="nav-link">
               <i className="bx bxs-bell icon"></i>
-              <span className="badge">5</span>
+              <span className="badge">{notificationCount}</span>
             </Link>
             <Link href={"#"} className="nav-link">
               <i className="bx bxs-message-square-dots icon"></i>

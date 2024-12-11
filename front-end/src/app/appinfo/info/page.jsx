@@ -15,8 +15,8 @@ export default function InfoPage() {
         gender: "",
         dateOfBirth: "",
       });
-      const [selectedFile, setSelectedFile] = useState(null);
-      const [tokenValue, setTokenValue] = useState(null);
+      const [selectedFile, setSelectedFile] = useState("");
+      const [tokenValue, setTokenValue] = useState("");
       useEffect(() => {
         // Giả sử bạn đã nhận được thông tin người dùng từ API
         const updatedUser = {

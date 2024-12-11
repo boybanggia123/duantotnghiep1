@@ -28,7 +28,7 @@ export default function ResetPasswordPage() {
       const data = await response.json();
       if (response.ok) {
         alert(data.message);  // Nếu thành công, hiển thị thông báo thành công
-        router.push("/dangnhap"); // Điều hướng tới trang đăng nhập
+        router.push("/"); // Điều hướng tới trang đăng nhập
       } else {
         alert(data.message);  // Nếu có lỗi, hiển thị thông báo lỗi
       }

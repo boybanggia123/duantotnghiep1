@@ -1,29 +1,33 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
+import Swal from 'sweetalert2';
 
 export default function EditProduct({ params }) {
   const router = useRouter();
-  const id = params.id; // Nhận id từ params trong Next.js.
+  const id = params.id;
 
   const [categories, setCategories] = useState([]);
-  const [product, setProduct] = useState(null); // Để lưu thông tin sản phẩm
-<<<<<<< HEAD
-=======
-  const [isProductLoaded, setIsProductLoaded] = useState(false); // Cờ kiểm soát sản phẩm đã được tải chưa
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+  const [product, setProduct] = useState(null);
+  const [isProductLoaded, setIsProductLoaded] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const [oldImage, setOldImage] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const [additionalImages, setAdditionalImages] = useState([]);  // State lưu ảnh phụ
+  const [additionalImagePreviews, setAdditionalImagePreviews] = useState([]);
+  
 
+  const toggleVisibility = () => {
+    setIsVisible(!isVisible);
+  };
   // Lấy danh mục sản phẩm
   useEffect(() => {
     const getCategories = async () => {
-<<<<<<< HEAD
-      const res = await fetch('http://localhost:3000/categories');
-=======
       const res = await fetch("http://localhost:3000/categories");
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
       const data = await res.json();
       setCategories(data);
     };
@@ -34,115 +38,130 @@ export default function EditProduct({ params }) {
       const res = await fetch(`http://localhost:3000/productdetail/${id}`);
       const data = await res.json();
       setProduct(data);
-<<<<<<< HEAD
+      setIsProductLoaded(true);
     };
 
     if (id) {
-      getProduct(); // Lấy thông tin sản phẩm khi có id
+      getProduct();
     }
-  }, [id]); // Chỉ cần theo dõi id thôi
-=======
-      setIsProductLoaded(true); 
-    };
+  }, [id]);
+  
+ 
+  
 
-    if (id) {
-      getProduct(); 
+  
+
+  useEffect(() => {
+    if (product && product.image) {
+      setOldImage(product.image); // Đảm bảo set ảnh cũ từ product
     }
-  }, [id]); 
+  }, [product]); // Cập nhật lại oldImage khi product thay đổi
 
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+  
 
-  const formik = useFormik({
-    initialValues: {
-      image: null,
-      name: "",
-      description: "",
-      price: "",
-      discountedPrice: "",
-      size: [],
-      quantity: 0,
-      status: "out of stock",
-      hot: false,
-      categoryId: "",
-    },
-    validationSchema: Yup.object({
-      image: Yup.mixed().required("Vui lòng thêm hình ảnh"),
-      name: Yup.string()
-        .max(100, "Tên sản phẩm không quá 100 ký tự")
-        .required("Vui lòng nhập tên sản phẩm"),
-      description: Yup.string().required("Vui lòng nhập mô tả sản phẩm"),
-      price: Yup.number().required("Giá sản phẩm là bắt buộc"),
-      discountedPrice: Yup.number().optional(),
-      size: Yup.array().min(1, "Vui lòng chọn ít nhất một kích thước"),
-      quantity: Yup.number().required("Vui lòng nhập số lượng sản phẩm"),
-      status: Yup.string().required("Vui lòng chọn trạng thái sản phẩm"),
-      hot: Yup.boolean(),
-      categoryId: Yup.string().required("Vui lòng chọn danh mục sản phẩm"),
-    }),
-    onSubmit: async (values, { setSubmitting, setFieldError }) => {
-      const formData = new FormData();
-      formData.append("image", values.image);
-      formData.append("name", values.name);
-      formData.append("description", values.description);
-      formData.append("price", values.price);
-      formData.append("discountedPrice", values.discountedPrice);
-      formData.append("size", JSON.stringify(values.size));
-      formData.append("quantity", values.quantity);
-      formData.append("status", values.status);
-      formData.append("hot", values.hot);
-      formData.append("categoryId", values.categoryId);
+  
 
-      try {
-        const res = await fetch(`http://localhost:3000/uploads/updateproduct/${id}`, {
-          method: "PUT",
-          body: formData,
+console.log("Old Image:", oldImage);
+
+
+    const formik = useFormik({
+      initialValues: {
+        image: null,
+        additionalImages: [],
+        name: "",
+        description: "",
+        price: "",
+        discountedPrice: "",
+        size: [],
+        quantity: 0,
+        status: "out of stock",
+        hot: false,
+        categoryId: "",
+        color: [],
+        reviews: [],
+      },
+      validationSchema: Yup.object({
+        image: Yup.mixed().required("Vui lòng thêm hình ảnh"),
+        additionalImages: Yup.array().of(Yup.mixed()).optional(),
+        name: Yup.string().max(100, "Tên sản phẩm không quá 100 ký tự").required("Vui lòng nhập tên sản phẩm"),
+        description: Yup.string().required("Vui lòng nhập mô tả sản phẩm"),
+        price: Yup.number().required("Giá sản phẩm là bắt buộc"),
+        discountedPrice: Yup.number().optional(),
+        size: Yup.array().min(1, "Vui lòng chọn ít nhất một kích thước"),
+        quantity: Yup.number().required("Vui lòng nhập số lượng sản phẩm"),
+        status: Yup.string().required("Vui lòng chọn trạng thái sản phẩm"),
+        hot: Yup.boolean(),
+        categoryId: Yup.string().required("Vui lòng chọn danh mục sản phẩm"),
+        color: Yup.array().of(Yup.string().required("Vui lòng nhập màu sắc")),
+      }),
+      onSubmit: async (values, { setSubmitting, setFieldError }) => {
+        const imageToSend = values.image || oldImage;
+
+        const formData = new FormData();
+        formData.append("image", imageToSend);
+        formData.append("name", values.name);
+        formData.append("description", values.description);
+        formData.append("price", values.price);
+        formData.append("discountedPrice", values.discountedPrice);
+        formData.append("size", JSON.stringify(values.size));
+        formData.append("quantity", values.quantity);
+        formData.append("status", values.status);
+        formData.append("hot", values.hot);
+        formData.append("categoryId", values.categoryId);
+        formData.append("reviews", JSON.stringify(values.reviews));
+        formData.append("color", JSON.stringify(values.color));
+
+        // Gộp ảnh cũ và ảnh mới
+        const allAdditionalImages = [
+          ...(product?.additionalImages || []), // Ảnh cũ
+          ...additionalImages, // Ảnh mới
+        ];
+        
+        // Đảm bảo các giá trị trong mảng là file hoặc URL, tránh thêm `undefined`
+        const filteredImages = allAdditionalImages.filter(Boolean);
+        
+        filteredImages.forEach((image) => {
+          formData.append("additionalImages", image);
         });
 
-        if (!res.ok) {
-          const errorData = await res.json();
-          if (res.status === 400 && errorData.message === "Sản phẩm đã tồn tại") {
-            setFieldError("name", "Sản phẩm đã tồn tại");
-          } else {
-            throw new Error(errorData.message || "Cập nhật sản phẩm thất bại");
+        try {
+          const res = await fetch(
+            `http://localhost:3000/uploads/updateproduct/${id}`,
+            {
+              method: "PUT",
+              body: formData,
+            }
+          );
+
+          if (!res.ok) {
+            const errorData = await res.json();
+            if (res.status === 400 && errorData.message === "Sản phẩm đã tồn tại") {
+              setFieldError("name", "Sản phẩm đã tồn tại");
+            } else {
+              throw new Error(errorData.message || "Cập nhật sản phẩm thất bại");
+            }
           }
+
+          alert("Cập nhật sản phẩm thành công");
+          router.push("/QuanlyProducts");
+        } catch (error) {
+          setFieldError("general", error.message);
+        } finally {
+          setSubmitting(false);
         }
+      },
+    });
 
-        alert("Cập nhật sản phẩm thành công");
-<<<<<<< HEAD
-        router.push("/QuanlyProducts"); // Quay về danh sách sản phẩm sau khi cập nhật
-=======
-        router.push("/QuanlyProducts"); 
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
-      } catch (error) {
-        setFieldError("general", error.message);
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
 
-<<<<<<< HEAD
-  // Đảm bảo khi thông tin sản phẩm được tải xong, form sẽ được cập nhật
-  useEffect(() => {
-    if (product && formik.setFieldValue) {
-      formik.setFieldValue('name', product.name);
-      formik.setFieldValue('price', product.price);
-      formik.setFieldValue('description', product.description);
-      formik.setFieldValue('categoryId', product.categoryId);
-      formik.setFieldValue('discountedPrice', product.discountedPrice);
-      formik.setFieldValue('size', product.size);
-      formik.setFieldValue('quantity', product.quantity);
-      formik.setFieldValue('status', product.status);
-      formik.setFieldValue('hot', product.hot);
-    }
-  }, [product, formik]);
-
-=======
+  
+ 
+  
 
   useEffect(() => {
     if (isProductLoaded && product) {
       formik.setValues({
         image: product.image || null,
+        additionalImages: product.additionalImages || [],
         name: product.name || "",
         description: product.description || "",
         price: product.price || "",
@@ -152,42 +171,231 @@ export default function EditProduct({ params }) {
         status: product.status || "out of stock",
         hot: product.hot || false,
         categoryId: product.categoryId || "",
+        reviews: product.reviews || [], // Gán reviews từ product
+        color: product.color || [],
       });
     }
-  }, [isProductLoaded, product]); 
+  }, [isProductLoaded, product]);
+
+  const handleAdditionalImageChange = (e) => {
+    const files = Array.from(e.target.files);
+    const newPreviews = files.map((file) => URL.createObjectURL(file));
+  
+    setAdditionalImages((prevImages) => [...prevImages, ...files]);
+    setAdditionalImagePreviews((prevPreviews) => [...prevPreviews, ...newPreviews]);
+  };
+  
+  const handleRemoveAdditionalImage = (index, isOldImage) => {
+    // Ngừng form submission trong khi xóa ảnh
+    event.preventDefault();
+  
+    // Hiển thị modal xác nhận với sweetalert2
+    Swal.fire({
+      title: 'Bạn có chắc chắn muốn xóa ảnh này?',
+      text: "Hành động này không thể hoàn tác!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Đồng ý',
+      cancelButtonText: 'Hủy',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Nếu người dùng chọn "Đồng ý", thực hiện xóa ảnh và cập nhật trạng thái sau
+        if (isOldImage) {
+          // Xóa ảnh cũ trong `product`
+          const updatedOldImages = product.additionalImages.filter((_, i) => i !== index);
+          setProduct((prev) => ({
+            ...prev,
+            additionalImages: updatedOldImages,
+          }));
+        } else {
+          // Xóa ảnh mới trong `additionalImages`
+          const updatedNewImages = additionalImages.filter((_, i) => i !== index);
+          const updatedNewPreviews = additionalImagePreviews.filter((_, i) => i !== index);
+          setAdditionalImages(updatedNewImages);
+          setAdditionalImagePreviews(updatedNewPreviews);
+        }
+    
+        // Hiển thị thông báo thành công
+        Swal.fire('Đã xóa!', 'Ảnh đã bị xóa thành công.', 'success');
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        // Nếu người dùng chọn "Hủy", không làm gì cả
+        Swal.fire('Đã hủy', 'Ảnh không bị xóa.', 'error');
+      }
+    });
+  };
+  
+  
+
+  const handleEditReview = (index, newComment, newRating) => {
+    const updatedReviews = [...formik.values.reviews];
+    updatedReviews[index].comment = newComment;
+    updatedReviews[index].rating = newRating;
+    formik.setFieldValue("reviews", updatedReviews);
+  };
+
+  const handleToggleHideReview = (index) => {
+    const updatedReviews = [...formik.values.reviews];
+    updatedReviews[index].isHidden = !updatedReviews[index].isHidden;
+    formik.setFieldValue("reviews", updatedReviews);
+  };
+
+  const handleRatingChange = (index, rating) => {
+    const updatedReviews = [...formik.values.reviews];
+    updatedReviews[index].rating = rating;
+    formik.setFieldValue("reviews", updatedReviews);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.currentTarget.files[0];
+    if (file) {
+      formik.setFieldValue("image", file); // Set file mới vào formik
+      setImagePreview(URL.createObjectURL(file)); // Tạo preview ảnh mới
+    }
+  };
+  
 
   if (!isProductLoaded) {
     return <p>Đang tải dữ liệu...</p>;
   }
->>>>>>> 92edceaf3caffa300f7fcc6bbe0bc8075b204b11
+
   return (
     <>
       <h1 className="title">Quản lý Sản phẩm</h1>
       <div className="add-title">
         <ul className="breadcrumbs">
-          <li><Link href="/">Home</Link></li>
+          <li>
+            <Link href="/">Home</Link>
+          </li>
           <li className="divider">/</li>
-          <li><Link href="/addProduct" className="active">Sửa sản phẩm</Link></li>
+          <li>
+            <Link href="/addProduct" className="active">
+              Sửa sản phẩm
+            </Link>
+          </li>
         </ul>
       </div>
-      <div className="container-add">
+      <div className="container-add mt-3">
         <div className="form_addproduct-add">
           <form onSubmit={formik.handleSubmit}>
             {/* Các trường input tương tự như trang AddProduct */}
             <div className="form-groupadd-1">
-              <label>Hình ảnh</label>
-              <input
-                type="file"
-                name="image"
-                onChange={(e) => {
-                  const file = e.currentTarget.files[0];
-                  formik.setFieldValue("image", file);
-                }}
-              />
-              {formik.touched.image && formik.errors.image && (
-                <div className="error">{formik.errors.image}</div>
-              )}
-            </div>
+            <label>Hình ảnh</label>
+            <input
+              type="file"
+              name="image"
+              onChange={handleImageChange}
+            />
+            {formik.touched.image && formik.errors.image && (
+              <div className="error">{formik.errors.image}</div>
+            )}
+
+            {/* Hiển thị ảnh cũ nếu có */}
+            {oldImage && (
+              <div>
+                <p>Ảnh cũ:</p>
+                <img
+                  src={oldImage}
+                  alt="Old Product"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              </div>
+            )}
+
+            {/* Hiển thị ảnh mới nếu người dùng chọn ảnh mới */}
+            {imagePreview && (
+              <div>
+                <p>Ảnh mới:</p>
+                <img
+                  src={imagePreview}
+                  alt="New Product"
+                  style={{ maxWidth: "100px", maxHeight: "100px" }}
+                />
+              </div>
+            )}
+
+            {/* Nếu không có ảnh mới được chọn, hiển thị ảnh cũ */}
+            {!imagePreview && !formik.values.image && !oldImage && (
+              <p>No image available</p>
+            )}
+          </div>
+          
+          <div className="form-groupadd-1">
+      <label>Ảnh phụ</label>
+      <input
+        type="file"
+        multiple
+        name="additionalImages"
+        onChange={handleAdditionalImageChange}
+      />
+      {formik.touched.additionalImages && formik.errors.additionalImages && (
+        <div className="error">{formik.errors.additionalImages}</div>
+      )}
+
+      {/* Hiển thị preview ảnh phụ mới */}
+      <div className="additional-images-preview">
+        {additionalImagePreviews.map((preview, index) => (
+          <div key={index} className="additional-image-item">
+            <img
+              src={preview}
+              alt={`Additional Preview ${index + 1}`}
+              style={{
+                maxWidth: "100px",
+                maxHeight: "100px",
+                margin: "5px",
+                position: "relative",
+              }}
+            />
+            <button
+              style={{
+                position: "absolute",
+                top: "0",
+                right: "0",
+                backgroundColor: "red",
+                color: "white",
+                border: "none",
+                cursor: "pointer",
+              }}
+              onClick={() => handleRemoveAdditionalImage(index, false)}
+            >
+              X
+            </button>
+          </div>
+        ))}
+      </div>
+
+      {/* Hiển thị ảnh phụ cũ nếu có */}
+              {product.additionalImages && product.additionalImages.length > 0 && (
+          <div>
+            <p>Ảnh phụ cũ:</p>
+            {product.additionalImages.map((image, index) => (
+              <div key={index} className="additional-image-item">
+                <img
+                  src={image}
+                  alt={`Old Additional Image ${index + 1}`}
+                  style={{ maxWidth: "100px", maxHeight: "100px", margin: "5px" }}
+                />
+                <button
+                  onClick={() => handleRemoveAdditionalImage(index, true)}
+                  style={{
+                    position: "absolute",
+                    top: "0",
+                    right: "0",
+                    backgroundColor: "red",
+                    color: "white",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            ))}
+          </div>
+        )}
+    </div>
+
+
 
             <div className="form-groupadd-1">
               <label>Tên sản phẩm</label>
@@ -244,9 +452,10 @@ export default function EditProduct({ params }) {
                 onBlur={formik.handleBlur}
                 placeholder="Giá giảm giá (tùy chọn)"
               />
-              {formik.touched.discountedPrice && formik.errors.discountedPrice && (
-                <div className="error">{formik.errors.discountedPrice}</div>
-              )}
+              {formik.touched.discountedPrice &&
+                formik.errors.discountedPrice && (
+                  <div className="error">{formik.errors.discountedPrice}</div>
+                )}
             </div>
 
             <div className="form-groupadd-1">
@@ -265,6 +474,67 @@ export default function EditProduct({ params }) {
                 <div className="error">{formik.errors.size}</div>
               )}
             </div>
+
+            <div className="form-groupadd-1">
+                <label htmlFor="newColor">Màu sản phẩm</label>
+
+                {/* Input để thêm màu mới */}
+                <div className="color-input-container">
+                  <input
+                    id="newColor"
+                    type="text"
+                    placeholder="Nhập màu (ví dụ: #000000 hoặc black)"
+                    value={formik.values.newColor || ""}
+                    onChange={(e) => formik.setFieldValue("newColor", e.target.value)}
+                  />
+                  <button
+                    type="button"
+                    className="add-color-btn"
+                    onClick={() => {
+                      const newColor = formik.values.newColor?.trim();
+                      if (newColor && !formik.values.color.includes(newColor)) {
+                        formik.setFieldValue("color", [...formik.values.color, newColor]);
+                        formik.setFieldValue("newColor", ""); // Xóa input sau khi thêm
+                      }
+                    }}
+                  >
+                    Thêm
+                  </button>
+                </div>
+
+                {/* Hiển thị các màu đã thêm */}
+                <div className="color-list-container">
+                  {formik.values.color.map((color, index) => (
+                    <div key={index} className="color-item">
+                      {/* Ô màu */}
+                      <div
+                        className="color-box"
+                        style={{ backgroundColor: color }}
+                        title={color} // Tooltip để hiển thị tên/mã màu
+                      ></div>
+                      {/* Nút xóa */}
+                      <button
+                        type="button"
+                        className="remove-color-btn"
+                        onClick={() =>
+                          formik.setFieldValue(
+                            "color",
+                            formik.values.color.filter((_, i) => i !== index)
+                          )
+                        }
+                      >
+                        Xóa
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Hiển thị lỗi nếu có */}
+                {formik.touched.color && formik.errors.color && (
+                  <div className="error">{formik.errors.color}</div>
+                )}
+              </div>
+
 
             <div className="form-groupadd-1">
               <label>Số lượng</label>
@@ -293,20 +563,6 @@ export default function EditProduct({ params }) {
                 <option value="out of stock">Hết hàng</option>
                 <option value="in stock">Còn hàng</option>
               </select>
-              {formik.touched.status && formik.errors.status && (
-                <div className="error">{formik.errors.status}</div>
-              )}
-            </div>
-
-            <div className="form-groupadd-1">
-              <label >Sản phẩm hot</label>
-              <input
-                className="checkboxpro"
-                type="checkbox"
-                name="hot"
-                checked={formik.values.hot}
-                onChange={formik.handleChange}
-              />
             </div>
 
             <div className="form-groupadd-1">
@@ -316,25 +572,105 @@ export default function EditProduct({ params }) {
                 value={formik.values.categoryId}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-            >
-                <option value="" label="Chọn danh mục" />
-                        {categories.length > 0 ? (
-                        categories.map((category) => (
-                            <option key={category._id} value={category._id}>
-                            {category.name}
-                            </option>
-                        ))
-                        ) : (
-                        <option disabled>Đang tải danh mục...</option>
-                        )}
-            </select>
+              >
+                {categories.map((category) => (
+                  <option key={category._id} value={category._id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
               {formik.touched.categoryId && formik.errors.categoryId && (
                 <div className="error">{formik.errors.categoryId}</div>
               )}
             </div>
 
-            <button className="buttonadd" type="submit" disabled={formik.isSubmitting}>
-              Cập nhật Sản phẩm
+            <div className="form-groupadd-1">
+              <label>Sản phẩm nổi bật</label>
+              <input
+              className="checkboxpro"
+                type="checkbox"
+                name="hot"
+                checked={formik.values.hot}
+                onChange={formik.handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+          <label>Bình luận</label>
+          <div>
+            {formik.values.reviews.map((review, index) => (
+              <div
+                key={index}
+                className={`review-item ${review.isHidden ? "review-hidden" : ""}`}
+              >
+                <div className="d-flex justify-content-between">
+                  <strong>{review.userName}</strong>
+                  <span className="badge badge-warning">{review.rating}⭐</span>
+                </div>
+
+                {/* Chỉnh sửa bình luận trực tiếp */}
+                <textarea
+                  value={review.comment}
+                  onChange={(e) =>
+                    handleEditReview(index, e.target.value, review.rating)
+                  }
+                  className="form-control"
+                  rows="3"
+                ></textarea>
+
+                {/* Chỉnh sửa đánh giá sao */}
+                <div className="rating">
+                  <span
+                    className={`star ${review.rating >= 1 ? "filled" : ""}`}
+                    onMouseEnter={() => handleRatingChange(index, 1)}
+                  >
+                    ★
+                  </span>
+                  <span
+                    className={`star ${review.rating >= 2 ? "filled" : ""}`}
+                    onMouseEnter={() => handleRatingChange(index, 2)}
+                  >
+                    ★
+                  </span>
+                  <span
+                    className={`star ${review.rating >= 3 ? "filled" : ""}`}
+                    onMouseEnter={() => handleRatingChange(index, 3)}
+                  >
+                    ★
+                  </span>
+                  <span
+                    className={`star ${review.rating >= 4 ? "filled" : ""}`}
+                    onMouseEnter={() => handleRatingChange(index, 4)}
+                  >
+                    ★
+                  </span>
+                  <span
+                    className={`star ${review.rating >= 5 ? "filled" : ""}`}
+                    onMouseEnter={() => handleRatingChange(index, 5)}
+                  >
+                    ★
+                  </span>
+                </div>
+
+                {/* Thay đổi nút ẩn hiển thị */}
+                {isVisible ? (
+                    <>
+                      <FaEye onClick={toggleVisibility} style={{ cursor: 'pointer', marginRight: '10px' }} />
+                      <span>Hiển thị bình luận</span>
+                    </>
+                  ) : (
+                    <>
+                      <FaEyeSlash onClick={toggleVisibility} style={{ cursor: 'pointer', marginRight: '10px' }} />
+                      <span>Đã ẩn bình luận</span>
+                    </>
+                  )}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+            <button type="submit" disabled={formik.isSubmitting}>
+              Cập nhật sản phẩm
             </button>
           </form>
         </div>
@@ -342,4 +678,3 @@ export default function EditProduct({ params }) {
     </>
   );
 }
-

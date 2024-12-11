@@ -1,6 +1,10 @@
+"use client";
 import React, { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import * as Yup from "yup";
 import axios from "axios";
 import Cookies from "js-cookie";
+import Link from "next/link";
 
 // Giải mã token JWT
 const decodeToken = (token) => {
@@ -18,98 +22,224 @@ const decodeToken = (token) => {
 
 const PayButton = () => {
   const [cartItems, setCartItems] = useState([]);
-  const [couponCode, setCouponCode] = useState("");
   const [loading, setLoading] = useState(false);
-  const [userId, setUserId] = useState(null);
+  const [userId, setUserId] = useState("");
+  const [appliedCoupon, setAppliedCoupon] = useState("");
+  const [discountAmount, setDiscountAmount] = useState(0);
+  const [couponMessage, setCouponMessage] = useState("");
+  const [couponStatus, setCouponStatus] = useState(null);
 
   useEffect(() => {
-    // Lấy token từ cookie
     const token = Cookies.get("token");
-  
+
     if (token) {
-      // Giải mã token để lấy thông tin người dùng (ví dụ userId)
       const decoded = decodeToken(token);
-      console.log("Decoded token:", decoded);
       setUserId(decoded?.userId); // Lưu userId vào state
     }
-  }, []); // Chạy chỉ một lần khi component mount
-  
+  }, []);
+
   useEffect(() => {
-    // Kiểm tra nếu có userId trước khi gửi yêu cầu API
     if (userId) {
       axios
         .get(`http://localhost:3000/cart/${userId}`)
         .then((res) => {
-          console.log("Cart items from API:", res.data); // Kiểm tra dữ liệu trả về
-          setCartItems(res.data); // Giả sử backend trả về một mảng giỏ hàng trực tiếp
+          setCartItems(res.data);
         })
         .catch((err) => console.error("Error fetching cart:", err));
     }
-  }, [userId]); // Chạy lại khi userId thay đổi
-  
+  }, [userId]);
+
+  const formik = useFormik({
+    initialValues: {
+      couponCode: "",
+    },
+    validationSchema: Yup.object({
+      couponCode: Yup.string(),
+    }),
+    onSubmit: async (values) => {
+      setCouponMessage("");
+      setCouponStatus(null);
+
+      try {
+        const response = await axios.post(
+          "http://localhost:3000/stripe/apply-coupon",
+          { couponCode: values.couponCode, totalAmount: 100 }
+        );
+
+        if (response.data.valid) {
+          const discountDetails = response.data.discountDetails;
+          const discountPercent = discountDetails.discountValue || 0;
+          setDiscountAmount(discountPercent);
+          setCouponMessage(`Mã giảm giá đã áp dụng: Giảm ${discountPercent}%`);
+          setCouponStatus(true);
+          setAppliedCoupon(values.couponCode);
+        } else {
+          setDiscountAmount(0);
+          setCouponMessage("Mã giảm giá không hợp lệ. Vui lòng thử lại.");
+          setCouponStatus(false);
+        }
+      } catch (error) {
+        console.error("Lỗi khi áp dụng mã giảm giá:", error.response?.data || error.message);
+        setCouponMessage("Mã giảm giá không đúng. Vui lòng thử lại.");
+        setCouponStatus(false);
+      }
+    },
+  });
+
+  // Hàm xử lý khi thay đổi mã giảm giá
+  const handleInputChange = (e) => {
+    const { value } = e.target;
+    formik.setFieldValue("couponCode", value);
+
+    if (!value.trim()) {
+      setDiscountAmount(0); // Reset giảm giá
+      setAppliedCoupon("");
+      setCouponMessage("");
+      setCouponStatus(null);
+    }
+  };
 
   const handleCheckout = async () => {
     const token = Cookies.get("token");
-    console.log("Token:", token); // Kiểm tra token
-    console.log("Cart Items:", cartItems); // Kiểm tra giỏ hàng
-    console.log("User ID:", userId); // Kiểm tra userId từ state
-  
+
     if (!token || !cartItems || cartItems.length === 0 || !userId) {
       alert("Vui lòng kiểm tra thông tin trước khi thanh toán.");
       return;
     }
-  
+
     setLoading(true);
-  
+
     try {
-      const res = await axios.post(
+      const decoded = decodeToken(token); // Giải mã token để lấy email
+      const email = decoded?.email;
+
+      const checkoutResponse = await axios.post(
         `http://localhost:3000/stripe/create-checkout-session`,
         {
           cartItems,
-          userId, // Sử dụng userId lấy từ state
-          couponId: couponCode || null,
+          userId,
+          email,
+          couponId: appliedCoupon || null, // Truyền mã giảm giá (nếu có)
+          discount: discountAmount.toString(),
         },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
-  
-      if (res.data.url) {
-        window.location.href = res.data.url;
 
+      if (checkoutResponse.data.url) {
+        window.location.href = checkoutResponse.data.url; // Chuyển hướng đến Stripe Checkout
       } else {
         alert("Không thể tạo phiên thanh toán.");
       }
-    } catch (err) {
-      console.error("Lỗi khi tạo phiên thanh toán:", err);
-  
-      if (err.response?.data?.message) {
-        alert(`Lỗi: ${err.response.data.message}`);
-      } else {
-        alert("Đã xảy ra lỗi. Vui lòng thử lại.");
-      }
+    } catch (error) {
+      console.error("Lỗi khi tạo phiên thanh toán:", error);
+      alert("Đã xảy ra lỗi. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
   };
-  
+
+  const total = cartItems.reduce(
+    (total, item) => total + item.discountedPrice * item.quantity,
+    0
+  );
+  const subtotal = cartItems.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  );
 
   return (
     <>
-      <input
-        type="text"
-        placeholder="Enter coupon code"
-        value={couponCode}
-        onChange={(e) => setCouponCode(e.target.value)}
-        className="form-control mt-3"
-      />
-      <button
-        className="btn btn-dark w-100 mt-3"
-        onClick={handleCheckout}
-        disabled={loading}
-      >
-        {loading ? "Đang xử lý..." : "Checkout"}
-      </button>
+      {cartItems.length > 0 && (
+        <div className="col-lg-4 col-md-12">
+          <div className="card p-3 mb-3">
+            <div className="mb-3 text-center">
+              <p className="text-danger mb-2">
+                Nhập mã giảm giá <strong>FREECASH</strong>
+              </p>
+              <form onSubmit={formik.handleSubmit}>
+              <div className="input-group w-auto">
+                <input
+                  type="text"
+                  placeholder="Enter coupon code"
+                  value={formik.values.couponCode}
+                  onChange={handleInputChange}
+                  className={`form-control ${
+                    formik.touched.couponCode && formik.errors.couponCode
+                      ? "is-invalid"
+                      : ""
+                  }`}
+                />
+                <button
+                  className="btn btn-success"
+                  type="submit"
+                  disabled={formik.isSubmitting}
+                >
+                  Áp dụng
+                </button>
+              </div>
+              {formik.touched.couponCode && formik.errors.couponCode && (
+                <div className="invalid-feedback">
+                  {formik.errors.couponCode}
+                </div>
+              )}
+              {couponMessage && (
+                <div
+                  className={`mt-2 ${
+                    couponStatus ? "text-success" : "text-danger"
+                  }`}
+                >
+                  {couponMessage}
+                </div>
+              )}
+            </form>
+
+
+            </div>
+            <hr />
+            <ul className="list-unstyled mb-2">
+              <li className="d-flex justify-content-between">
+                <span>Tổng phụ</span>
+                <span>
+                  {total.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+                </span>
+              </li>
+              <li className="d-flex justify-content-between">
+                <span>Giảm giá</span>
+                <span>{discountAmount}%</span>
+              </li>
+            </ul>
+            <hr />
+            <span className="d-flex justify-content-between">
+              <span className="Total">Total</span>
+              <span>
+                {(total * (100 - discountAmount) / 100).toLocaleString(
+                  "en-US",
+                  {
+                    style: "currency",
+                    currency: "USD",
+                  }
+                )}
+              </span>
+            </span>
+            <button
+              className="btn btn-dark w-100 mt-3"
+              onClick={handleCheckout}
+            >
+              Checkout
+            </button>
+            <div className="mt-3">
+              <Link href="/" className="text-center">
+                Quay về trang chủ
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -101,7 +101,7 @@ const Search = () => {
         <div className="product-image">
           <img
             className="img-fluid"
-            src={`/img/${product.image}`}
+            src={product.image}
             alt={product.name}
             style={{ maxWidth: "100px" }}
             loading="lazy"

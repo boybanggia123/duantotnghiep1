@@ -14,7 +14,7 @@ export default function Header() {
   const cartItems = useSelector((state) => state.cart?.items) || [];
   const [cartCount, setCartCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState(null);
+  const [userName, setUserName] = useState("");
 
   useEffect(() => {
     // Cập nhật số lượng giỏ hàng ngay khi cartItems thay đổi
@@ -79,7 +79,7 @@ export default function Header() {
       <nav className="navbar navbar-expand-lg navbar-light mx-3 mx-md-5">
         <div className="container-fluid m-0 p-1">
           <Link className="navbar-brand" href={"/"}>
-            <img src="img/logo_fashion.png" alt="logo" />
+            <img src="https://res.cloudinary.com/dwrp82bhy/image/upload/v1732089666/logo_fashion_guzen3.png" alt="logo" />
           </Link>
           <button
             className="navbar-toggler"
@@ -178,7 +178,7 @@ export default function Header() {
         <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
           {categories &&
             categories.map((category) => (
-              <Link href={`/category/${category._id}`}>{category.name}</Link>
+              <Link  key={category._id} href={`/category/${category._id}`}>{category.name}</Link>
             ))}
         </div>
       </div>

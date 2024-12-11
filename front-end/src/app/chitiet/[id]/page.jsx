@@ -6,10 +6,11 @@ import Link from "next/link";
 import useSWR from "swr";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
+import { useRouter,useParams } from "next/navigation";
 const fetcher = (...args) => fetch(...args).then((res) => res.json());
 
 export default function Detail({ params }) {
+  const { id } = useParams();
   const [rating, setRating] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState("");
@@ -28,9 +29,13 @@ export default function Detail({ params }) {
     data: product,
     error,
     isLoading,
-  } = useSWR(`http://localhost:3000/productdetail/${params.id}`, fetcher, {
-    refreshInterval: 6000,
-  });
+  } = useSWR(
+    id ? `http://localhost:3000/productdetail/${id}` : null,
+    fetcher,
+    {
+      refreshInterval: 6000,
+    }
+  );
   useEffect(() => {
     if (product) {
       // Lấy danh sách bình luận của sản phẩm khi có dữ liệu sản phẩm
@@ -153,7 +158,7 @@ export default function Detail({ params }) {
 
         <div className="col-md-4">
           <div className="name_detail">{product.name}</div>
-          <p className="price_giam mb-2">
+          <div className="price_giam mb-2">
             <div className="gia_detail">
               ${product.discountedPrice}{" "}
               <del className="price_goc">${product.price}</del>
@@ -161,7 +166,7 @@ export default function Detail({ params }) {
             <div className="text-warning_1 fs-6">
               ★★★★☆<span className="sl_ratings">(3)</span>
             </div>
-          </p>
+          </div>
 
           <div className="mb-3">
             <h6 className="name_detail">Màu sắc</h6>
