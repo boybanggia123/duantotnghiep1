@@ -89,7 +89,7 @@ export default function Footer() {
                   <input
                     type="email"
                     className="form-control"
-                    placeholder="Email Address"
+                    placeholder="Địa chỉ email"
                     aria-label="Email Address"
                   />
                 </div>

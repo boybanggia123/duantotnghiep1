@@ -4,47 +4,15 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import Link from "next/link";
 
-export default function SignInModal({ showModal, setShowModal }) {
-  const formik = useFormik({
-    initialValues: {
-      email: "",
-      password: "",
-    },
-    validationSchema: Yup.object({
-      email: Yup.string().email("Email không hợp lệ").required("Bắt buộc"),
-      password: Yup.string().required("Bắt buộc"),
-    }),
-    onSubmit: async (values, { setSubmitting, setFieldError }) => {
-      try {
-        const res = await fetch("http://localhost:3000/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(values),
-        });
-        if (!res.ok) {
-          const errorData = await res.json();
-          throw new Error(errorData.message || "Đăng nhập thất bại");
-        }
-        const data = await res.json();
-        document.cookie = `token=${data.token}; path=/; max-age=${60 * 60}`;
+export default function DangNhapPage() {
+  const [showModal, setShowModal] = useState(false);
+  const pathname = usePathname(); // Dùng usePathname để lấy đường dẫn
 
-        const token = data.token;
-        const payload = JSON.parse(atob(token.split(".")[1]));
-        if (payload.role === "admin") {
-          window.location.href = "http://localhost:3002";
-        } else {
-          alert("Đăng nhập thành công");
-          window.location.href = "/";
-        }
-      } catch (error) {
-        setFieldError("general", error.message);
-      } finally {
-        setSubmitting(false);
-      }
-    },
-  });
+  useEffect(() => {
+    if (pathname === "/dangnhap") {
+      setShowModal(true);
+    }
+  }, [pathname]);
 
   return (
     <div>

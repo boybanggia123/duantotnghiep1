@@ -591,9 +591,40 @@ main .btn-send {
 main .btn-send:hover {
 	background: var(--dark-blue);
 }
-/* MAIN */
-/* CONTENT */
 
+.commet_detail{
+	color: rgb(87, 86, 86);
+	border: 0.5px solid #ada7a7;
+	padding: 4px;
+	font-size: 12px;
+	font-weight: 500;
+	border-radius: 5px;
+}
+.commet_detail:hover{
+	background-color: #000;
+	color: #ffffff;
+	transition: all 0.5s ease;
+}
+
+.commet_detail_delete {
+    color: #b30303;
+    text-decoration: none;
+    font-size: 18px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.commet_detail_delete:hover {
+    color: #f00808;
+    transition: all 0.2s ease-in;
+}
+
+.commet_detail_delete:hover {
+    text-decoration: underline;
+}
+
+.raiting_commets{
+	color:darkorange;
+}
 
 @media screen and (max-width: 768px) {
 	#content {

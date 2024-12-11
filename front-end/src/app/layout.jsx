@@ -12,9 +12,9 @@ import "../../public/css/cart.css";
 import "../../public/css/style.css";
 import "../../public/css/sanpham.css";
 import "../../public/css/detail.css";
+import "../../public/css/favourite.css";
 import "../../public/css/style-dangnhap.css";
-import "../../public/css/style-dangky.css";
-
+import "../../public/css/style-info.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,10 +32,15 @@ export default function RootLayout({ children }) {
             crossOrigin="anonymous"
             referrerPolicy="no-referrer"
           />
-          <link
+          {/* <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-          />
+          /> */}
+          <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-pzjw8f+ua7Kw1TIq0GdD1rOOfWygHiJtqvR6VokzO5mTt6FgHiM6kS+VbInXJzIu"
+            crossOrigin="anonymous"
+          ></script>
           <Footer />
           <script src="/bootstrap/js/bootstrap.bundle.min.js"></script>
         </body>

@@ -1,6 +1,7 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
+import "../../../public/css/password.css";
 
 const PasswordResetForm = ({ onSubmit }) => {
   const [newPassword, setNewPassword] = useState("");
@@ -21,37 +22,52 @@ const PasswordResetForm = ({ onSubmit }) => {
   };
 
   return (
-    <div className="auth-container mt-5 my-5">
-      <h3 className="auth-title">Đặt lại mật khẩu</h3>
-      <form onSubmit={handleSubmit} className="auth-form mt-3">
-        <div className="auth-mb-3">
-          <label className="auth-form-label">Mật khẩu mới</label>
+    <div className="auth-container mt-5 my-5 text-center">
+      <div className="mb-3">
+        <img
+          src="/img/logo_fashion.png" // Thay bằng logo của bạn
+          alt="Logo"
+          className="mb-3"
+          style={{ width: "auto", height: "45px" }}
+        />
+        <h6>Reset password</h6>
+      </div>
+      {errorMessage && <div className="text-danger mb-2">{errorMessage}</div>}
+      <form onSubmit={handleSubmit}>
+        <div className="mb-3">
           <input
             type="password"
-            className="auth-input form-control"
+            className="form-control"
+            placeholder="Nhập mật khẩu mới"
             value={newPassword}
             onChange={(e) => setNewPassword(e.target.value)}
-            placeholder="Nhập mật khẩu mới"
             required
+            style={{
+              width: "100%",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
 
-        <div className="auth-mb-3">
-          <label className="auth-form-label">Xác nhận mật khẩu mới</label>
+        <div className="mb-3">
           <input
             type="password"
-            className="auth-input form-control"
+            className="form-control"
+            placeholder="Nhập lại mật khẩu mới"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Nhập lại mật khẩu mới"
             required
+            style={{
+              width: "100%",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
           />
         </div>
 
-        {errorMessage && <p className="text-danger">{errorMessage}</p>}
-
-        <button type="submit" className=" auth-button btn btn-warning w-100">
-          Đặt lại mật khẩu
+        <button type="submit" className="otp_button btn-warning mb-3">
+          Submit
         </button>
       </form>
     </div>

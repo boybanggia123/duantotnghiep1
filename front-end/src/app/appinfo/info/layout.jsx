@@ -1,18 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 
 
+export default function Info({
 
-
-export default function Info({ user, handleUpdateUser, handleChange, handleFileChange,children }) {
-  
-
+  children,
+}) {
   const handleLogout = () => {
-    
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    window.location.href = "/";  // Redirect after logout
-    
+    window.location.href = "/"; // Redirect after logout
   };
   return (
     <div className="container mt-5 my-5">
@@ -31,9 +28,8 @@ export default function Info({ user, handleUpdateUser, handleChange, handleFileC
             <li className="fw-bold d-flex gap-1">
               <i className="bi bi-receipt-cutoff"></i>
               <Link href="info/userbill">
-              <span>Đơn hàng của tôi</span>
+                <span>Đơn hàng của tôi</span>
               </Link>
-             
             </li>
             <li className="fw-bold d-flex gap-1">
               <i className="bi bi-bell-fill"></i>
@@ -51,11 +47,8 @@ export default function Info({ user, handleUpdateUser, handleChange, handleFileC
             </button>
           </div>
         </div>
-  
+
         {children}
-        
-
-
       </div>
     </div>
   );

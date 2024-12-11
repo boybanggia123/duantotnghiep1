@@ -1,25 +1,49 @@
 "use client";
+import { fetchCart } from "../../redux/slices/cartslice";
+import { useSelector, useDispatch } from "react-redux";
+// import Countdown from "../components/Countdown";
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import Countdown from "../components/Countdown";
-import { useSelector } from "react-redux";
 import Search from "../components/Search";
 import SignInModal from "../dangnhap/page";
 import SignUpModal from "../dangky/page";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Cookies from "js-cookie";
+import axios from "axios";
 import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 export default function Header() {
-  const cartItems = useSelector((state) => state.cart?.items) || [];
+  const { items = [] } = useSelector((state) => state.cart || {});
   const [cartCount, setCartCount] = useState(0);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    // Cập nhật số lượng giỏ hàng ngay khi cartItems thay đổi
-    setCartCount(cartItems.length);
-  }, [cartItems]);
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+
+      if (currentScrollPos > lastScrollPos && currentScrollPos > 50) {
+        setIsVisible(false); // Ẩn header khi cuộn xuống
+      } else {
+        setIsVisible(true); // Hiện header khi cuộn lên
+      }
+
+      setLastScrollPos(currentScrollPos);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [lastScrollPos]);
+
+  useEffect(() => {
+    setCartCount(items.length); // Cập nhật số lượng từ
+  }, [items]);
+
+  useEffect(() => {
+    setFavouriteCount(favouriteItems.length); // Cập nhật số lượng yêu thích
+  }, [favouriteItems]);
 
   const { data: categories } = useSWR(
     "http://localhost:3000/categories",
@@ -34,7 +58,6 @@ export default function Header() {
 
     if (token) {
       setIsLoggedIn(true);
-
       fetch("http://localhost:3000/detailuser", {
         method: "GET",
         headers: {
@@ -50,16 +73,19 @@ export default function Header() {
         .then((data) => {
           if (data?.fullname) {
             setUserName(data.fullname);
+            dispatch(fetchCart(data._id)); // Lấy giỏ hàng khi người dùng đăng nhập
+            setCartCount(items.length); // Cập nhật số lượng từ
           }
         })
         .catch((error) => {
           console.error("Error fetching user info:", error);
         });
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <>
+    <div>
       <div className="promotion-bar p-2 text-center text-md-start">
         <span>FREE 1-DAY SHIPPING</span>
         <span className="small-text d-none d-md-inline">
@@ -168,21 +194,36 @@ export default function Header() {
                   {cartCount > 0 && (
                     <span className="cart-quantity-badge">{cartCount}</span>
                   )}
-                </Link>
+                   </Link>
+                </div>
+                <div className="fav-icon-container">
+                  <Link
+                    href={"/yeuthich"}
+                    className="heart_item d-flex align-items-center"
+                  >
+                    <i className="bi bi-suit-heart "></i>
+                    {favouriteCount > 0 && (
+                      <span className="fav-quantity">{favouriteCount}</span>
+                    )}
+                  </Link>
+                </div>
+                <div className="cart-icon-container">
+                  <Link
+                    href={"/cart"}
+                    className="cart_item d-flex align-items-center"
+                  >
+                    <i className="bi bi-basket "></i>
+                    {cartCount > 0 && (
+                      <span className="cart-quantity-badge">{cartCount}</span>
+                    )}
+                  </Link>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </nav>
-      <div className="d-flex justify-content-start mx-3 mx-md-5 pl-2 pl-md-4 flex-wrap">
-        <div className="text-capitalize d-flex flex-wrap gap-2 gap-md-4 p-2">
-          {categories &&
-            categories.map((category) => (
-              <Link  key={category._id} href={`/category/${category._id}`}>{category.name}</Link>
-            ))}
-        </div>
+        </nav>
       </div>
-      <hr className="mt-0 mb-0" />
+      <SignInModal />
     </>
   );
 }

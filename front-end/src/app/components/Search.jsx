@@ -12,11 +12,9 @@ const Search = () => {
     if (!keyword) {
       return;
     }
-
     setLoading(true);
     setError(null);
     setProducts([]);
-
     try {
       const response = await fetch(
         `http://localhost:3000/search?key=${encodeURIComponent(keyword)}`
@@ -25,7 +23,6 @@ const Search = () => {
         const errorData = await response.json();
         throw new Error(errorData.message || "Không tìm thấy sản phẩm");
       }
-
       const data = await response.json();
       setProducts(data);
     } catch (error) {
@@ -46,7 +43,6 @@ const Search = () => {
     return () => clearTimeout(delayDebounceFn);
   }, [keyword]);
 
-  // Hàm xử lý khi nhấn Enter
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -55,9 +51,9 @@ const Search = () => {
   };
 
   return (
-    <div className="flex-column">
+    <div className="flex-column position-relative">
       <form
-        className="d-flex mt-3 gap-3"
+        className="d-flex gap-3"
         role="search"
         onSubmit={(e) => e.preventDefault()}
       >
@@ -80,46 +76,46 @@ const Search = () => {
             className="input-group-text search-icon-right"
             id="search-addon-right"
           >
-            <i className="fa-solid fa-camera"></i>{" "}
+            <i className="fa-solid fa-camera"></i>
           </span>
         </div>
       </form>
+
       {loading && <p className="mb-0">Đang tìm kiếm...</p>}
       {error && (
-        <p className="mb-0" style={{ color: "black" }}>
+        <p className="mb-0 text-danger">
           {error}
         </p>
       )}
-      {products.length > 0 && keyword ? (
-  <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
-    {products.map((product) => (
-      <a
-        key={product._id}
-        href={`/chitiet/${product._id}`}
-        className="d-flex justify-content-center align-content-center product-item gap-3"
-      >
-        <div className="product-image">
-          <img
-            className="img-fluid"
-            src={product.image}
-            alt={product.name}
-            style={{ maxWidth: "100px" }}
-            loading="lazy"
-          />
-        </div>
-        <div className="d-flex flex-column justify-content-center">
-          <h4 className="mb-0">{product.name}</h4>
-          <p className="mb-0">{product.description}</p>
-        </div>
-      </a>
-    ))}
-  </div>
-) : (
-  !loading &&
-  !error &&
-  keyword && <p className="mb-0">Không có sản phẩm nào</p>
-)}
 
+      {products.length > 0 && keyword && (
+        <div className="card mt-2 rounded flex-column justify-content-between align-items-center gap-2 position-absolute z-1 p-2">
+          {products.map((product) => (
+            <a
+              key={product._id}
+              href={`/chitiet/${product._id}`}
+              className="d-flex justify-content-start align-items-center product-item gap-3"
+            >
+              <div className="product-image">
+                <img
+                  className="img-fluid"
+                  src={product.image}
+                  alt={product.name}
+                  style={{ maxWidth: "100px" }}
+                  loading="lazy"
+                />
+              </div>
+              <div className="product-info">
+                <p className="mb-0">{product.name}</p>
+              </div>
+            </a>
+          ))}
+        </div>
+      )}
+
+      {!loading && !error && keyword && products.length === 0 && (
+        <p className="mb-0">Không có sản phẩm nào</p>
+      )}
     </div>
   );
 };

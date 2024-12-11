@@ -14,12 +14,15 @@ export default function EditProduct({ params }) {
   const [categories, setCategories] = useState([]);
   const [product, setProduct] = useState(null);
   const [isProductLoaded, setIsProductLoaded] = useState(false);
+<<<<<<< HEAD
   const [isVisible, setIsVisible] = useState(true);
   const [oldImage, setOldImage] = useState("");
   const [imagePreview, setImagePreview] = useState("");
   const [additionalImages, setAdditionalImages] = useState([]);  // State lưu ảnh phụ
   const [additionalImagePreviews, setAdditionalImagePreviews] = useState([]);
   
+=======
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
 
   const toggleVisibility = () => {
     setIsVisible(!isVisible);
@@ -45,6 +48,7 @@ export default function EditProduct({ params }) {
       getProduct();
     }
   }, [id]);
+<<<<<<< HEAD
   
  
   
@@ -58,9 +62,12 @@ export default function EditProduct({ params }) {
   }, [product]); // Cập nhật lại oldImage khi product thay đổi
 
   
+=======
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
 
   
 
+<<<<<<< HEAD
 console.log("Old Image:", oldImage);
 
 
@@ -140,6 +147,26 @@ console.log("Old Image:", oldImage);
             } else {
               throw new Error(errorData.message || "Cập nhật sản phẩm thất bại");
             }
+=======
+      try {
+        const res = await fetch(
+          `http://localhost:3000/uploads/updateproduct/${id}`,
+          {
+            method: "PUT",
+            body: formData,
+          }
+        );
+
+        if (!res.ok) {
+          const errorData = await res.json();
+          if (
+            res.status === 400 &&
+            errorData.message === "Sản phẩm đã tồn tại"
+          ) {
+            setFieldError("name", "Sản phẩm đã tồn tại");
+          } else {
+            throw new Error(errorData.message || "Cập nhật sản phẩm thất bại");
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
           }
 
           alert("Cập nhật sản phẩm thành công");
@@ -152,11 +179,24 @@ console.log("Old Image:", oldImage);
       },
     });
 
+<<<<<<< HEAD
 
   
  
   
 
+=======
+        alert("Cập nhật sản phẩm thành công");
+        router.push("/QuanlyProducts");
+      } catch (error) {
+        setFieldError("general", error.message);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+  });
+
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
   useEffect(() => {
     if (isProductLoaded && product) {
       formik.setValues({
@@ -176,6 +216,7 @@ console.log("Old Image:", oldImage);
       });
     }
   }, [isProductLoaded, product]);
+<<<<<<< HEAD
 
   const handleAdditionalImageChange = (e) => {
     const files = Array.from(e.target.files);
@@ -254,6 +295,8 @@ console.log("Old Image:", oldImage);
     }
   };
   
+=======
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
 
   if (!isProductLoaded) {
     return <p>Đang tải dữ liệu...</p>;
@@ -587,7 +630,10 @@ console.log("Old Image:", oldImage);
             <div className="form-groupadd-1">
               <label>Sản phẩm nổi bật</label>
               <input
+<<<<<<< HEAD
               className="checkboxpro"
+=======
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
                 type="checkbox"
                 name="hot"
                 checked={formik.values.hot}
@@ -595,6 +641,7 @@ console.log("Old Image:", oldImage);
               />
             </div>
 
+<<<<<<< HEAD
             <div className="form-group">
           <label>Bình luận</label>
           <div>
@@ -669,6 +716,8 @@ console.log("Old Image:", oldImage);
                   </div>
                 </div>
 
+=======
+>>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
             <button type="submit" disabled={formik.isSubmitting}>
               Cập nhật sản phẩm
             </button>
