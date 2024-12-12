@@ -94,7 +94,6 @@ router.post("/addproduct", upload.array("images", 5), async (req, res) => {
       size: size ? JSON.parse(size) : [],
       quantity,
       status,
-<<<<<<< HEAD
       hot: hot === "true", // Đảm bảo đúng kiểu dữ liệu boolean
       categoryId: categoryObjectId,
       color: Array.isArray(color) ? color : JSON.parse(color || "[]"),
@@ -102,13 +101,6 @@ router.post("/addproduct", upload.array("images", 5), async (req, res) => {
       additionalImages: additionalImages, 
       createdAt: new Date(), // Thời gian thêm
       updatedAt: new Date(), 
-=======
-      dayadd: dayadd ? new Date(dayadd) : new Date(),
-      hot: hot === " ",
-      categoryId,
-      reviews: Array.isArray(reviews) ? reviews : reviews ? JSON.parse(reviews) : [],
-      image: imageUrl,
->>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
     };
 
     const result = await productCollection.insertOne(newProduct);

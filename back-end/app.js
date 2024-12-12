@@ -4,7 +4,7 @@ var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
 var cors = require("cors");
-// var http = require("http");
+var http = require("http");
 
 var app = express();
 
@@ -56,26 +56,26 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-// const { initializeRedis } = require('./services/emailQueue');
-// const { processEmailQueue } = require('./services/emailService');
-// const { processReturnQueue } = require('./services/returnRequestQueue');
+const { initializeRedis } = require('./services/emailQueue');
+const { processEmailQueue } = require('./services/emailService');
+const { processReturnQueue } = require('./services/returnRequestQueue');
 
-// // Hàm khởi tạo toàn bộ ứng dụng
-// (async () => {
-//   try {
-//     // Khởi tạo Redis
-//     await initializeRedis();
-//     console.log("Redis đã khởi chạy thành công, ứng dụng đã sẵn sàng...");
-//     // Khởi chạy xử lý hàng đợi email sau khi Redis đã sẵn sàng
-//     await processEmailQueue();
-//     console.log("Hàng đợi email đã được xử lý.");
-//     await processReturnQueue();
-//     console.log("Hệ thống xử lý yêu cầu trả hàng đã sẵn sàng.");
-//   } catch (error) {
-//     console.error("Không thể khởi tạo Redis hoặc xử lý hàng đợi email:", error.message);
-//     process.exit(1); // Dừng ứng dụng nếu lỗi nghiêm trọng xảy ra
-//   }
-// })();
+// Hàm khởi tạo toàn bộ ứng dụng
+(async () => {
+  try {
+    // Khởi tạo Redis
+    await initializeRedis();
+    console.log("Redis đã khởi chạy thành công, ứng dụng đã sẵn sàng...");
+    // Khởi chạy xử lý hàng đợi email sau khi Redis đã sẵn sàng
+    await processEmailQueue();
+    console.log("Hàng đợi email đã được xử lý.");
+    await processReturnQueue();
+    console.log("Hệ thống xử lý yêu cầu trả hàng đã sẵn sàng.");
+  } catch (error) {
+    console.error("Không thể khởi tạo Redis hoặc xử lý hàng đợi email:", error.message);
+    process.exit(1); // Dừng ứng dụng nếu lỗi nghiêm trọng xảy ra
+  }
+})();
 
 
 

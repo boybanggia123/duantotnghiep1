@@ -1,9 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
-const jwt = require("jsonwebtoken");
 const Stripe = require("stripe");
-const bcrypt = require("bcryptjs"); 
+
 require("dotenv").config();
 const Bill = require("../model/bill")
 const stripe = Stripe(process.env.STRIPE_SECRET_KEY);

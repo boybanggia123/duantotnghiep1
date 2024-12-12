@@ -6,36 +6,16 @@ import "../../public/css/products.css";
 import "../../public/css/style.css";
 import "../../public/css/formmodal.css";
 import Script from "next/script";
-import { useEffect,useState } from 'react';
+import { useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 const inter = Inter({ subsets: ["latin"] });
-<<<<<<< HEAD
 import { useRouter } from 'next/navigation';
-import { io } from 'socket.io-client';
 
-const socket = io('http://localhost:3000');
-=======
-import { useRouter } from "next/navigation";
->>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
 
 export default function RootLayout({ children }) {
-  const [notificationCount, setNotificationCount] = useState(0);
+ 
   const router = useRouter();
-<<<<<<< HEAD
-
-  useEffect(() => {
-    // Lắng nghe sự kiện từ server
-    socket.on('notification', (message) => {
-      console.log('Thông báo mới:', message);
-      setNotificationCount(prevCount => prevCount + 1); // Tăng số thông báo
-    });
-
-    // Dọn dẹp kết nối khi component bị hủy
-    return () => {
-      socket.off('notification');
-    };
-  }, []);
 
 
   useEffect(() => {
@@ -50,13 +30,6 @@ export default function RootLayout({ children }) {
 
     router.push('http://localhost:3001');
   }
-=======
-  const handleLogout = () => {
-    document.cookie = "token=; path=/; max-age=-1";
-
-    router.push("http://localhost:3001/");
-  };
->>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
   return (
     <html lang="en">
       <head>
@@ -112,16 +85,12 @@ export default function RootLayout({ children }) {
             </li>
             <li>
               <Link href={"#"}>
-<<<<<<< HEAD
                 <i className="fa-solid fa-comment icon"></i> Quản lý Comments
               </Link>
             </li>
             <li>
               <Link href={"/Quanlydonhang"}>
                 <i className="fa-solid fa-briefcase icon"></i> Quản lý Order
-=======
-                <i className="fa-solid fa-briefcase icon"></i> Quản lý đơn hàng
->>>>>>> 5782ca3b2c0b949f09af7a4d8467932d5f7732df
               </Link>
             </li>
             <li>
@@ -150,7 +119,7 @@ export default function RootLayout({ children }) {
             </form>
             <Link href={"#"} className="nav-link">
               <i className="bx bxs-bell icon"></i>
-              <span className="badge">{notificationCount}</span>
+              <span className="badge">0</span>
             </Link>
             <Link href={"#"} className="nav-link">
               <i className="bx bxs-message-square-dots icon"></i>
